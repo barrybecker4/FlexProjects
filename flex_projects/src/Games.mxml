@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:app="com.becker.animation.*"	
+	layout="absolute" >
+	
+	<mx:VBox width="100%" height="100%" >       
+	    <mx:Label text="Flash inside Flex"/>					    			    	    		    
+	    <app:AnimationComponent animClass="com.becker.animation.PlayBall" />	       	        
+    </mx:VBox>
+  
+</mx:Application>
