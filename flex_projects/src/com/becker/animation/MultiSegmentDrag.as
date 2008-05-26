@@ -1,7 +1,6 @@
 package  com.becker.animation
 {
     import com.becker.common.Segment;
-    import com.becker.common.Util;
     
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -11,7 +10,7 @@ package  com.becker.animation
     public class MultiSegmentDrag extends UIComponent implements Animatible
     {
         private var segments:Array;
-        private var numSegments:uint = 50;
+        private var numSegments:uint = 100;
         private var dragSegment:Segment;
         
         public function MultiSegmentDrag() {}
@@ -22,7 +21,8 @@ package  com.becker.animation
             var lastSegment:Segment;
             for(var i:uint = 0; i < numSegments; i++)
             {
-                var segment:Segment = new Segment(50, 10, "seg" + i);
+                var segment:Segment = new Segment(50, 10);
+                
                 segment.addEventListener(MouseEvent.MOUSE_DOWN, onPress);
                 addChild(segment);                
                 segments.push(segment);
@@ -39,8 +39,9 @@ package  com.becker.animation
         
         private function onPress(evt:MouseEvent):void
         {
-            dragSegment = Segment(evt.target);            
+        	dragSegment = Segment(evt.target); 
         }
+        
         private function unPress(evt:MouseEvent):void
         {
             dragSegment = null;
@@ -48,18 +49,10 @@ package  com.becker.animation
         
         private function onEnterFrame(event:Event):void
         {
-            if (dragSegment == null) return;
-            // now drag all the connected segments (recursively) accordingly.
-            dragSegment.dragChildSegments(null, mouseX, mouseY);
-            /*    
-            dragSegment.dragFromFront(mouseX, mouseY);                        
-            for (var i:uint = 1; i < numSegments; i++)
-            {
-                var segment:Segment = segments[i];     // s
-                var lastSegment:Segment = segments[i - 1]; // this
-                //dragFromFront(segment, lastSegment.x, lastSegment.y);
-                segment.dragFromFront(lastSegment.x, lastSegment.y);
-            }*/
+            if (dragSegment != null) {
+                // now drag all the connected segments (recursively) accordingly.
+                dragSegment.dragSegments(null, mouseX, mouseY);
+            }
         }
     }
 }

@@ -9,7 +9,6 @@ package com.becker.common
      * 
      * This diagram represents the segments parts:
      * 
-     * 
      *            x,y
      *         /   _____________________
      * height {   < o                 o >  rear
@@ -20,9 +19,7 @@ package com.becker.common
     public class Segment extends Sprite
     {
         private static const DEFAULT_PIN_RADIUS:Number = 2.0;
-        
-        public var id:String;
-        
+   
         // velocity vector
         public var vx:Number = 0;
         public var vy:Number = 0;
@@ -37,14 +34,13 @@ package com.becker.common
         
         
         public function Segment(segmentWidth:Number, segmentHeight:Number, 
-                                id:String = null, color:uint = 0xffffff)
+                                color:uint = 0xffffff)
         {
             this.segmentWidth = segmentWidth;
             this.segmentHeight = segmentHeight;
             this.color = color;
             this.frontConnections = new Array();
-            this.rearConnections = new Array();
-            this.id = id;
+            this.rearConnections = new Array();      
             init();
         }
         
@@ -102,30 +98,43 @@ package com.becker.common
                 segment.frontConnections.push(this);
             } else {
                 segment.rearConnections.push(this);
-            }                        
+            }   
+            var pt:Point = front? getFrontPin() : getRearPin();
+            if (toFront) {
+                segment.dragFromFront(pt.x, pt.y);
+            } else {
+          	    segment.dragFromRear(pt.x, pt.y);
+            }                                         
         }
         
         /**
          * Recusively drag all child semgents.
          */
-        public function dragChildSegments(parentSegment:Segment, xpos:Number, ypos:Number):void
+        public function dragSegments(parentSegment:Segment,
+                                     xpos:Number, ypos:Number):void
         {
-             dragFromRear(xpos, ypos);
-             dragChildSegments1(frontConnections, parentSegment, x, y);
-             var rearPin:Point = getRearPin();
-             //dragFromRear(xpos, ypos);
-             //dragChildSegments1(rearConnections, parentSegment, rearPin.x, rearPin.y);             
+        	 var draggedFromFront:Boolean = this.closerToFront(xpos, ypos);
+        	 if (draggedFromFront) {
+                dragFromFront(xpos, ypos);
+             } else {
+          	    dragFromRear(xpos, ypos);
+             }
+             
+             dragChildSegments(frontConnections, parentSegment, x, y);
+             var rearPin:Point = getRearPin();         
+             dragChildSegments(rearConnections, parentSegment, rearPin.x, rearPin.y);             
         }
         
-        private function dragChildSegments1(connections:Array, 
-                              parentSegment:Segment, xpos:Number, ypos:Number):void
+        private function dragChildSegments(connections:Array, 
+                                           parentSegment:Segment, 
+                                           xpos:Number, ypos:Number):void
         {
             for each (var s:Segment in connections)
             {
                 if (s != parentSegment)
                 {
                     //trace("dragging child="+ this + " to "+ xpos+ ","+ypos);
-                    s.dragChildSegments(this, xpos, ypos);
+                    s.dragSegments(this, xpos, ypos);
                 }
             }
         }
@@ -154,36 +163,28 @@ package com.becker.common
         public function dragFromFront(xpos:Number, ypos:Number):void
         {
             var rearPin:Point = getRearPin();    
-            var dx:Number = xpos - rearPin.x;
-            var dy:Number = ypos - rearPin.y;
+  
+            var dx:Number = rearPin.x - xpos;
+            var dy:Number = rearPin.y - ypos;
             var angle:Number = Math.atan2(dy, dx);
             rotation = angle * 180 / Math.PI;
             
-            //rearPin:Point = getRearPin();        
-            //var w:Number = rearPin.x - x;
-            //var h:Number = rearPin.y - y;
             x = xpos;
             y = ypos;
         }
         
-        /*
-        private function drag(startPin:Point, otherPin:Point, 
-                              xpos:Number, ypos:Number):void
-        {                
-            var dx:Number = xpos - startPin.x;
-            var dy:Number = ypos - startPin.y;
-            var angle:Number = Math.atan2(dy, dx);
-            rotation = angle * 180 / Math.PI;
-                    
-            var w:Number = otherPin.x - x;
-            var h:Number = otherPin.y - y;
-            x = xpos - w;
-            y = ypos - h;
-        }*/
+        /**
+         * @return true if specified x, y closer to front than rear.
+         */
+        public function closerToFront(x:Number, y:Number):Boolean
+        {
+        	var pt:Point = new Point(x, y);
+        	return (Point.distance(getFrontPin(), pt) < Point.distance(getRearPin(), pt));
+        }
         
         override public function toString():String
         {
-            return "Segment "+id+": x="+x+" y="+y+" connections: " + 
+            return "Segment x="+x+" y="+y+" connections: " + 
                     "numFront="+frontConnections.length +
                     " numRear=" + rearConnections.length;
         }
