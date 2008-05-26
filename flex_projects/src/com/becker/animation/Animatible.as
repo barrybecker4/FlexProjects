@@ -1,7 +1,7 @@
 package com.becker.animation
 {
-	public interface Animatible
-	{
-		function startAnimating():void;
-	}
+    public interface Animatible
+    {
+        function startAnimating():void;
+    }
 }
