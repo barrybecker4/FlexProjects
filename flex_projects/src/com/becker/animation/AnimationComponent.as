@@ -12,7 +12,7 @@ package com.becker.animation
     {
         private var _sprite:Animatible;
         
-        // need to reference or not in swf :(
+        // need to reference or not in swf unfortunately :(
         private var w1:RealWalk;
         private var w2:DrawingApp;
         private var w3:MultiBilliard2;
@@ -50,6 +50,14 @@ package com.becker.animation
             
             comp.addEventListener(FlexEvent.CREATION_COMPLETE, init);                
             //setTimeout(init, 200);   
+        }
+        
+        /**
+         * return Animatible, internal UIComponent.
+         */
+        public function get sprite():Animatible
+        {
+        	return _sprite;
         }
         
         public function init(evt:FlexEvent):void

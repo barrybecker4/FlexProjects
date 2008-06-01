@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:app="com.becker.animation.*"	
+	layout="absolute" >
+	
+	<mx:Panel title="Physics Simulation" width="100%" height="100%" >
+	    <mx:VBox width="100%" height="100%" >
+	       <mx:TabNavigator width="100%" height="160">
+	            <mx:VBox label="Build" width="100%" height="100%">
+	                 <mx:HBox width="180">
+	                      <mx:ColorPicker/>
+	                      <mx:Label text="Segment Color"/>
+	                 </mx:HBox>
+	                 <mx:HBox width="180">
+	                      <mx:NumericStepper value="20" maximum="200"/>
+	                      <mx:Label text="Segment Width"/>
+	                 </mx:HBox>
+	                 <mx:Button label="Add Segment"/>
+	            </mx:VBox>
+	            <mx:VBox label="Simulate" width="100%" height="100%">	               
+	                 <mx:HBox width="250">
+	                      <mx:CheckBox label="Gravity"/>
+	                      <mx:NumericStepper value="9.8" stepSize="0.1" maximum="20"/>
+	                 </mx:HBox>
+	            </mx:VBox>
+	       </mx:TabNavigator>
+	       
+	       <app:AnimationComponent id="animComp" animClass="com.becker.animation.MultiSegmentDrag" />	
+	        
+	    </mx:VBox>    	    	        
+    </mx:Panel>
+	 
+</mx:Application>

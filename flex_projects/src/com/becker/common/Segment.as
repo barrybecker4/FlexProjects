@@ -11,36 +11,40 @@ package com.becker.common
      * 
      *            x,y
      *         /   _____________________
-     * height {   < o                 o >  rear
+     * height {   < o                 o >  rear connector
      *         \   ---------------------
-     *        front       width               
+     *      front con.     width               
      *                         
      */ 
     public class Segment extends Sprite
     {
-        private static const DEFAULT_PIN_RADIUS:Number = 2.0;
-   
+        // don't necessarily allow a joint to fold back on itselt.
+        private static const DEFAULT_ANGLE_LIMIT:Number = 0.7; 
+        
+        private var color_:uint;
+        private var length_:Number;
+        private var thickness_:Number;    
+        
+        // child connections
+        public var frontConnector:Connector;
+        public var rearConnector:Connector;
+        
         // velocity vector
         public var vx:Number = 0;
         public var vy:Number = 0;
         
-        private var color:uint;
-        private var segmentWidth:Number;
-        private var segmentHeight:Number;    
+        private var angleLimit:Number = DEFAULT_ANGLE_LIMIT;
         
-        // child connections
-        private var frontConnections:Array;
-        private var rearConnections:Array;
-        
-        
-        public function Segment(segmentWidth:Number, segmentHeight:Number, 
+        public function Segment(length:Number, thickness:Number, 
                                 color:uint = 0xffffff)
         {
-            this.segmentWidth = segmentWidth;
-            this.segmentHeight = segmentHeight;
-            this.color = color;
-            this.frontConnections = new Array();
-            this.rearConnections = new Array();      
+            length_ = length;
+            thickness_ = thickness;
+            color_ = color;
+            frontConnector = new Connector(this, true);
+            rearConnector = new Connector(this, false);  
+            addChild(frontConnector); 
+            addChild(rearConnector);   
             init();
         }
         
@@ -48,130 +52,33 @@ package com.becker.common
         {
             // draw the segment itself
             graphics.lineStyle(0);
-            graphics.beginFill(color);
-            graphics.drawRoundRect(-segmentHeight / 2, 
-                                   -segmentHeight / 2,
-                                   segmentWidth + segmentHeight,
-                                   segmentHeight,
-                                   segmentHeight,
-                                   segmentHeight);
+            graphics.beginFill(color_);
+            graphics.drawRoundRect(-thickness / 2, 
+                                   -thickness / 2,
+                                   length + thickness,
+                                   thickness,
+                                   thickness,
+                                   thickness);
             graphics.endFill();
-            
-            // draw the two "pins"
-            graphics.drawCircle(0, 0, DEFAULT_PIN_RADIUS);
-            graphics.drawCircle(segmentWidth, 0, DEFAULT_PIN_RADIUS);
         }
         
-        /**
-         * On the left when oriented normally
-         */
-        public function getFrontPin():Point
+        public function get length():Number {
+            return length_;
+        }
+        public function get thickness():Number {
+            return thickness_;
+        }
+        
+        /*
+        private function jointAngle(seg:Segment):Number
         {
-            return new Point(x, y);
-        }
+        	var vec1:Point = getFrontPin().subtract(getRearPin());
+        	vec1.normalize(1.0);
+        	var vec2:Point = seg.getFrontPin().subtract(seg.getRearPin());
+        	vec2.normalize(1.0);
+        	return Math.acos(vec1.x * vec2.x + vec1.y * vec2.y);
+        }*/
         
-        /**
-         * On the right when oriented normally
-         */
-        public function getRearPin():Point
-        {
-            var angle:Number = rotation * Math.PI / 180;
-            var xPos:Number = x + Math.cos(angle) * segmentWidth;
-            var yPos:Number = y + Math.sin(angle) * segmentWidth;
-            return new Point(xPos, yPos);
-        }
-        
-        /**
-         * connect this segment with another.
-         * @param segment segment to connect to
-         * @param front if the segment is connecting to our front.
-         * @param toFront we are connecting to its front.
-         */         
-        public function connect(segment:Segment, front:Boolean, toFront:Boolean):void
-        {
-            if (front) {
-                frontConnections.push(segment);
-            } else {
-                rearConnections.push(segment);
-            }
-            if (toFront) {
-                segment.frontConnections.push(this);
-            } else {
-                segment.rearConnections.push(this);
-            }   
-            var pt:Point = front? getFrontPin() : getRearPin();
-            if (toFront) {
-                segment.dragFromFront(pt.x, pt.y);
-            } else {
-          	    segment.dragFromRear(pt.x, pt.y);
-            }                                         
-        }
-        
-        /**
-         * Recusively drag all child semgents.
-         */
-        public function dragSegments(parentSegment:Segment,
-                                     xpos:Number, ypos:Number):void
-        {
-        	 var draggedFromFront:Boolean = this.closerToFront(xpos, ypos);
-        	 if (draggedFromFront) {
-                dragFromFront(xpos, ypos);
-             } else {
-          	    dragFromRear(xpos, ypos);
-             }
-             
-             dragChildSegments(frontConnections, parentSegment, x, y);
-             var rearPin:Point = getRearPin();         
-             dragChildSegments(rearConnections, parentSegment, rearPin.x, rearPin.y);             
-        }
-        
-        private function dragChildSegments(connections:Array, 
-                                           parentSegment:Segment, 
-                                           xpos:Number, ypos:Number):void
-        {
-            for each (var s:Segment in connections)
-            {
-                if (s != parentSegment)
-                {
-                    //trace("dragging child="+ this + " to "+ xpos+ ","+ypos);
-                    s.dragSegments(this, xpos, ypos);
-                }
-            }
-        }
-        
-        /**
-         *  move the rear of the segment toward xpos, ypos
-         */
-        public function dragFromRear(xpos:Number, ypos:Number):void
-        {                
-            var frontPin:Point = getFrontPin();            
-            var dx:Number = xpos - frontPin.x;
-            var dy:Number = ypos - frontPin.y;
-            var angle:Number = Math.atan2(dy, dx);
-            rotation = angle * 180 / Math.PI;
-            
-            var rearPin:Point = getRearPin();
-            var w:Number = rearPin.x - x;
-            var h:Number = rearPin.y - y;
-            x = xpos - w;
-            y = ypos - h;            
-        }
-        
-        /**
-         *  move the rear of the segment toward xpos, ypos
-         */
-        public function dragFromFront(xpos:Number, ypos:Number):void
-        {
-            var rearPin:Point = getRearPin();    
-  
-            var dx:Number = rearPin.x - xpos;
-            var dy:Number = rearPin.y - ypos;
-            var angle:Number = Math.atan2(dy, dx);
-            rotation = angle * 180 / Math.PI;
-            
-            x = xpos;
-            y = ypos;
-        }
         
         /**
          * @return true if specified x, y closer to front than rear.
@@ -179,14 +86,16 @@ package com.becker.common
         public function closerToFront(x:Number, y:Number):Boolean
         {
         	var pt:Point = new Point(x, y);
-        	return (Point.distance(getFrontPin(), pt) < Point.distance(getRearPin(), pt));
+        	var distToFront:Number = Point.distance(frontConnector.getPosition(), pt);
+        	var distToRear:Number = Point.distance(rearConnector.getPosition(), pt);
+        	return (distToFront < distToRear);
         }
         
         override public function toString():String
         {
             return "Segment x="+x+" y="+y+" connections: " + 
-                    "numFront="+frontConnections.length +
-                    " numRear=" + rearConnections.length;
+                    "frontConnector="+ frontConnector+
+                    " rearConnector=" + rearConnector;
         }
     }
 }

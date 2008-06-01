@@ -60,13 +60,13 @@ package  com.becker.animation
         
         private function reach(segment:Segment, xpos:Number, ypos:Number):Point
         {
-            var frontPin:Point = segment.getFrontPin();
+            var frontPin:Point = segment.frontConnector.getPosition();
             var dx:Number = xpos - frontPin.x;
             var dy:Number = ypos - frontPin.y;
             var angle:Number = Math.atan2(dy, dx);
             segment.rotation = angle * 180 / Math.PI;
             
-            var rearPin:Point = segment.getRearPin();
+            var rearPin:Point = segment.rearConnector.getPosition();
             var w:Number = rearPin.x - segment.x;
             var h:Number = rearPin.y - segment.y;
             var tx:Number = xpos - w;
@@ -76,7 +76,7 @@ package  com.becker.animation
         
         private function position(segmentA:Segment, segmentB:Segment):void
         {
-            var rearPinB:Point = segmentB.getRearPin();
+            var rearPinB:Point = segmentB.rearConnector.getPosition();
             segmentA.x = rearPinB.x;
             segmentA.y = rearPinB.y;
         }
@@ -84,7 +84,7 @@ package  com.becker.animation
         public function checkHit():void
         {
             var segment:Segment = segments[0];
-            var rearPin:Point = segment.getRearPin();
+            var rearPin:Point = segment.rearConnector.getPosition();
             var dx:Number = rearPin.x - ball.x;
             var dy:Number = rearPin.y - ball.y;
             var dist:Number = Math.sqrt(dx * dx + dy * dy);

@@ -49,7 +49,7 @@ package com.becker.animation.walking
             segment1 = new Segment(50, 10);
             addChild(segment1);
             
-            var rearPin0:Point = segment0.getRearPin();
+            var rearPin0:Point = segment0.rearConnector.getPosition();
             segment1.x = rearPin0.x;
             segment1.y = rearPin0.y;
             
@@ -60,7 +60,7 @@ package com.becker.animation.walking
             
             segment3 = new Segment(50, 10);
             addChild(segment3);
-            var rearPin3:Point = segment3.getRearPin();
+            var rearPin3:Point = segment3.rearConnector.getPosition();
             segment3.x = rearPin3.x;
             segment3.y = rearPin3.y;
             
@@ -105,7 +105,7 @@ package com.becker.animation.walking
         
         private function walk(segA:Segment, segB:Segment, cyc:Number):void
         {
-            var foot:Point = segB.getRearPin();
+            var foot:Point = segB.rearConnector.getPosition();
             var angleA:Number = Math.sin(cyc) *
                                 thighRange + 
                                 thighBase;
@@ -114,10 +114,10 @@ package com.becker.animation.walking
             segA.rotation = angleA;
             segB.rotation = segA.rotation + angleB;
             
-            segB.x = segA.getRearPin().x;
-            segB.y = segA.getRearPin().y;
-            segB.vx = segB.getRearPin().x - foot.x;
-            segB.vy = segB.getRearPin().y - foot.y;
+            segB.x = segA.rearConnector.getPosition().x;
+            segB.y = segA.rearConnector.getPosition().y;
+            segB.vx = segB.rearConnector.getPosition().x - foot.x;
+            segB.vy = segB.rearConnector.getPosition().y - foot.y;
         }
 
         private function doVelocity():void

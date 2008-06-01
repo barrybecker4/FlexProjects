@@ -2,6 +2,7 @@
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:app="com.becker.animation.walking.*"	
+	xmlns:anim="com.becker.animation.*"	
 	xmlns:comp="com.becker.common.*"	
 	layout="absolute" >
 	
@@ -13,26 +14,27 @@
 	
 	    private function sliderChanged(evt:SliderEvent):void
 	    {
-	    	var slider:HSlider = HSlider(evt.target);
+	    	var slider:HSlider = HSlider(evt.target); 
 	    	var v:Number = slider.value;
+	    	var walker:RealWalk = RealWalk(animComp.sprite);
 	    	
 	    	if (slider.parent == speed) {
-	   	        walker.walker.setSpeed(v);
+	   	        walker.setSpeed(v);
             }
             else if (slider.parent == thighRange) {
-            	walker.walker.setThighRange(v);
+            	walker.setThighRange(v);
             }
             else if (slider.parent == thighBase) {
-            	walker.walker.setThighBase(v);
+            	walker.setThighBase(v);
             }
             else if (slider.parent == calfRange) {
-            	walker.walker.setCalfRange(v);
+            	walker.setCalfRange(v);
             }
             else if (slider.parent == calfOffset) {
-            	walker.walker.setCalfOffset(v);
+            	walker.setCalfOffset(v);
             }            
             else if (slider.parent == gravity) {
-            	walker.walker.setGravity(v);
+            	walker.setGravity(v);
             }          
 	    }
 	    
@@ -54,7 +56,8 @@
 	            	                min="0" max="1.0" value="{0.2}" />	 										
 			</mx:VBox>
 				    			    	    		    
-	        <app:WalkerComponent id="walker" />	       
+	        <!--app:WalkerComponent id="walker" /-->	   
+	        <anim:AnimationComponent id="animComp" animClass="com.becker.animation.walking.RealWalk" />	    
 	        
 		</mx:VBox>
    
