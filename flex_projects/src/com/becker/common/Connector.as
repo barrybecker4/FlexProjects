@@ -25,7 +25,10 @@ package com.becker.common
         private var radius:Number;
         private var color:uint;
         
-        public function Connector(owner:Segment, isFront:Boolean, color:uint = 0xffee00)                                 
+        // Elsticity. how much to bounce when hitting another object like a wall.
+        private static const BOUNCE:Number = 0.9;
+        
+        public function Connector(owner:Segment, isFront:Boolean, color:uint = 0x88ff00)                                 
         {
         	this.owner_ = owner;
         	this.isFront_ = isFront;
@@ -46,9 +49,6 @@ package com.becker.common
         public function init():void
         {          
         	graphics.lineStyle(0);
-        	if (isFront) {
-        		color = 0x1111ee;
-        	}
         	graphics.beginFill(color);
             graphics.drawCircle(isFront?0:owner.length, 0, radius);  
             graphics.endFill();
@@ -59,7 +59,7 @@ package com.becker.common
          */
         public function getPosition():Point
         {      	
-        	if (isFront_) {
+        	if (isFront) {
                 return new Point(owner_.x, owner_.y);
             } else {
             	var angle:Number = Util.DEG_TO_RAD * owner_.rotation;
@@ -67,6 +67,18 @@ package com.becker.common
 	            var ypos:Number  = owner_.y + Math.sin(angle) * owner_.length;
 	            return new Point(xpos, ypos);
             }         
+        }
+        
+        private function setPosition(pt:Point):void
+        {
+        	if (isFront) {
+        		owner_.x = pt.x;
+        		owner_.y = pt.y;
+        	} else {
+        		var angle:Number = Util.DEG_TO_RAD * owner_.rotation;
+	            owner_.x = pt.x - Math.cos(angle) * owner_.length;
+	            owner_.y = pt.y - Math.sin(angle) * owner_.length;	           
+        	}
         }
         
         
@@ -135,7 +147,6 @@ package com.becker.common
 	            dx = rearPin.x - xpos;
 	            dy = rearPin.y - ypos;	                   
 	            owner.rotation = determineNewRotation(dy, dx, adjacent);
-	            //trace("from front ="+rotation);        
 	            owner.x = xpos;
 	            owner.y = ypos;	            
         	}
@@ -144,7 +155,6 @@ package com.becker.common
 	            dx = xpos - frontPin.x;
 	            dy = ypos - frontPin.y;
 	            owner.rotation = determineNewRotation(dy, dx, adjacent);
-	            //trace("from rear ="+rotation);	            
 	            rearPin = getPosition();
 	            var w:Number = rearPin.x - frontPin.x;
 	            var h:Number = rearPin.y - frontPin.y;
@@ -185,6 +195,33 @@ package com.becker.common
             }
             return ang;
             */
+        }
+       
+        public function updateDynamics(gravity:Number, width:Number, height:Number):void {
+        	
+        	vy += gravity * 1.0;
+        	var pt:Point = getPosition();
+    		pt.x += vx * 0.1;
+    		pt.y += vy * 0.1; 
+    		   
+    		// bounce if hit a wall   		
+    		if (pt.x > width) {
+    			pt.x = width;
+    			vx *= -BOUNCE;
+    		}
+    		if (pt.x < 0) {
+    			pt.x = 0;
+    			vx *= -BOUNCE;
+    		}    
+    		if (pt.y > height) {
+    			pt.y = height;
+    			vy *= -BOUNCE;
+    		}
+    		if (pt.y < 0) {
+    			pt.y = 0;
+    			vy *= -BOUNCE;
+    		}     
+    		setPosition(pt);		
         }
     }
 }

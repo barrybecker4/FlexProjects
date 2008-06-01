@@ -13,14 +13,17 @@ package  com.becker.animation
     {
     	private static const DEFAULT_SEGMENT_LENGTH:Number = 60;
         private var segments:Array;
-        private var numSegments:uint = 300;
+        private var numSegments:uint = 10;
         private var draggedConnector:Connector;
         private var lastDraggedConnector:Connector;
         private var lastDragVelocity:Point;
         private var lastX:Number;
         private var lastY:Number;
-        private var gravity:Number = 0.98;
-        private var bounce:Number = 0.9
+        
+        public var gravity:Number = 0.9;
+        public var gravityEnabled:Boolean = false;
+        public var enableSimulation:Boolean = false;
+        
         
         public function MultiSegmentDrag() {}
         
@@ -72,31 +75,12 @@ package  com.becker.animation
         {
         	if (lastDraggedConnector == null && draggedConnector == null) return;
         	
-        	// update positions based on current velocity
-        	/*
-        	for each (var segment:Segment in segments) {
-        		segment.vy += gravity * 1.0;
-        		segment.x += segment.vx * 1.0;
-        		segment.y += segment.vy * 1.0;    
-        		// bounce if hit a wall
-        		//var rear:Point = segment.getRearPin();
-        		if (segment.x > width ) {
-        			segment.x = width;
-        			segment.vx *= -bounce;
-        		}
-        		if (segment.x < 0) {
-        			segment.x = 0;
-        			segment.vx *= -bounce;
-        		}    
-        		if (segment.y > height) {
-        			segment.y = height;
-        			segment.vy *= -bounce;
-        		}
-        		if (segment.y < 0) {
-        			segment.y = 0;
-        			segment.vy *= -bounce;
-        		}     		
-        	}*/
+        	// update positions based on current velocity       
+        	if (enableSimulation) { 	
+	        	for each (var segment:Segment in segments) {
+	        		segment.updateDynamics(gravityEnabled?gravity:0, width, height);        		
+	        	}
+	        }
         	
             if (draggedConnector != null && 
                 mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
@@ -105,11 +89,12 @@ package  com.becker.animation
                 // drag all the connected segments (recursively) accordingly.               
                 draggedConnector.dragConnectingSegments(null, mouseX, mouseY);
             }
-            else if (lastDraggedConnector != null) {
+            else if (lastDraggedConnector != null && enableSimulation) {
             	// keep going at the last drag velocity
-            	//lastDragSegment.dragConnectingSegments(null, 
-            	//    lastDragSegment.x + lastDragVelocity.x, 
-            	//    lastDragSegment.y + lastDragVelocity.y);        	
+            	var pt:Point = lastDraggedConnector.getPosition();
+            	lastDraggedConnector.dragConnectingSegments(null, 
+            	        pt.x + lastDragVelocity.x, 
+            	        pt.y + lastDragVelocity.y);        	
             }            
         }
     }

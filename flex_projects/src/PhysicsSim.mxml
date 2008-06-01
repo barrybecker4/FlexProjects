@@ -2,11 +2,55 @@
 <mx:Application 
 	xmlns:mx="http://www.adobe.com/2006/mxml" 
 	xmlns:app="com.becker.animation.*"	
-	layout="absolute" >
+	layout="absolute"  
+	creationComplete="createComplete()">
 	
+	<mx:Script><![CDATA[
+		import com.becker.animation.MultiSegmentDrag;
+		import mx.events.IndexChangedEvent;
+		import mx.controls.HSlider;
+		import com.becker.animation.walking.RealWalk;
+		import mx.events.SliderEvent;
+		import mx.events.FlexEvent;
+	
+	    private static const BUILD_LABEL:String = "Build";
+	    private static const SIMULATE_LABEL:String = "Simulate";
+	    
+	    private var app:MultiSegmentDrag;
+	    
+	    private function createComplete():void {
+	    	app = MultiSegmentDrag(animComp.sprite);		    
+	    }
+	    private function simTabCreated():void {	    	
+	    	gravityCheckbox.selected = app.gravityEnabled;
+	    	gravityStepper.value = app.gravity; 
+	    	gravityStepper.stepSize = 0.1; 
+	    	gravityStepper.maximum = 20;
+	    }
+	    
+	    private function tabChanged(event:IndexChangedEvent):void {	    		    	
+	        app.enableSimulation = (tabNav.getTabAt(tabNav.selectedIndex).label == SIMULATE_LABEL); 	
+	    }
+	    
+	    private function gravityCheckChange():void {
+	    	app.gravityEnabled = gravityCheckbox.selected;
+	    }
+	    
+        private function gravityValueChange():void {
+	    	app.gravity = gravityStepper.value;
+	    }
+	    
+	    private function sliderChanged(evt:SliderEvent):void
+	    {
+	    	var slider:HSlider = HSlider(evt.target); 
+	    	
+	    }
+	    
+    ]]></mx:Script>
 	<mx:Panel title="Physics Simulation" width="100%" height="100%" >
 	    <mx:VBox width="100%" height="100%" >
-	       <mx:TabNavigator width="100%" height="160">
+	       <mx:TabNavigator id="tabNav" width="100%" height="160" 
+	       	                change="tabChanged(event)" >
 	            <mx:VBox label="Build" width="100%" height="100%">
 	                 <mx:HBox width="180">
 	                      <mx:ColorPicker/>
@@ -16,12 +60,12 @@
 	                      <mx:NumericStepper value="20" maximum="200"/>
 	                      <mx:Label text="Segment Width"/>
 	                 </mx:HBox>
-	                 <mx:Button label="Add Segment"/>
+	                 <mx:Button label="Add Segment" click="{}" />
 	            </mx:VBox>
-	            <mx:VBox label="Simulate" width="100%" height="100%">	               
+	            <mx:VBox label="Simulate" width="100%" height="100%"  creationComplete="{simTabCreated()}">	               
 	                 <mx:HBox width="250">
-	                      <mx:CheckBox label="Gravity"/>
-	                      <mx:NumericStepper value="9.8" stepSize="0.1" maximum="20"/>
+	                      <mx:CheckBox id="gravityCheckbox" label="Gravity" change="{gravityCheckChange()}"/>
+	                      <mx:NumericStepper id="gravityStepper" change="{gravityValueChange()}"/>
 	                 </mx:HBox>
 	            </mx:VBox>
 	       </mx:TabNavigator>

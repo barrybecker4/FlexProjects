@@ -19,7 +19,7 @@ package com.becker.common
     public class Segment extends Sprite
     {
         // don't necessarily allow a joint to fold back on itselt.
-        private static const DEFAULT_ANGLE_LIMIT:Number = 0.7; 
+        private static const DEFAULT_ANGLE_LIMIT:Number = 0.7;         
         
         private var color_:uint;
         private var length_:Number;
@@ -67,6 +67,11 @@ package com.becker.common
         }
         public function get thickness():Number {
             return thickness_;
+        }
+        
+        public function updateDynamics(gravity:Number, width:Number, height:Number):void {
+        	frontConnector.updateDynamics(gravity, width, height);
+        	rearConnector.updateDynamics(gravity, width, height);      	
         }
         
         /*
