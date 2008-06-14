@@ -86,15 +86,15 @@ package com.becker.common
         
         
         /**
-         * @return true if specified x, y closer to front than rear.
-         */
+         * @return true if specified x, y are closer to front than rear.
+         *
         public function closerToFront(x:Number, y:Number):Boolean
         {
         	var pt:Point = new Point(x, y);
         	var distToFront:Number = Point.distance(frontConnector.getPosition(), pt);
         	var distToRear:Number = Point.distance(rearConnector.getPosition(), pt);
         	return (distToFront < distToRear);
-        }
+        }*/
         
         override public function toString():String
         {

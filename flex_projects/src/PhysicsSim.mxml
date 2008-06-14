@@ -21,16 +21,19 @@
 	    private function createComplete():void {
 	    	app = MultiSegmentDrag(animComp.sprite);		    
 	    }
-	    private function simTabCreated():void {	    	
+	    private function simTabCreated():void {	   
+	    	app = MultiSegmentDrag(animComp.sprite);	
 	    	gravityCheckbox.selected = app.gravityEnabled;
 	    	gravityStepper.value = app.gravity; 
 	    	gravityStepper.stepSize = 0.1; 
 	    	gravityStepper.maximum = 20;
 	    }
 	    
-	    private function tabChanged(event:IndexChangedEvent):void {	    		    	
-	        app.enableSimulation = (tabNav.getTabAt(tabNav.selectedIndex).label == SIMULATE_LABEL); 	
-	    }
+	    private function tabChanged(event:IndexChangedEvent):void {	   
+	    	if (app !=null && tabNav != null) {		    	
+	            app.enableSimulation = (tabNav.getTabAt(tabNav.selectedIndex).label == SIMULATE_LABEL); 
+	        }	
+	    }	    
 	    
 	    private function gravityCheckChange():void {
 	    	app.gravityEnabled = gravityCheckbox.selected;
@@ -40,11 +43,14 @@
 	    	app.gravity = gravityStepper.value;
 	    }
 	    
-	    private function sliderChanged(evt:SliderEvent):void
-	    {
-	    	var slider:HSlider = HSlider(evt.target); 
-	    	
+	    private function frictionCheckChange():void {
+	    	app.frictionEnabled = frictionCheckbox.selected;
 	    }
+	    
+        private function frictionValueChange():void {
+	    	app.friction = frictionStepper.value;
+	    }
+	    
 	    
     ]]></mx:Script>
 	<mx:Panel title="Physics Simulation" width="100%" height="100%" >
@@ -57,8 +63,12 @@
 	                      <mx:Label text="Segment Color"/>
 	                 </mx:HBox>
 	                 <mx:HBox width="180">
-	                      <mx:NumericStepper value="20" maximum="200"/>
-	                      <mx:Label text="Segment Width"/>
+	                      <mx:NumericStepper value="60" maximum="200"/>
+	                      <mx:Label text="Length"/>
+	                 </mx:HBox>
+	                 <mx:HBox width="180">
+	                      <mx:NumericStepper value="12" maximum="40"/>
+	                      <mx:Label text="Thickness"/>
 	                 </mx:HBox>
 	                 <mx:Button label="Add Segment" click="{}" />
 	            </mx:VBox>
@@ -66,6 +76,10 @@
 	                 <mx:HBox width="250">
 	                      <mx:CheckBox id="gravityCheckbox" label="Gravity" change="{gravityCheckChange()}"/>
 	                      <mx:NumericStepper id="gravityStepper" change="{gravityValueChange()}"/>
+	                 </mx:HBox>
+	                 <mx:HBox width="250">
+	                      <mx:CheckBox id="frictionCheckbox" label="Friction" change="{frictionCheckChange()}"/>
+	                      <mx:NumericStepper id="frictionStepper" change="{frictionValueChange()}"/>
 	                 </mx:HBox>
 	            </mx:VBox>
 	       </mx:TabNavigator>

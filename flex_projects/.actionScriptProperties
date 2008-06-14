@@ -9,6 +9,7 @@
 <sourceAttachmentPath/>
 </compiler>
 <applications>
+<application path="PhysicsSim.mxml"/>
 <application path="Games.mxml"/>
 <application path="WalkingSim.mxml"/>
 </applications>

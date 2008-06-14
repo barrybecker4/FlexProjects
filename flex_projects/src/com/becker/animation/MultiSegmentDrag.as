@@ -16,12 +16,16 @@ package  com.becker.animation
         private var numSegments:uint = 10;
         private var draggedConnector:Connector;
         private var lastDraggedConnector:Connector;
-        private var lastDragVelocity:Point;
-        private var lastX:Number;
-        private var lastY:Number;
+        //private var lastDragVelocity:Point;
+        //private var lastX:Number;
+        //private var lastY:Number;
         
         public var gravity:Number = 0.9;
         public var gravityEnabled:Boolean = false;
+        
+        public var friction:Number = 0.9;
+        public var frictionEnabled:Boolean = false;
+        
         public var enableSimulation:Boolean = false;
         
         
@@ -66,7 +70,7 @@ package  com.becker.animation
         {
         	if (draggedConnector != null) {
         	    lastDraggedConnector = draggedConnector;
-        	    lastDragVelocity = new Point(mouseX - lastX, mouseY - lastY);
+        	    //lastDragVelocity = new Point(mouseX - lastX, mouseY - lastY);
         	}
             draggedConnector = null;
         }
@@ -84,17 +88,20 @@ package  com.becker.animation
         	
             if (draggedConnector != null && 
                 mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-                lastX = mouseX;
-                lastY = mouseY;
+                //lastX = mouseX;
+                //lastY = mouseY;
                 // drag all the connected segments (recursively) accordingly.               
                 draggedConnector.dragConnectingSegments(null, mouseX, mouseY);
             }
             else if (lastDraggedConnector != null && enableSimulation) {
             	// keep going at the last drag velocity
             	var pt:Point = lastDraggedConnector.getPosition();
+            	/*           	           	
             	lastDraggedConnector.dragConnectingSegments(null, 
             	        pt.x + lastDragVelocity.x, 
-            	        pt.y + lastDragVelocity.y);        	
+            	        pt.y + lastDragVelocity.y);  
+            	*/   
+            	lastDraggedConnector.dragConnectingSegments(null, pt.x, pt.y);   	
             }            
         }
     }

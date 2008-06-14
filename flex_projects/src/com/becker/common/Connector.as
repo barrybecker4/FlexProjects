@@ -13,6 +13,7 @@ package com.becker.common
         // the segment that owns this connector (and one other)
         private var owner_:Segment;
         
+        // true if this connector is as the front of the segment.
         private var isFront_:Boolean;
         
         // other segment connectors that we are connected to.
@@ -26,7 +27,9 @@ package com.becker.common
         private var color:uint;
         
         // Elsticity. how much to bounce when hitting another object like a wall.
-        private static const BOUNCE:Number = 0.9;
+        private static const BOUNCE:Number = 0.5;
+        
+        private static const VEL_FACTOR:Number = 0.04;
         
         public function Connector(owner:Segment, isFront:Boolean, color:uint = 0x88ff00)                                 
         {
@@ -46,8 +49,7 @@ package com.becker.common
         	return isFront_;
         }
         
-        public function init():void
-        {          
+        public function init():void {          
         	graphics.lineStyle(0);
         	graphics.beginFill(color);
             graphics.drawCircle(isFront?0:owner.length, 0, radius);  
@@ -57,8 +59,7 @@ package com.becker.common
         /**
          * On the left or right of the owning segment.
          */
-        public function getPosition():Point
-        {      	
+        public function getPosition():Point {      	
         	if (isFront) {
                 return new Point(owner_.x, owner_.y);
             } else {
@@ -69,8 +70,7 @@ package com.becker.common
             }         
         }
         
-        private function setPosition(pt:Point):void
-        {
+        private function setPosition(pt:Point):void {
         	if (isFront) {
         		owner_.x = pt.x;
         		owner_.y = pt.y;
@@ -80,14 +80,12 @@ package com.becker.common
 	            owner_.y = pt.y - Math.sin(angle) * owner_.length;	           
         	}
         }
-        
-        
+                
         /**
          * connect this segment with another.
          * @param connector to connect to
          */         
-        public function connect(connector:Connector):void
-        {           
+        public function connect(connector:Connector):void {           
             connections.push(connector);             
             connector.connections.push(this);  
             var pt:Point = getPosition()        
@@ -98,9 +96,7 @@ package com.becker.common
          * Recursively drag all child semgents.
          */
         public function dragConnectingSegments(parentSegment:Segment,
-                                     xpos:Number, ypos:Number):void
-        {
-        	 //trace("dragging xpos="+xpos);        	 
+                                     xpos:Number, ypos:Number):void {
              drag(xpos, ypos, parentSegment);
              
              var pin:Point = getPosition();
@@ -121,8 +117,7 @@ package com.becker.common
         
         private function dragChildSegments(connections:Array, 
                                            parentSegment:Segment, 
-                                           xpos:Number, ypos:Number):void
-        {
+                                           xpos:Number, ypos:Number):void {
             for each (var c:Connector in connections)
             {
                 if (c.owner != parentSegment)
@@ -133,10 +128,9 @@ package com.becker.common
         }
         
         /**
-         *  move the rear of the segment toward xpos, ypos
+         *  move the connector toward xpos, ypos
          */
-        public function drag(xpos:Number, ypos:Number, adjacent:Segment):void
-        {     
+        public function drag(xpos:Number, ypos:Number, adjacent:Segment):void {     
         	var oldPos:Point = getPosition();    
         	var rearPin:Point;
         	var dx:Number;
@@ -162,8 +156,8 @@ package com.becker.common
 	            owner.y = ypos - h;       	         
 	        }
 	        var newPos:Point = getPosition();
-            vx = newPos.x - oldPos.x;
-            vy = newPos.y - oldPos.y;     
+            vx += VEL_FACTOR * (newPos.x - oldPos.x);
+            vy += VEL_FACTOR * (newPos.y - oldPos.y);     
         }     
      
         private function determineNewRotation(dy:Number, dx:Number, adjacent:Segment):Number {
@@ -171,8 +165,8 @@ package com.becker.common
 	        return limitAngleIfNeeded(angle, adjacent) * Util.RAD_TO_DEG;
         }
         
-        private function limitAngleIfNeeded(proposedAngle:Number, adjacent:Segment):Number
-        {
+        private function limitAngleIfNeeded(proposedAngle:Number, 
+                                            adjacent:Segment):Number {
         	return proposedAngle;
         	/*
         	// if the angle desired is to great, limit it.            
@@ -196,32 +190,39 @@ package com.becker.common
             return ang;
             */
         }
+        
+        private function getOppositeConnector():Connector {
+        	return (isFront)? owner.rearConnector: owner.frontConnector;       	
+        }
        
         public function updateDynamics(gravity:Number, width:Number, height:Number):void {
-        	
+        	        	
         	vy += gravity * 1.0;
         	var pt:Point = getPosition();
-    		pt.x += vx * 0.1;
-    		pt.y += vy * 0.1; 
+    		pt.x += vx * VEL_FACTOR;
+    		pt.y += vy * VEL_FACTOR; 
+    		//var oppositeConnector:Connector = getOppositeConnector();
     		   
     		// bounce if hit a wall   		
     		if (pt.x > width) {
-    			pt.x = width;
-    			vx *= -BOUNCE;
+    			pt.x = width; //2.0 * width - pt.x;
+    			vx *= -BOUNCE;  	 		
     		}
-    		if (pt.x < 0) {
-    			pt.x = 0;
-    			vx *= -BOUNCE;
+    		if (pt.x < 0.0) {
+    			pt.x = 0.0; //-pt.x ;
+    			vx *= -BOUNCE;  	
     		}    
     		if (pt.y > height) {
-    			pt.y = height;
-    			vy *= -BOUNCE;
+    			pt.y = height; // 2.0 * height - pt.y;
+    			vy *= -BOUNCE; 	
     		}
-    		if (pt.y < 0) {
-    			pt.y = 0;
-    			vy *= -BOUNCE;
+    		if (pt.y < 0.0) {
+    			pt.y = 0.0; //-pt.y;
+    			vy *= -BOUNCE; 	
     		}     
-    		setPosition(pt);		
+    		
+    	    setPosition(pt);
+    		//dragConnectingSegments(owner, pt.x, pt.y);     
         }
     }
 }
