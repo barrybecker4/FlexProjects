@@ -57,21 +57,25 @@
 	    <mx:VBox width="100%" height="100%" >
 	       <mx:TabNavigator id="tabNav" width="100%" height="160" 
 	       	                change="tabChanged(event)" >
-	            <mx:VBox label="Build" width="100%" height="100%">
-	                 <mx:HBox width="180">
-	                      <mx:ColorPicker/>
-	                      <mx:Label text="Segment Color"/>
-	                 </mx:HBox>
-	                 <mx:HBox width="180">
-	                      <mx:NumericStepper value="60" maximum="200"/>
-	                      <mx:Label text="Length"/>
-	                 </mx:HBox>
-	                 <mx:HBox width="180">
-	                      <mx:NumericStepper value="12" maximum="40"/>
-	                      <mx:Label text="Thickness"/>
-	                 </mx:HBox>
-	                 <mx:Button label="Add Segment" click="{}" />
-	            </mx:VBox>
+	       	    <mx:HBox label="Build" horizontalGap="4" paddingRight="10" paddingBottom="5">	       	    		       	        
+		            <mx:VBox  height="100%">
+		                 <mx:HBox width="180">
+		                      <mx:ColorPicker/>
+		                      <mx:Label text="Segment Color"/>
+		                 </mx:HBox>
+		                 <mx:HBox width="180">
+		                      <mx:NumericStepper value="60" maximum="200"/>
+		                      <mx:Label text="Length"/>
+		                 </mx:HBox>
+		                 <mx:HBox width="180">
+		                      <mx:NumericStepper value="12" maximum="40"/>
+		                      <mx:Label text="Thickness/Mass"/>
+		                 </mx:HBox>
+		                 <mx:Button label="Add Segment" click="{}" />
+		            </mx:VBox>
+		            <mx:TextArea htmlText="The goal for this Flash application is to allow you to build dynamic structures and see how they behave in simulated circumstances. I am still trying to work out the physics so a lot is missing right now. So far you can click on the pins that connect the segments and drag the whole chain around. In the simulation tab, you can also apply gravity. You cannot add new segments and connections yet." 
+		            	    width="100%" height="100%" />
+	            </mx:HBox>       
 	            <mx:VBox label="Simulate" width="100%" height="100%"  creationComplete="{simTabCreated()}">	               
 	                 <mx:HBox width="250">
 	                      <mx:CheckBox id="gravityCheckbox" label="Gravity" change="{gravityCheckChange()}"/>

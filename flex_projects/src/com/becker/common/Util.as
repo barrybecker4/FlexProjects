@@ -52,6 +52,18 @@ import flash.geom.Point;
                 result.y = y * cos + x * sin;
             }
             return result;
-        }                
+        }      
+        
+        /**
+         * Round to specificied place.
+         * e.g. round(3.45, 1) = 3.5
+         *      rount(23.456, 0) = 23
+         *      round(12345.3, -2) = 12300
+         */
+        public static function round(value:Number, place:int):Number {
+        	var exp:Number = Math.pow(10.0, place);
+        	return Math.round(value * exp) / exp;
+        }
+                  
     }
 }

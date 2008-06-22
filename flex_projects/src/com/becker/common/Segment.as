@@ -1,7 +1,6 @@
 package com.becker.common
 {
     import flash.display.Sprite;
-    import flash.geom.Point;
 
     /**
      * A simple segment that can be combined with other segments
@@ -18,7 +17,7 @@ package com.becker.common
      */ 
     public class Segment extends Sprite
     {
-        // don't necessarily allow a joint to fold back on itselt.
+        // don't necessarily allow a joint to fold back on itself.
         private static const DEFAULT_ANGLE_LIMIT:Number = 0.7;         
         
         private var color_:uint;
@@ -29,7 +28,7 @@ package com.becker.common
         public var frontConnector:Connector;
         public var rearConnector:Connector;
         
-        // velocity vector
+        // velocity vector (used only by walkder app)
         public var vx:Number = 0;
         public var vy:Number = 0;
         
@@ -70,9 +69,10 @@ package com.becker.common
         }
         
         public function updateDynamics(gravity:Number, width:Number, height:Number):void {
-        	frontConnector.updateDynamics(gravity, width, height);
-        	rearConnector.updateDynamics(gravity, width, height);      	
+        	frontConnector.updateDynamics(gravity, width, height);        	
+            rearConnector.updateDynamics(gravity, width, height);           	       	   	
         }
+       
         
         /*
         private function jointAngle(seg:Segment):Number

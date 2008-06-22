@@ -2,6 +2,7 @@ package  com.becker.animation
 {
     import com.becker.common.Connector;
     import com.becker.common.Segment;
+    import com.becker.common.SegmentSet;
     
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -12,7 +13,7 @@ package  com.becker.animation
     public class MultiSegmentDrag extends UIComponent implements Animatible
     {
     	private static const DEFAULT_SEGMENT_LENGTH:Number = 60;
-        private var segments:Array;
+        private var segments:SegmentSet;
         private var numSegments:uint = 10;
         private var draggedConnector:Connector;
         private var lastDraggedConnector:Connector;
@@ -33,7 +34,7 @@ package  com.becker.animation
         
         public function startAnimating():void
         {
-            segments = new Array();
+            segments = new SegmentSet();
             var lastSegment:Segment;
             for (var i:uint = 0; i < numSegments; i++)
             {
@@ -42,20 +43,22 @@ package  com.becker.animation
                 
                 segment.frontConnector.addEventListener(MouseEvent.MOUSE_DOWN, onPress);
                 segment.rearConnector.addEventListener(MouseEvent.MOUSE_DOWN, onPress);
-                addChild(segment);                
-                segments.push(segment);
+                addChild(segment);                                
                 // connect each new segment to the one before it.
+                var connector:Connector = null;
                 if (i == 0) {
                 	segment.x = 20;
                 	segment.y = 20;           
                 } else {
                 	segment.y = lastSegment.y + 3;
                 	segment.x = lastSegment.x + lastSegment.length;
-                	lastSegment.rearConnector.connect(segment.frontConnector);        
+                	connector = lastSegment.rearConnector;       
                 }
+                segments.add(segment, true, connector);
                 lastSegment = segment;
             }
             draggedConnector = null;
+            
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
             parent.addEventListener(MouseEvent.MOUSE_UP, unPress);    
         }
@@ -80,10 +83,8 @@ package  com.becker.animation
         	if (lastDraggedConnector == null && draggedConnector == null) return;
         	
         	// update positions based on current velocity       
-        	if (enableSimulation) { 	
-	        	for each (var segment:Segment in segments) {
-	        		segment.updateDynamics(gravityEnabled?gravity:0, width, height);        		
-	        	}
+        	if (enableSimulation) { 
+        		segments.updateDynamics(gravityEnabled?gravity:0, width, height);		        	
 	        }
         	
             if (draggedConnector != null && 
@@ -91,7 +92,7 @@ package  com.becker.animation
                 //lastX = mouseX;
                 //lastY = mouseY;
                 // drag all the connected segments (recursively) accordingly.               
-                draggedConnector.dragConnectingSegments(null, mouseX, mouseY);
+                draggedConnector.dragConnectingSegments(null, new Point(mouseX, mouseY));
             }
             else if (lastDraggedConnector != null && enableSimulation) {
             	// keep going at the last drag velocity
@@ -101,7 +102,7 @@ package  com.becker.animation
             	        pt.x + lastDragVelocity.x, 
             	        pt.y + lastDragVelocity.y);  
             	*/   
-            	lastDraggedConnector.dragConnectingSegments(null, pt.x, pt.y);   	
+            	lastDraggedConnector.dragConnectingSegments(null, pt);   	
             }            
         }
     }
