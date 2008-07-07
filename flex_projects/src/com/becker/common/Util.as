@@ -64,6 +64,13 @@ import flash.geom.Point;
         	var exp:Number = Math.pow(10.0, place);
         	return Math.round(value * exp) / exp;
         }
+        
+        public static function distance(pt1:Point, pt2:Point):Number
+        {
+        	var dx:Number = pt1.x - pt2.x;
+        	var dy:Number = pt1.y - pt2.y;
+        	return Math.sqrt(dx * dx + dy * dy);
+        }
                   
     }
 }

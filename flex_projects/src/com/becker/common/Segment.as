@@ -13,7 +13,9 @@ package com.becker.common
      * height {   < o                 o >  rear connector
      *         \   ---------------------
      *      front con.     width               
-     *                         
+     *               
+     * The angle of the segment is computed using
+     * Math.atan2(rear.y - front.y, rear.x - front.x)          
      */ 
     public class Segment extends Sprite
     {

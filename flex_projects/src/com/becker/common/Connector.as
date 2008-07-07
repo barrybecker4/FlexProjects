@@ -29,10 +29,22 @@ package com.becker.common
         private var color:uint;
         private var mass:Number;
         
+        [Bindable]
+        public var showForce:Boolean = false;
+        [Bindable]
+        public var showVelocity:Boolean = false;
+        
         // Elasticity. how much to bounce when hitting another object like a wall.
-        private static const BOUNCE:Number = 0.8;
+        private static const BOUNCE:Number = 0.1;
         
         private static const VEL_FACTOR:Number = 0.2;
+        
+        /** for drawing force and velocity vectors) */
+        private static const FORCE_COLOR:uint = 0x1100aa;
+        private static const FORCE_ALPHA:Number = 0.5;
+        private static const VELOCITY_COLOR:uint = 0x00bb33;
+        private static const VELOCITY_ALPHA:Number = 0.5;
+        
         
         public function Connector(owner:Segment, isFront:Boolean, color:uint = 0x88ff00, mass:Number = 1.0)                                 
         {
@@ -44,7 +56,7 @@ package com.becker.common
             this.mass = mass;
             velocity = new Vector2d(0, 0);
             force = new Vector2d(0, 0);
-            init();
+            addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
         
         public function get owner():Segment {
@@ -54,14 +66,39 @@ package com.becker.common
         public function get isFront():Boolean {
         	return isFront_;
         }
-        
-        public function init():void {          
+     
+        private function onEnterFrame(event:Event):void
+        {  
+        	graphics.clear();
         	graphics.lineStyle(0);
-        	graphics.beginFill(color);
-            graphics.drawCircle(isFront?0:owner.length, 0, radius);  
-            graphics.endFill();
-        }        
-      
+            graphics.beginFill(color);
+            var xpos:int = isFront?0:owner.length;
+            graphics.drawCircle(xpos, 0, radius);  
+            graphics.endFill();   
+            var adjPt:Point; 
+                       
+        	if (showForce) {
+                graphics.lineStyle(1, FORCE_COLOR, FORCE_ALPHA); 
+                adjPt = adjustForRotation(force);             
+                graphics.lineTo(adjPt.x + xpos, adjPt.y);
+            }
+            if (showVelocity) {
+                graphics.lineStyle(1, VELOCITY_COLOR, VELOCITY_ALPHA);
+                graphics.moveTo(0, 0);
+                adjPt = adjustForRotation(velocity);   
+                graphics.lineTo(adjPt.x + xpos, adjPt.y);
+            }
+        }
+        
+        public function adjustForRotation(adjPoint:Vector2d):Point
+        {
+        	var len:Number = adjPoint.length;
+        	var ang:Number = Math.atan2(adjPoint.y, adjPoint.x);
+        	var adjAng:Number = ang - owner.rotation * Util.DEG_TO_RAD;
+        	var newPt:Point = new Point(Math.cos(adjAng) * len, Math.sin(adjAng) * len);
+        	return newPt;
+        }
+        
         /**
          * On the left or right of the owning segment.
          */
@@ -78,13 +115,16 @@ package com.becker.common
         
         private function setPosition(pt:Point):void {
         	//trace("setPosition "+ (isFront?"front":"rear") + " angle="+owner_.rotation + "  x=" +Util.round(owner_.x,1) + " y=" +Util.round(owner_.y,2));
+        	//var oppPos:Point = getOppositeConnector().getPosition();  
         	if (isFront) {
         		owner_.x = pt.x;
-        		owner_.y = pt.y;
+        		owner_.y = pt.y;       		
+        		//owner_.rotation = Math.atan2(oppPos.y - pt.y, oppPos.x - pt.x) * Util.RAD_TO_DEG;
         	} else {
         		var angle:Number = Util.DEG_TO_RAD * owner_.rotation;
 	            owner_.x = pt.x - Math.cos(angle) * owner_.length;
-	            owner_.y = pt.y - Math.sin(angle) * owner_.length;	           
+	            owner_.y = pt.y - Math.sin(angle) * owner_.length;	
+	            //owner_.rotation = Math.atan2(pt.y - oppPos.y, pt.x - oppPos.x) * Util.RAD_TO_DEG;           
         	}
         	//trace(" - angle="+owner_.rotation + " vx="+Util.round(vx, 2)+" vy="+Util.round(vy, 2)+"       x="+Util.round(owner_.x, 1) + " y="+Util.round(owner_.y, 1));
         }
@@ -163,9 +203,7 @@ package com.becker.common
 	            owner.y = pos.y - h;       	         
 	        }
 	        var newPos:Point = getPosition();
-	        var velChange:Vector2d = new Vector2d(newPos.x - oldPos.x, newPos.y - oldPos.y);
-	        velChange.scale(VEL_FACTOR);
-            velocity.add(velChange);     
+	        velocity = new Vector2d(newPos.x - oldPos.x, newPos.y - oldPos.y); 
         }     
      
         private function determineNewRotation(dy:Number, dx:Number, adjacent:Segment):Number {
@@ -208,12 +246,19 @@ package com.becker.common
          * The opposite pins velocity is changed by the component in the direction of the segment.
          */
         public function updateDynamics(gravity:Number, width:Number, height:Number):Boolean {
-        	        	
-        	velocity.y += gravity * 1.0;
+        	        
+         	velocity.x += force.x;
+        	velocity.y += (force.y + gravity);
+        	force.x = 0;
+        	force.y = 0;
         	var pt:Point = getPosition();
         	pt.x += velocity.x * VEL_FACTOR;
     		pt.y += velocity.y * VEL_FACTOR; 
-    		var oppositeConnector:Connector = getOppositeConnector();
+    		
+    		// must do 3 steps
+    		// 1) update velocities based on all forces.
+    		// 2) update positions based on all velocities
+    		// 3) apply constraints (i.e rigid segments must be maintained).
     		var bounced:Boolean = false;
     		
     		   
@@ -242,6 +287,12 @@ package com.becker.common
     	    setPosition(pt);
     		//dragConnectingSegments(owner, pt.x, pt.y);  
     		return bounced;   
+        }
+        
+        override public function toString():String
+        {
+        	var pt:Point = this.getPosition();
+            return "Connector x=" + pt.x + " y=" + pt.y;
         }
     }
 }

@@ -16,6 +16,10 @@
 	    private static const BUILD_LABEL:String = "Build";
 	    private static const SIMULATE_LABEL:String = "Simulate";
 	    
+	    private static const DEFAULT_GRAVITY:Number = 0.8;
+	    private static const DEFAULT_FRICTION:Number = 0.8;
+	    
+	    [Bindable]
 	    private var app:MultiSegmentDrag;
 	    
 	    private function createComplete():void {
@@ -23,39 +27,35 @@
 	    }
 	    private function simTabCreated():void {	   
 	    	app = MultiSegmentDrag(animComp.sprite);	
-	    	gravityCheckbox.selected = app.gravityEnabled;
-	    	gravityStepper.value = app.gravity; 
+	    	gravityCheckbox.selected = app.gravityEnabled;	    	
 	    	gravityStepper.stepSize = 0.1; 
 	    	gravityStepper.maximum = 20;
+	    	gravityStepper.value = DEFAULT_GRAVITY; 
+	    	frictionStepper.value = DEFAULT_FRICTION;   	
 	    }
 	    
 	    private function tabChanged(event:IndexChangedEvent):void {	   
 	    	if (app !=null && tabNav != null) {		    	
 	            app.enableSimulation = (tabNav.getTabAt(tabNav.selectedIndex).label == SIMULATE_LABEL); 
+	            app.showForces = forcesCheckbox.selected && event.newIndex == 1;
+	            app.showVelocities = velocitiesCheckbox.selected && event.newIndex == 1;
 	        }	
-	    }	    
-	    
-	    private function gravityCheckChange():void {
-	    	app.gravityEnabled = gravityCheckbox.selected;
-	    }
-	    
-        private function gravityValueChange():void {
-	    	app.gravity = gravityStepper.value;
-	    }
-	    
-	    private function frictionCheckChange():void {
-	    	app.frictionEnabled = frictionCheckbox.selected;
-	    }
-	    
-        private function frictionValueChange():void {
-	    	app.friction = frictionStepper.value;
-	    }
-	    
+	    }	    	   
 	    
     ]]></mx:Script>
+    
+    <mx:Binding source="gravityCheckbox.selected" destination="app.gravityEnabled" />
+    <mx:Binding source="gravityStepper.value" destination="app.gravity" />
+    
+    <mx:Binding source="frictionCheckbox.selected" destination="app.frictionEnabled" />
+    <mx:Binding source="frictionStepper.value" destination="app.friction" />
+    
+    <mx:Binding source="forcesCheckbox.selected" destination="app.showForces" />
+    <mx:Binding source="velocitiesCheckbox.selected" destination="app.showVelocities" />
+    
 	<mx:Panel title="Physics Simulation" width="100%" height="100%" >
-	    <mx:VBox width="100%" height="100%" >
-	       <mx:TabNavigator id="tabNav" width="100%" height="160" 
+	    <mx:VBox width="100%" height="100%" > 
+	       <mx:TabNavigator id="tabNav" width="100%" height="140" 
 	       	                change="tabChanged(event)" >
 	       	    <mx:HBox label="Build" horizontalGap="4" paddingRight="10" paddingBottom="5">	       	    		       	        
 		            <mx:VBox  height="100%">
@@ -78,13 +78,17 @@
 	            </mx:HBox>       
 	            <mx:VBox label="Simulate" width="100%" height="100%"  creationComplete="{simTabCreated()}">	               
 	                 <mx:HBox width="250">
-	                      <mx:CheckBox id="gravityCheckbox" label="Gravity" change="{gravityCheckChange()}"/>
-	                      <mx:NumericStepper id="gravityStepper" change="{gravityValueChange()}"/>
+	                      <mx:CheckBox id="gravityCheckbox" label="Gravity" />
+	                      <mx:NumericStepper id="gravityStepper"/>
 	                 </mx:HBox>
 	                 <mx:HBox width="250">
-	                      <mx:CheckBox id="frictionCheckbox" label="Friction" change="{frictionCheckChange()}"/>
-	                      <mx:NumericStepper id="frictionStepper" change="{frictionValueChange()}"/>
+	                      <mx:CheckBox id="frictionCheckbox" label="Friction" />
+	                      <mx:NumericStepper id="frictionStepper" />
 	                 </mx:HBox>
+	                 <mx:HBox width="300">
+                          <mx:CheckBox id="forcesCheckbox" label="Show force vectors" selected="true" />
+                          <mx:CheckBox id="velocitiesCheckbox" label="Show veclocity vectors" selected="true"/>
+                     </mx:HBox>
 	            </mx:VBox>
 	       </mx:TabNavigator>
 	       
