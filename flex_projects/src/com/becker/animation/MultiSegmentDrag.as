@@ -20,14 +20,12 @@ package  com.becker.animation
     {
     	private static const DEFAULT_SEGMENT_LENGTH:Number = 60;
     	// effectively the spring constant used when dragging in simulation mode.
-    	private static const DRAG_SCALE:Number = 1.0;
+    	private static const DRAG_SCALE:Number = 0.02;
         private var segments:SegmentSet;
         private var numSegments:uint = 20;
         private var draggedConnector:Connector;
         private var lastDraggedConnector:Connector;
-        //private var lastDragVelocity:Point;
-        //private var lastX:Number;
-        //private var lastY:Number;
+      
         
         [Bindable]
         public var gravity:Number = 0.9;
@@ -98,11 +96,7 @@ package  com.becker.animation
         	
             if (draggedConnector != null && !enableSimulation &&
                 mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-                //lastX = mouseX;
-                //lastY = mouseY;
                 // drag all the connected segments (recursively) accordingly.   
-                
-                // apply force            
                 pos = new Point(mouseX, mouseY);               
                 draggedConnector.dragConnectingSegments(null, pos);
             }
@@ -115,11 +109,6 @@ package  com.becker.animation
                 
             	// keep going at the last drag velocity
             	pos = lastDraggedConnector.getPosition();
-            	/*           	           	
-            	lastDraggedConnector.dragConnectingSegments(null, 
-            	        pt.x + lastDragVelocity.x, 
-            	        pt.y + lastDragVelocity.y);  
-            	*/   
             	lastDraggedConnector.dragConnectingSegments(null, pos);   	
             }            
         }

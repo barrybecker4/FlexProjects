@@ -85,11 +85,14 @@ package com.becker.common
             if (showVelocity) {
                 graphics.lineStyle(1, VELOCITY_COLOR, VELOCITY_ALPHA);
                 graphics.moveTo(0, 0);
-                adjPt = adjustForRotation(velocity);   
+                adjPt = adjustForRotation(new Vector2d(1.0 * velocity.x, 1.0 * velocity.y));   
                 graphics.lineTo(adjPt.x + xpos, adjPt.y);
             }
         }
         
+        /**
+         * subtract the angle that the owning segment is rotated.
+         */
         public function adjustForRotation(adjPoint:Vector2d):Point
         {
         	var len:Number = adjPoint.length;
@@ -202,8 +205,8 @@ package com.becker.common
 	            owner.x = pos.x - w;
 	            owner.y = pos.y - h;       	         
 	        }
-	        var newPos:Point = getPosition();
-	        velocity = new Vector2d(newPos.x - oldPos.x, newPos.y - oldPos.y); 
+	        //var newPos:Point = getPosition();
+	        //velocity = new Vector2d(newPos.x - oldPos.x, newPos.y - oldPos.y); 
         }     
      
         private function determineNewRotation(dy:Number, dx:Number, adjacent:Segment):Number {
@@ -263,23 +266,23 @@ package com.becker.common
     		
     		   
     		// bounce if hit a wall   		
-    		if (pt.x > width) {
-    			pt.x = 2.0 * width - pt.x;
+    		if (pt.x > width + radius) {
+    			pt.x = width - radius; //2.0 * width - pt.x - radius;
     			velocity.x *= -BOUNCE;  	 	
     			bounced = true;	
     		}
-    		if (pt.x < 0.0) {
-    			pt.x = -pt.x;
+    		if (pt.x - radius < 0.0) {
+    			pt.x = radius;
     			velocity.x *= -BOUNCE;  
     			bounced = true;		
     		}    
-    		if (pt.y > height) {
-    			pt.y = 2.0 * height - pt.y;
+    		if (pt.y > height + radius) {
+    			pt.y = height - radius; //2.0 * height - pt.y;
     			velocity.y *= -BOUNCE; 
     			bounced = true;		
     		}
-    		if (pt.y < 0.0) {
-    			pt.y = -pt.y; 
+    		if (pt.y - radius < 0.0) {
+    			pt.y = radius; //-pt.y; 
     			velocity.y *= -BOUNCE; 
     			bounced = true;		
     		}     
