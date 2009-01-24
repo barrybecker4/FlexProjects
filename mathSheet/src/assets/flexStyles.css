@@ -141,11 +141,15 @@ VDividedBox {
     fontWeight: normal;
 }
 
+.applicationStyle {
+    paddingTop: 12;
+}
 
 .titleStyle {
     fontSize: 24;
     color: #000000;
     fontWeight: bold;
+
 }
 
 
