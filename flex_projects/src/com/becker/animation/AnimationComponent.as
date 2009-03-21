@@ -8,11 +8,15 @@ package com.becker.animation
     import mx.core.UIComponent;
     import mx.events.FlexEvent;
     
+    /**
+     * The idea is to embedd a flash animation compoent inside a flash application.
+     * @author Barry Becker
+     */
     public class AnimationComponent extends VBox
     {
         private var _sprite:Animatible;
         
-        // need to reference or not in swf unfortunately :(
+        // need to reference or not included in swf unfortunately :(
         private var w1:RealWalk;
         private var w2:DrawingApp;
         private var w3:MultiBilliard2;
@@ -24,6 +28,9 @@ package com.becker.animation
         private var w9:MultiSegmentDrag;
         private var w10:MultiSpring;
         private var w11:Fireworks;
+        private var w12:BoxWorld;
+        private var w13:BoxMain;
+        private var w14:BoxExample;
         
         /**
          * @param sprite must pass in a sprite to wrap.

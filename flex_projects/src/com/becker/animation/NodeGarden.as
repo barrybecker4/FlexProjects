@@ -2,13 +2,14 @@ package com.becker.animation
 {
     import com.becker.common.Ball;
     
-    import flash.display.Sprite;
     import flash.events.Event;
+    
+    import mx.core.UIComponent;
 
-    public class NodeGarden extends Sprite implements Animatible
+    public class NodeGarden extends UIComponent implements Animatible
     {
         private var particles:Array;
-        private var numParticles:uint = 10;
+        private var numParticles:uint = 30;
         private var minDist:Number = 100;
         private var springAmount:Number = .003;
         
