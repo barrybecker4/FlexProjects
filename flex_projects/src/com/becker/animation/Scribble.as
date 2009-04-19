@@ -1,7 +1,8 @@
 package com.becker.animation
 {
-    import flash.display.Sprite;
     import flash.events.Event;
+    
+    import mx.core.UIComponent;
     
     public class Scribble extends UIComponent implements Animatible
     {

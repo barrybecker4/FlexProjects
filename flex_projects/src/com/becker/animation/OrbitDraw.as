@@ -1,10 +1,13 @@
 package  com.becker.animation
 {
-    import flash.display.Sprite;
+    import com.becker.common.Ball;
+    
     import flash.display.StageAlign;
     import flash.display.StageScaleMode;
     import flash.events.Event;
     import flash.geom.Point;
+    
+    import mx.core.UIComponent;
 
     public class OrbitDraw extends UIComponent implements Animatible
     {

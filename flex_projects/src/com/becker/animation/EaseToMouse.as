@@ -1,9 +1,10 @@
 package com.becker.animation
 {
-    import com.becker.animation.Animatible;
+    import com.becker.common.Ball;
     
-    import flash.display.Sprite;
     import flash.events.Event;
+    
+    import mx.core.UIComponent;
     
     public class EaseToMouse extends UIComponent implements Animatible
     {

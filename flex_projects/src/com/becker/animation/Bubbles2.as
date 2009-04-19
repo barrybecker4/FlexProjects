@@ -1,8 +1,11 @@
 package com.becker.animation
 {
-    import flash.display.Sprite;
+    import com.becker.common.Ball;
+    
     import flash.events.Event;
     import flash.events.MouseEvent;
+    
+    import mx.core.UIComponent;
     
     public class Bubbles2 extends UIComponent implements Animatible
     {
@@ -70,7 +73,7 @@ package com.becker.animation
             {
                 var ball:Ball = balls[i];
                 if (ball != draggedBall) {
-                    move(ball);
+                    moveBall(ball);
                 }
             }
         }
@@ -93,7 +96,7 @@ package com.becker.animation
             }
         }
         
-        private function move(ball:Ball):void
+        private function moveBall(ball:Ball):void
         {
             ball.vy += gravity;
             ball.x += ball.vx;
