@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Object xmlns:mx="http://www.adobe.com/2006/mxml">
+
+<mx:Script><![CDATA[
+	[Embed(source='../../../assets/images/gold-env2.png')]
+	public static const GOLD:Class;
+	
+	[Embed(source='../../../assets/images/envmap_gold.jpg')]
+    public static const GOLD2:Class;
+	
+	[Embed(source="../../../assets/images/grunge1_small.jpg")]
+	public static const GRUNGE:Class;
+	
+	
+	[Embed(source='../../../assets/images/human_tissue_small.jpg')]
+	public static const TISSUE:Class;
+	
+	[Embed(source='../../../assets/images/pool_pennies_small.jpg')]
+	public static const POOL_PENNIES:Class;
+	
+	
+	
+	/**
+	 * Return a list of all images
+	 * @return an Array of objects where each object contains name:String and icon:Class
+	 */
+	
+	public static function getImageData():Array
+	{
+		var imageData:Array = new Array();
+		var classInfo:XML = describeType(Images);
+		for each (var image:XML in classInfo..constant) {
+		
+			var name:String = String(image.@name);
+			var oneImage:Object = new Object();
+			oneImage.name = name;
+			oneImage.icon = Images[name];
+			
+			imageData.push(oneImage);			
+		}
+	
+	    return imageData;	
+	}
+]]></mx:Script>
+
+</mx:Object>

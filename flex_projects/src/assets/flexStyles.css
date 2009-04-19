@@ -1,0 +1,136 @@
+/* CSS file */
+  
+@font-face {
+        src:url("fonts/American Dream.ttf");
+        font-family: dreamFont;
+}
+@font-face {
+        src:url("fonts/Agent Orange.ttf");
+        font-family: agentFont;
+}
+@font-face {
+        src:url("fonts/Abduction II.ttf");
+        font-family: abductionFont;
+}
+@font-face {
+        src:url("fonts/Abscissa.ttf");
+        font-family: abscissaFont;
+}
+@font-face {
+        src:url("fonts/Ace Crikey.ttf");
+        font-family: crikeyFont;
+}
+@font-face {
+        src:url("fonts/Acklin Regular.ttf");
+        font-family: acklinFont;
+}
+@font-face {
+        src:url("fonts/Acquaintance.ttf");
+        font-family: acquaintanceFont;
+}
+@font-face {
+        src:url("fonts/Action Man.ttf");
+        font-family: actionFont;
+}
+@font-face {
+        src:url("fonts/Action Man Italic.ttf");
+        font-family: actionItalicFont;
+        fontStyle: italic;
+}
+@font-face {
+        src:url("fonts/Action Man Shaded.ttf");
+        font-family: actionShadedFont;
+}
+@font-face {
+        src:url("fonts/A Cut Above The Rest.ttf");
+        font-family: cutAboveFont;
+}
+@font-face {
+        src:url("fonts/Air Millhouse Italic.ttf");
+        font-family: millhouseFont;
+        fontStyle: italic;
+}
+
+
+/*
+dreamFont
+agentFont
+abductionFont 
+abscissaFont 
+crikeyFont 
+acklinFont 
+acquaintanceFont 
+actionFont
+actionItalicFont 
+actionShadedFont 
+cutAboveFont 
+millhouseFont 
+*/
+
+.dreamFont {
+    font-family:dreamFont;
+    font-size: 14pt;
+}
+.agentFont {
+    font-family:agentFont;
+    fontSize: 14pt;
+}
+.abductionFont {
+    font-family:abductionFont;
+    fontSize: 14pt;
+}
+.abscissaFont {
+    font-family:abscissaFont;
+    fontSize: 14pt;
+}
+.crikeyFont {
+    font-family:crikeyFont;
+    fontSize: 14pt;
+}
+.acklinFont {
+    font-family:acklinFont;
+    fontSize: 14pt;
+}
+.acquaintanceFont {
+    font-family:acquaintanceFont;
+    fontSize: 14pt;
+}
+.actionFont {
+    font-family:actionFont;
+    fontSize: 14pt;
+}
+.actionItalicFont {
+    font-family:actionItalicFont;
+    fontSize: 14pt;
+    fontType: italic;
+}
+.actionShadedFont {
+    font-family:actionShadedFont;
+    fontSize: 14pt;
+    fontWeight: normal;
+}
+.cutAboveFont {
+    font-family:cutAboveFont;
+    fontSize: 14pt;
+}
+.millhouseFont {
+    font-family:millhouseFont;
+    fontSize: 14pt;
+}
+
+.actionShadedLargeFont {
+    font-family:actionShadedFont;
+    fontSize: 24pt;
+}
+ 
+TextArea {
+    font-family:arial;
+    fontSize: 12pt;
+}
+/*
+Button {
+ 	font-family:agentFont;
+    fontSize: 12pt;
+    fontWeight: bold;
+}*/
+

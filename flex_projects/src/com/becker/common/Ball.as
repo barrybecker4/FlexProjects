@@ -18,42 +18,52 @@ package com.becker.common
             this.color = color;
             init();
         }
-        public function init():void {
-            graphics.beginFill(color);
+        
+        private function init():void {
+        	graphics.beginFill(color);
             graphics.drawCircle(0, 0, radius);
             graphics.endFill();
         }
+        /*
+        override protected function updateDisplayList(w:Number, h:Number):void {
+            super.updateDisplayList(w, h);
+            
+            graphics.beginFill(color);
+            graphics.drawCircle(0, 0, radius);
+            graphics.endFill();
+        }*/
         
         /** 
          * controls the bouncing ball.
+         * Handles collision with a wall.
          * @param bounce controls the elasticity fo the bounce (1 = totally elastic)
          */
         public function bounce(bounce:Number, gravity:Number, 
                                    container:UIComponent):void
         {
             vy += gravity;
-            x += vx;
-            y += vy;
-            if(x + radius > container.width)
-            {
+
+            //trace("x="+x +" container.width="+container.width+" y="+y +" container.height="+  container.height );
+            if (x + radius > container.width) {
                 x = container.width - radius;
                 vx *= bounce;
             }
-            else if(x - radius < 0)
-            {
+            else if (x - radius < 0) {
                 x = radius;
-                vx *= bounce;
+                vx *= -bounce;
             }
-            if(y + radius > container.height)
-            {
+            
+            if (y + radius > container.height) {
                 y = container.height - radius;
                 vy *= bounce;
             }
-            else if(y - radius < 0)
-            {
+            else if (y - radius < 0) {
                 y = radius;
                 vy *= bounce;
             }
+            trace("vx="+ vx +" vy="+ vy + " radius="+ this.radius);
+            x += vx;
+            y += vy;
         }    
         
         /**

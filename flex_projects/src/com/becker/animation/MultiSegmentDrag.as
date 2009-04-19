@@ -55,8 +55,10 @@ package  com.becker.animation
             draggedConnector = null;
             
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
-            parent.addEventListener(MouseEvent.MOUSE_DOWN, onPress)
-            parent.addEventListener(MouseEvent.MOUSE_UP, unPress);    
+            //parent.addEventListener(MouseEvent.MOUSE_DOWN, onPress)
+            //parent.addEventListener(MouseEvent.MOUSE_UP, unPress);    
+            addEventListener(MouseEvent.MOUSE_DOWN, onPress)
+            addEventListener(MouseEvent.MOUSE_UP, unPress);    
         }
         
         public function set showForces(show:Boolean):void {

@@ -1,102 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:app="com.becker.animation.*"	
-	layout="absolute"  
-	creationComplete="createComplete()">
-	
-	<mx:Script><![CDATA[
-		import com.becker.animation.BoxWorld;
-		import mx.events.IndexChangedEvent;
-		import mx.controls.HSlider;
-		import com.becker.animation.walking.RealWalk;
-		import mx.events.SliderEvent;
-		import mx.events.FlexEvent;
-	
-	    private static const BUILD_LABEL:String = "Build";
-	    private static const SIMULATE_LABEL:String = "Simulate";
-	    
-	    private static const DEFAULT_GRAVITY:Number = 0.8;
-	    private static const DEFAULT_FRICTION:Number = 0.8;
-	    
-	    [Bindable]
-	    private var app:BoxWorld;
-	    
-	    private function createComplete():void {
-	    	app = BoxWorld(animComp.sprite);		    
-	    }
-	    private function simTabCreated():void {	   
-	    	app = BoxWorld(animComp.sprite);	
-	    	gravityCheckbox.selected = app.gravityEnabled;	    	
-	    	gravityStepper.stepSize = 0.1; 
-	    	gravityStepper.maximum = 20;
-	    	gravityStepper.value = DEFAULT_GRAVITY; 
-	    	frictionStepper.value = DEFAULT_FRICTION;   	
-	    }
-	    
-	    private function tabChanged(event:IndexChangedEvent):void {	   
-	    	if (app !=null && tabNav != null) {		    	
-	            app.enableSimulation = (tabNav.getTabAt(tabNav.selectedIndex).label == SIMULATE_LABEL); 
-	            app.showForces = forcesCheckbox.selected && event.newIndex == 1;
-	            app.showVelocities = velocitiesCheckbox.selected && event.newIndex == 1;
-	        }	
-	    }	    	   
-	    
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    xmlns:app="com.becker.animation.*"  
+    xmlns:control="com.becker.controls.*" 
+    layout="absolute"  
+    creationComplete="createComplete()">
+    
+    <mx:Style source="../assets/flexStyles.css" />
+    
+    <mx:Script><![CDATA[
+        import com.becker.animation.box2d.simulations.RagDollSimulation;
+        import com.becker.animation.box2d.Simulation;
+        import com.becker.animation.box2d.BoxWorld;
+        import mx.events.IndexChangedEvent;
+        import mx.controls.HSlider;
+        import com.becker.animation.walking.RealWalk;
+        import mx.events.SliderEvent;
+        import mx.events.FlexEvent;
+        import com.becker.controls.FontSelector;
+    
+        private static const BUILD_LABEL:String = "Build";
+        private static const SIMULATE_LABEL:String = "Simulate";
+        
+        private static const DEFAULT_GRAVITY:Number = 9.0;
+        private static const DEFAULT_FRICTION:Number = 0.5;
+        
+        private static const RESUME_LABEL:String = "Resume";
+        private static const PAUSE_LABEL:String = "Pause";
+        
+        private static const INSTRUCTIONS:String = "Use this Flash application, based on <a href=\"http://box2dflash.sourceforge.net/\">Box2DAS3</a> " + 
+                "to simulate dynamic structures. You can click on things and drag them around, " + 
+                "and you can press 'd' over an object to delete it." 
+                
+        private var app:BoxWorld;
+        
+        [Bindable]
+        private var selectedFont:String;
+        
+        
+        private function createComplete():void {
+            app = BoxWorld(animComp.sprite);
+            simulationSelected();   
+                   
+            selectedFont = fontSelector.selectedFont;
+            gravityStepper.stepSize = 0.1; 
+            gravityStepper.maximum = 20;
+            gravityStepper.value = DEFAULT_GRAVITY; 
+            frictionStepper.value = DEFAULT_FRICTION;   
+            app.enableSimulation = true;    
+        }
+        
+        private function simulationSelected():void {
+            
+            app.setSimulation(String(simulationCombo.selectedItem));  
+        }   
+        
+        private function toggleAnimation():void {      
+                        
+            app.enableSimulation = !app.enableSimulation; 
+            app.showForces = forcesCheckbox.selected && app.enableSimulation;
+            app.showVelocities = velocitiesCheckbox.selected && app.enableSimulation;
+            animateButton.label = app.enableSimulation ? PAUSE_LABEL : RESUME_LABEL;        
+        }      
+        
+        private function restartAnimation():void {
+            
+            app.setSimulation(String(simulationCombo.selectedItem)); 
+            app.enableSimulation = true;     
+            animateButton.label = PAUSE_LABEL; 
+        }   
+        
+        private function fontSelected():void {
+            selectedFont = String(fontSelector.selectedFont);
+        }   
+        
     ]]></mx:Script>
     
-    <mx:Binding source="gravityCheckbox.selected" destination="app.gravityEnabled" />
     <mx:Binding source="gravityStepper.value" destination="app.gravity" />
     
-    <mx:Binding source="frictionCheckbox.selected" destination="app.frictionEnabled" />
     <mx:Binding source="frictionStepper.value" destination="app.friction" />
     
     <mx:Binding source="forcesCheckbox.selected" destination="app.showForces" />
     <mx:Binding source="velocitiesCheckbox.selected" destination="app.showVelocities" />
     
-	<mx:Panel title="Physics Simulation" width="100%" height="100%" >
-	    <mx:VBox width="100%" height="100%" > 
-	       
-	       <mx:TabNavigator id="tabNav" width="100%" height="140" 
-	       	                change="tabChanged(event)" >
-	       	    <mx:HBox label="Build" horizontalGap="4" paddingRight="10" paddingBottom="5">	       	    		       	        
-		            <mx:VBox  height="100%">
-		                 <mx:HBox width="180">
-		                      <mx:ColorPicker/>
-		                      <mx:Label text="Segment Color"/>
-		                 </mx:HBox>
-		                 <mx:HBox width="180">
-		                      <mx:NumericStepper value="60" maximum="200"/>
-		                      <mx:Label text="Length"/>
-		                 </mx:HBox>
-		                 <mx:HBox width="180">
-		                      <mx:NumericStepper value="12" maximum="40"/>
-		                      <mx:Label text="Thickness/Mass"/>
-		                 </mx:HBox>
-		                 <mx:Button label="Add Segment" click="{}" />
-		            </mx:VBox>
-		            <mx:TextArea htmlText="The goal for this Flash application is to allow you to build dynamic structures and see how they behave in simulated circumstances. I am still trying to work out the physics so a lot is missing right now. So far you can click on the pins that connect the segments and drag the whole chain around. In the simulation tab, you can also apply gravity. You cannot add new segments and connections yet." 
-		            	    width="100%" height="100%" />
-	            </mx:HBox>       
-	            <mx:VBox label="Simulate" width="100%" height="100%"  creationComplete="{simTabCreated()}">	   
-	                   
-	                 <mx:HBox width="250">
-	                      <mx:CheckBox id="gravityCheckbox" label="Gravity" />
-	                      <mx:NumericStepper id="gravityStepper"/>
-	                 </mx:HBox>
-	                 <mx:HBox width="250">
-	                      <mx:CheckBox id="frictionCheckbox" label="Friction" />
-	                      <mx:NumericStepper id="frictionStepper" />
-	                 </mx:HBox>
-	                 <mx:HBox width="300">
-                          <mx:CheckBox id="forcesCheckbox" label="Show force vectors" selected="false" />
-                          <mx:CheckBox id="velocitiesCheckbox" label="Show veclocity vectors" selected="false"/>
-                     </mx:HBox>
-	            </mx:VBox>
-	       </mx:TabNavigator>
-	       
-	       <app:AnimationComponent id="animComp" animClass="com.becker.animation.BoxWorld" />	
-	        
-	    </mx:VBox>    	    	        
+    <mx:Panel title="Physics Simulation" width="100%" height="100%" 
+              titleStyleName="actionShadedLargeFont"  styleName="{selectedFont}" >
+      
+        <mx:VBox  width="100%"> 
+             <mx:TextArea  htmlText="{INSTRUCTIONS}"
+                    width="100%" height="50" />   
+             <!--mx:HBox width="100%">                         
+                 <mx:HBox>
+                      <mx:ColorPicker/>
+                      <mx:Label text="Segment Color"  />
+                 </mx:HBox>
+                 <mx:HBox >
+                      <mx:NumericStepper value="60" maximum="200" />
+                      <mx:Label text="Length" styleName="{selectedFont}"/>
+                 </mx:HBox>
+                 <mx:HBox >
+                      <mx:NumericStepper value="12" maximum="40" />
+                      <mx:Label text="Thickness/Mass" />
+                 </mx:HBox>
+             </mx:HBox-->
+             
+             <mx:HBox width="100%">          
+                <mx:HBox>
+                     <mx:Label text="Simulation" />
+                     <mx:ComboBox id="simulationCombo" dataProvider="{BoxWorld.AVAILABLE_SIMULATIONS}"  selectedIndex="0" change="simulationSelected()" />  
+                </mx:HBox>
+                <mx:Spacer width="100%" />
+                <control:FontSelector id="fontSelector" changeHandler="fontSelected" />
+             </mx:HBox>
+             <mx:HBox>
+                  <mx:HBox>
+                     <mx:Label text="Gravity" />
+                     <mx:NumericStepper id="gravityStepper" stepSize="0.1" width="60" />
+                  </mx:HBox>
+                  <mx:HBox>
+                     <mx:Label text="Friction" />   
+                     <mx:NumericStepper id="frictionStepper"  stepSize="0.1" width="60"/>
+                  </mx:HBox>
+                  <mx:Spacer width="40" />
+                  <mx:HBox>
+                      <mx:CheckBox id="forcesCheckbox" label="Show force vectors" selected="false" />
+                      <mx:CheckBox id="velocitiesCheckbox" label="Show velocity vectors" selected="false"/>
+                  </mx:HBox>
+             </mx:HBox>
+             
+             <mx:HBox >
+                  <mx:Button id="animateButton" label="{PAUSE_LABEL}"  click="toggleAnimation()"   toolTip="toggle the animation"  />                
+                  <mx:Button id="restart" label="Restart"  click="restartAnimation()" />             
+                  <!-- mx:Button label="Add Segment" click="app.addBoxes()" /-->     
+             </mx:HBox>
+       </mx:VBox>
+       
+       <app:AnimationComponent id="animComp" animClass="com.becker.animation.box2d.BoxWorld" /> 
+                            
     </mx:Panel>
-	 
+     
 </mx:Application>
