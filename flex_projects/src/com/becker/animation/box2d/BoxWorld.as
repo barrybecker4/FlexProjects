@@ -147,12 +147,13 @@ public class BoxWorld extends UIComponent implements Animatible {
         _enableSimulation = enable;
     }
       
+	/*
     private function removeChildren():void
     {  
     	for (var i:int=this.numChildren-1; i>=0; i--) {
     		this.removeChildAt(i);
     	}
-    } 
+    } */
     
     public function onEnterFrame(e:Event):void{
     	  
