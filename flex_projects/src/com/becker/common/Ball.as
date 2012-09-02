@@ -14,7 +14,7 @@ package com.becker.common {
         public var yVelocity:Number = 0;
         public var mass:Number = 1.0;
         
-        public function Ball(radius:Number=40, color:uint=0xdd0022) {
+        public function Ball(radius:Number=40, color:uint=0x6600dd) {
             this.radius = radius;
             this.color = color;
             init();

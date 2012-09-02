@@ -122,11 +122,11 @@ millhouseFont
     font-family:actionShadedFont;
     fontSize: 24pt;
 }
- 
+/*
 TextArea {
     font-family:arial;
     fontSize: 12pt;
-}
+}*/
 /*
 Button {
  	font-family:agentFont;
