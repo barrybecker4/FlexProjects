@@ -1,5 +1,5 @@
-package com.becker.animation
-{
+package com.becker.animation {
+	
     import com.becker.animation.box2d.BoxWorld;
     import com.becker.animation.walking.*;
     
@@ -10,11 +10,11 @@ package com.becker.animation
     import mx.events.FlexEvent;
     
     /**
-     * The idea is to embedd a flash animation compoent inside a flash application.
+     * The idea is to embedd a flash animation component inside a flex application.
+	 * 
      * @author Barry Becker
      */
-    public class AnimationComponent extends VBox
-    {
+    public class AnimationComponent extends VBox {
         private var _animatible:Animatible;
         private var _currentComponent:UIComponent;
         
@@ -42,15 +42,14 @@ package com.becker.animation
         /**
          * @param sprite must pass in a sprite to wrap.
          */
-        public function AnimationComponent()
-        {    
+        public function AnimationComponent() {    
             this.percentHeight = 100;
             this.percentWidth = 100;    
             this.setStyle("backgroundColor", 0xddccbb);                        
         }
         
-        public function set animClass(className:String):void
-        {
+        public function set animClass(className:String):void {
+			
         	trace(" about to load "+ className);
             var objClass:Class = getDefinitionByName(className) as Class;            
             if( objClass != null) {
@@ -67,19 +66,16 @@ package com.becker.animation
             
             _currentComponent.addEventListener(FlexEvent.CREATION_COMPLETE, init);                
         }
-        
-        
+                
         
         /**
          * return Animatible, internal UIComponent.
          */
-        public function get sprite():Animatible
-        {
+        public function get sprite():Animatible {
         	return _animatible;
         }
         
-        public function init(evt:FlexEvent):void
-        {
+        public function init(evt:FlexEvent):void {
             _animatible.startAnimating();
         }
         

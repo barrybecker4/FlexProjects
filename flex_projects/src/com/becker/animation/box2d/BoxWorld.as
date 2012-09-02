@@ -1,5 +1,4 @@
-package  com.becker.animation.box2d
-{
+package  com.becker.animation.box2d {
 import Box2D.Collision.*;
 import Box2D.Collision.Shapes.*;
 import Box2D.Common.Math.*;
@@ -28,7 +27,7 @@ import mx.events.ResizeEvent;
  * 
  * ideas todo:
  *  - show force line when dragging objects
- *  - simplify simple shape consturciton to include position.
+ *  - simplify simple shape consturction to include position.
  *  - make scene scale with window resize.
  *  - make game
  */
@@ -39,8 +38,7 @@ public class BoxWorld extends UIComponent implements Animatible {
 	private var simulation:Simulation;
 	
     private static const NUM_ITERATIONS:int = 10;
-    private static const TIME_STEP:Number = 1.0/20.0;   
-    
+    private static const TIME_STEP:Number = 1.0/20.0;      
     private static const ORIG_WIDTH:int = 1200;
     
     [Bindable]
@@ -50,7 +48,8 @@ public class BoxWorld extends UIComponent implements Animatible {
     public var friction:Number = 0.5;
     
     [Bindable]
-    public var density:Number = 1.0;        
+    public var density:Number = 1.0;  
+	
     [Bindable]
     public var restitution:Number = 0.2;
     
@@ -87,8 +86,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     /**
      * @param the name of a class that implements Simulation
      */
-    public function setSimulation(simulationName:String):void
-    {
+    public function setSimulation(simulationName:String):void {
     	world = createWorld();  
     	switch (simulationName) {
             case AVAILABLE_SIMULATIONS[0]: 
@@ -192,58 +190,66 @@ public class BoxWorld extends UIComponent implements Animatible {
     public function MouseDrag():void{
         // mouse press
         if (Input.mouseDown && draggedBody == null){
-            
-            var body:b2Body = GetBodyAtMouse();
-            if (body)
-            {
-            	draggedBody = body;
-            	if (!mouseJoint) {
-	                var md:b2MouseJointDef = new b2MouseJointDef();
-	                
-	                md.body1 = world.GetGroundBody();
-	                md.body2 = draggedBody;
-	                md.target.Set(mouseWorldPhys.x, mouseWorldPhys.y);
-	                md.maxForce = 300.0 * draggedBody.GetMass();
-	                md.timeStep = TIME_STEP;
-	                mouseJoint = world.CreateJoint(md) as b2MouseJoint;
-	                
-	                draggedBody.WakeUp(); 
-	            }     
-            }
+            startMouseDrag();
         }       
       
         // mouse release
         if (!Input.mouseDown){
-            if (mouseJoint)
-            {
-            	//this.removeChild(mouseJoint.GetUserData());
-            	draggedBody = null;
-                world.DestroyJoint(mouseJoint);
-                
-                mouseJoint = null;
-                this.graphics.clear();
-            }
+            stopMouseDrag();
         }
                 
         // mouse move
-        if (mouseJoint)
-        {
-            var p2:b2Vec2 = new b2Vec2(mouseWorldPhys.x, mouseWorldPhys.y);
-            mouseJoint.SetTarget(p2);
-            
-            //var v:b2Vec2 = .GetLocalCenter();
-            var start:Point = new Point(draggedBody.GetUserData().x, draggedBody.GetUserData().y );
-            var end:Point = new Point(Input.mouseX, Input.mouseY - 200); 
-            
-            this.graphics.clear();
-            this.graphics.lineStyle(2, 0xff8888);
-            this.graphics.moveTo(start.x, start.y);
-            this.graphics.lineTo(end.x, end.y);
-            this.graphics.drawCircle(end.x, end.y, 4);
+        if (mouseJoint) {
+			dragJoint();
         }
     }
     
-    
+	private function startMouseDrag():void {
+		var body:b2Body = GetBodyAtMouse();
+		if (body)
+		{
+			draggedBody = body;
+			if (!mouseJoint) {
+				var md:b2MouseJointDef = new b2MouseJointDef();
+				
+				md.body1 = world.GetGroundBody();
+				md.body2 = draggedBody;
+				md.target.Set(mouseWorldPhys.x, mouseWorldPhys.y);
+				md.maxForce = 300.0 * draggedBody.GetMass();
+				md.timeStep = TIME_STEP;
+				mouseJoint = world.CreateJoint(md) as b2MouseJoint;
+				
+				draggedBody.WakeUp(); 
+			}     
+		}
+	}
+	
+	private function stopMouseDrag():void {
+		if (mouseJoint) {
+			//this.removeChild(mouseJoint.GetUserData());
+			draggedBody = null;
+			world.DestroyJoint(mouseJoint);
+			
+			mouseJoint = null;
+			this.graphics.clear();
+		}
+	}
+		
+	private function dragJoint():void {
+		var p2:b2Vec2 = new b2Vec2(mouseWorldPhys.x, mouseWorldPhys.y);
+		mouseJoint.SetTarget(p2);
+		
+		//var v:b2Vec2 = .GetLocalCenter();
+		var start:Point = new Point(draggedBody.GetUserData().x, draggedBody.GetUserData().y );
+		var end:Point = new Point(Input.mouseX, Input.mouseY - 200); 
+		
+		this.graphics.clear();
+		this.graphics.lineStyle(2, 0xff8888);
+		this.graphics.moveTo(start.x, start.y);
+		this.graphics.lineTo(end.x, end.y);
+		this.graphics.drawCircle(end.x, end.y, 4);
+	}
+		    
     public function MouseDestroy():void{
         // mouse press
         if (!Input.mouseDown && Input.isKeyPressed(68/*D*/)){
@@ -272,10 +278,10 @@ public class BoxWorld extends UIComponent implements Animatible {
         var shapes:Array = new Array();
         var count:int = world.Query(aabb, shapes, k_maxCount);
         var body:b2Body = null;
-        for (var i:int = 0; i < count; ++i)
-        {
-            if (shapes[i].GetBody().IsStatic() == false || includeStatic)
-            {
+        for (var i:int = 0; i < count; ++i) {
+			
+            if (b2Body(shapes[i].GetBody()).IsStatic() == false || includeStatic) {
+				
                 var tShape:b2Shape = shapes[i] as b2Shape;
                 var inside:Boolean = tShape.TestPoint(tShape.GetBody().GetXForm(), mousePVec);
                 if (inside)

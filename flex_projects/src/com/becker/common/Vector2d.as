@@ -1,5 +1,5 @@
-package com.becker.common
-{
+package com.becker.common {
+	
 	import flash.geom.Point;
 	
   
@@ -11,8 +11,7 @@ package com.becker.common
      *  
      * @author Barry Becker                       
      */ 
-    public class Vector2d extends Point
-    {
+    public class Vector2d extends Point {
            
         public function Vector2d(x:Number, y:Number) {
             super(x, y);
@@ -21,8 +20,7 @@ package com.becker.common
         /**
          * scale this vector by the specified amount.
          */
-        public function scale(s:Number):void
-        {
+        public function scale(s:Number):void {
         	x *= s;
         	y *= s;
         }
@@ -68,10 +66,8 @@ package com.becker.common
         public function cross(vec:Vector2d):Number {
             return x * vec.y - y * vec.x;
         }      
-        
-       
-        override public function toString():String
-        {           
+               
+        override public function toString():String {           
             return "("+ x + ", " +y +")";           
         }
     }

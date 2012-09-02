@@ -15,9 +15,7 @@
 * misrepresented as being the original software.
 * 3. This notice may not be removed or altered from any source distribution.
 */
-
-package com.becker.animation.box2d.simulations
-{
+package com.becker.animation.box2d.simulations {
 	import Box2D.Collision.Shapes.b2PolygonDef;
 	import Box2D.Dynamics.b2Body;
 	import Box2D.Dynamics.b2BodyDef;
@@ -28,15 +26,13 @@ package com.becker.animation.box2d.simulations
 	
 	import mx.core.UIComponent;
 	
-	public class RagDollSimulation extends AbstractSimulation
-	{
+	public class RagDollSimulation extends AbstractSimulation {
         private static const NUM_DOLLS:Number = 10;
         
         private var ragDollBuilder:RagDollBuilder;
         
 		public function RagDollSimulation(world:b2World, canvas:UIComponent,
-                                     density:Number, friction:Number, restitution:Number)		
-		{
+                                     density:Number, friction:Number, restitution:Number) {
 			super(world, canvas, density, friction, restitution);
 			ragDollBuilder = new RagDollBuilder(world, canvas, scale);			
 		}

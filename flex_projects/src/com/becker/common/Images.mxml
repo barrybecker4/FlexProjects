@@ -10,8 +10,7 @@
 	
 	[Embed(source="../../../assets/images/grunge1_small.jpg")]
 	public static const GRUNGE:Class;
-	
-	
+		
 	[Embed(source='../../../assets/images/human_tissue_small.jpg')]
 	public static const TISSUE:Class;
 	
@@ -23,10 +22,9 @@
 	/**
 	 * Return a list of all images
 	 * @return an Array of objects where each object contains name:String and icon:Class
-	 */
-	
-	public static function getImageData():Array
-	{
+	 */	
+	public static function getImageData():Array {
+		
 		var imageData:Array = new Array();
 		var classInfo:XML = describeType(Images);
 		for each (var image:XML in classInfo..constant) {

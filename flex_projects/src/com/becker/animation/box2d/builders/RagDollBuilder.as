@@ -1,5 +1,4 @@
-package com.becker.animation.box2d.builders
-{
+package com.becker.animation.box2d.builders {
     import Box2D.Collision.Shapes.b2PolygonDef;
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
@@ -9,23 +8,20 @@ package com.becker.animation.box2d.builders
     
     import mx.core.UIComponent;
     
-    public class RagDollBuilder extends AbstractBuilder
-    {
+    public class RagDollBuilder extends AbstractBuilder {
         
         private var shapeBuilder:BasicShapeBuilder;
         private var ragDoll:RagDoll;
     
         
-        public function RagDollBuilder(world:b2World, canvas:UIComponent, scale:Number)
-        {
+        public function RagDollBuilder(world:b2World, canvas:UIComponent, scale:Number) {
         	super(world, canvas, scale);
         	shapeBuilder = new BasicShapeBuilder(world, canvas, scale);
         }
         
        
         public function buildInstance(startX:Number, startY:Number, 
-                            density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2):RagDoll
-        {           
+                            density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2):RagDoll  {           
             var bodyDef:b2BodyDef;    
             var box:b2PolygonDef = new b2PolygonDef();      
             
@@ -88,6 +84,7 @@ package com.becker.animation.box2d.builders
         }
         
         private function createJoints(startX:Number, startY:Number, ragDoll:RagDoll):void {
+			
         	// JOINTS
             var jd:b2RevoluteJointDef = new b2RevoluteJointDef();
             jd.enableLimit = true;

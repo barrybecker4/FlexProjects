@@ -36,7 +36,7 @@ package  com.becker.animation
             var planet:Ball = new Ball(10, 0x00ff00);
             planet.x = stage.stageWidth / 2 + 160;
             planet.y = stage.stageHeight / 2;
-            planet.vy = SPEED;
+            planet.yVelocity = SPEED;
             planet.mass = 1;
             addChild(planet);
             particles.push(planet);
@@ -52,8 +52,8 @@ package  com.becker.animation
             for(var i:uint = 0; i < numParticles; i++)
             {
                 var particle:Ball = particles[i];
-                particle.x += particle.vx;
-                particle.y += particle.vy;
+                particle.x += particle.xVelocity;
+                particle.y += particle.yVelocity;
             }
             for(i=0; i < numParticles - 1; i++)
             {
@@ -77,10 +77,10 @@ package  com.becker.animation
             var force:Number = partA.mass * partB.mass / distSQ;
             var ax:Number = force * dx / dist;
             var ay:Number = force * dy / dist;
-            partA.vx += ax / partA.mass;
-            partA.vy += ay / partA.mass;
-            partB.vx -= ax / partB.mass;
-            partB.vy -= ay / partB.mass;
+            partA.xVelocity += ax / partA.mass;
+            partA.yVelocity += ay / partA.mass;
+            partB.xVelocity -= ax / partB.mass;
+            partB.yVelocity -= ay / partB.mass;
         }
         
         private function checkCollision(ball0:Ball, ball1:Ball):void
@@ -102,15 +102,15 @@ package  com.becker.animation
                 var pos1:Point = rotate(dx, dy, sin, cos, true);
                 
                 // rotate ball0's velocity
-                var vel0:Point = rotate(ball0.vx,
-                                        ball0.vy,
+                var vel0:Point = rotate(ball0.xVelocity,
+                                        ball0.yVelocity,
                                         sin,
                                         cos,
                                         true);
                 
                 // rotate ball1's velocity
-                var vel1:Point = rotate(ball1.vx,
-                                        ball1.vy,
+                var vel1:Point = rotate(ball1.xVelocity,
+                                        ball1.yVelocity,
                                         sin,
                                         cos,
                                         true);
@@ -159,10 +159,10 @@ package  com.becker.animation
                                           sin,
                                           cos,
                                           false);
-                ball0.vx = vel0F.x;
-                ball0.vy = vel0F.y;
-                ball1.vx = vel1F.x;
-                ball1.vy = vel1F.y;
+                ball0.xVelocity = vel0F.x;
+                ball0.yVelocity = vel0F.y;
+                ball1.xVelocity = vel1F.x;
+                ball1.yVelocity = vel1F.y;
             }
         }
         

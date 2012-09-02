@@ -6,11 +6,16 @@
         import mx.events.FlexEvent;
      
         public static const FONT_VALUES:Array = [ 
-            "dreamFont", "agentFont", 
-            "abductionFont", "abscissaFont", 
-            "acklinFont", "acquaintanceFont", 
-            "actionFont", "actionShadedFont", 
-            "cutAboveFont" ];
+            "dreamFont", 
+			"agentFont", 
+            "abductionFont", 
+			"abscissaFont", 
+            "acklinFont", 
+			"acquaintanceFont", 
+            "actionFont", 
+			"actionShadedFont", 
+            "cutAboveFont"
+		];
  
         
         [Bindable]

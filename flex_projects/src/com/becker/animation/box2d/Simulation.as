@@ -1,7 +1,6 @@
-package com.becker.animation.box2d
-{
-	public interface Simulation
-	{
+package com.becker.animation.box2d {
+	
+	public interface Simulation {
 		
 		function addStaticElements():void
 		

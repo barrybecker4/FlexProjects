@@ -1,5 +1,4 @@
-package com.becker.animation.box2d.simulations
-{
+package com.becker.animation.box2d.simulations {
 	import Box2D.Collision.Shapes.b2CircleDef;
 	import Box2D.Collision.Shapes.b2PolygonDef;
 	import Box2D.Common.Math.b2Math;
@@ -16,8 +15,7 @@ package com.becker.animation.box2d.simulations
 	
 	import mx.core.UIComponent;
 	
-	public class TheoJansenSimulation extends AbstractSimulation
-	{
+	public class TheoJansenSimulation extends AbstractSimulation {
         private static const T_SCALE:Number = 4.0;
         
         
@@ -30,8 +28,7 @@ package com.becker.animation.box2d.simulations
             
         
 		public function TheoJansenSimulation(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number)		
-		{
+                            density:Number, friction:Number, restitution:Number) {
 			super(world, canvas, density, friction, restitution);
 			builder = new BasicShapeBuilder(world, canvas, scale);
 		}

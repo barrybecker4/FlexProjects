@@ -1,7 +1,6 @@
-package com.becker.animation
-{
-    public interface Animatible
-    {
+package com.becker.animation {
+	
+    public interface Animatible {
         function startAnimating():void;
         
         function set width(value:Number):void;

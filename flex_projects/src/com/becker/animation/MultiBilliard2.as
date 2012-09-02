@@ -28,8 +28,8 @@ package com.becker.animation
                 ball.mass = radius;
                 ball.x = Math.random() * this.width;
                 ball.y = Math.random() * this.height;
-                ball.vx = Math.random() * 20 - 5;
-                ball.vy = Math.random() * 20 - 5;
+                ball.xVelocity = Math.random() * 20 - 5;
+                ball.yVelocity = Math.random() * 20 - 5;
                 addChild(ball);
                 balls.push(ball);
             }
@@ -42,8 +42,8 @@ package com.becker.animation
             for(var i:uint = 0; i < numBalls; i++)
             {
                 var ball:Ball = balls[i];
-                ball.x += ball.vx;
-                ball.y += ball.vy;
+                ball.x += ball.xVelocity;
+                ball.y += ball.yVelocity;
                 ball.bounce(0, bounce, this);
                 
             }

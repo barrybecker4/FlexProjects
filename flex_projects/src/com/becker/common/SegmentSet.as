@@ -12,8 +12,7 @@ package com.becker.common
      *  
      * @author Barry Becker                       
      */ 
-    public class SegmentSet extends Sprite
-    {
+    public class SegmentSet extends Sprite {
         /** all the segments in the set */
         private var segments:Array;
         
@@ -37,11 +36,9 @@ package com.becker.common
             addChild(segment);
         }
         
-        public function initializeSegmentString(numSegments:Number, segmentLength:Number):void
-        {
+        public function initializeSegmentString(numSegments:Number, segmentLength:Number):void {
         	var lastSegment:Segment;
-            for (var i:uint = 0; i < numSegments; i++)
-            {
+            for (var i:uint = 0; i < numSegments; i++) {
                 var segment:Segment = 
                     new Segment(segmentLength, 12,  0x0fff88);
                 
@@ -62,16 +59,14 @@ package com.becker.common
         }
         
         public function set showForces(show:Boolean):void {
-            for each (var segment:Segment in segments)
-            {
+            for each (var segment:Segment in segments) {
             	segment.frontConnector.showForce = show;
             	segment.rearConnector.showForce = show;
             }
         }
         
         public function set showVelocities(show:Boolean):void {
-            for each (var segment:Segment in segments)
-            {
+            for each (var segment:Segment in segments) {
                 segment.frontConnector.showVelocity = show;
                 segment.rearConnector.showVelocity = show;
             }
@@ -81,8 +76,7 @@ package com.becker.common
          * find connector closest to the specified point within some max threshold.
          */
         public function findClosestConnector(x:Number, y:Number, 
-                                             maxDistanceThreshold:Number = 200):Connector
-        {
+                                             maxDistanceThreshold:Number = 200):Connector {
             var here:Point = new Point(x, y);
             // dont consider connector if we have alread seen it.
             var connectorHash:Dictionary = new Dictionary();

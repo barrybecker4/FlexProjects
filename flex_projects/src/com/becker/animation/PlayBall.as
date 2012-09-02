@@ -26,7 +26,7 @@ package  com.becker.animation
         public function startAnimating():void
         {
             ball = new Ball(20);
-            ball.vx = 10;
+            ball.xVelocity = 10;
             addChild(ball);
             segments = new Array();
             for (var i:uint = 0; i < numSegments; i++)
@@ -90,8 +90,8 @@ package  com.becker.animation
             var dist:Number = Math.sqrt(dx * dx + dy * dy);
             if(dist < ball.radius)
             {
-                ball.vx += Math.random() * 2 - 1;
-                ball.vy -= 1;
+                ball.xVelocity += Math.random() * 2 - 1;
+                ball.yVelocity -= 1;
             }
         }
     }

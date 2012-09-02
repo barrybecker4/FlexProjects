@@ -1,5 +1,4 @@
-package com.becker.animation.box2d.simulations
-{
+package com.becker.animation.box2d.simulations {
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.Joints.b2RevoluteJointDef;
 	import Box2D.Dynamics.b2Body;
@@ -13,8 +12,7 @@ package com.becker.animation.box2d.simulations
 	
 	import mx.core.UIComponent;
 	
-	public class BridgeSimulation extends AbstractSimulation
-	{
+	public class BridgeSimulation extends AbstractSimulation {
         private static const NUM_SHAPES:Number = 50;
         private static const NUM_PLANKS:int = 10;
         
@@ -25,8 +23,7 @@ package com.becker.animation.box2d.simulations
         
         
 		public function BridgeSimulation(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number)		
-		{
+                            density:Number, friction:Number, restitution:Number) {
 			super(world, canvas, density, friction, restitution);
 			builder = new BasicShapeBuilder(world, canvas, scale);
 		}

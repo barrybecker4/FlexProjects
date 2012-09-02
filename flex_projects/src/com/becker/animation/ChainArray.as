@@ -48,13 +48,13 @@ package com.becker.animation
         
         private function moveBall(ball:Ball, targetX:Number, targetY:Number):void
         {
-            ball.vx += (targetX - ball.x) * spring;
-            ball.vy += (targetY - ball.y) * spring;
-            ball.vy += gravity;
-            ball.vx *= friction;
-            ball.vy *= friction;
-            ball.x += ball.vx;
-            ball.y += ball.vy;
+            ball.xVelocity += (targetX - ball.x) * spring;
+            ball.yVelocity += (targetY - ball.y) * spring;
+            ball.yVelocity += gravity;
+            ball.xVelocity *= friction;
+            ball.yVelocity *= friction;
+            ball.x += ball.xVelocity;
+            ball.y += ball.yVelocity;
         }
     }
 }
