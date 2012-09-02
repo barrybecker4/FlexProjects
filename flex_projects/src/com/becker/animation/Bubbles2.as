@@ -32,8 +32,8 @@ package com.becker.animation
                 
                 ball.x = Math.random() * stage.stageWidth;
                 ball.y = Math.random() * stage.stageHeight;
-                ball.vx = Math.random() * 6 - 3;
-                ball.vy = Math.random() * 6 - 3;
+                ball.xVelocity = Math.random() * 6 - 3;
+                ball.yVelocity = Math.random() * 6 - 3;
                 addChild(ball);
                 balls.push(ball);
             }
@@ -61,10 +61,10 @@ package com.becker.animation
                         var ty:Number = ball0.y + dy / dist * minDist;
                         var ax:Number = (tx - ball1.x) * spring;
                         var ay:Number = (ty - ball1.y) * spring;
-                        ball0.vx -= ax;
-                        ball0.vy -= ay;
-                        ball1.vx += ax;
-                        ball1.vy += ay;
+                        ball0.xVelocity -= ax;
+                        ball0.yVelocity -= ay;
+                        ball1.xVelocity += ax;
+                        ball1.yVelocity += ay;
                     }
                 }
             }
@@ -98,28 +98,28 @@ package com.becker.animation
         
         private function moveBall(ball:Ball):void
         {
-            ball.vy += gravity;
-            ball.x += ball.vx;
-            ball.y += ball.vy;
+            ball.yVelocity += gravity;
+            ball.x += ball.xVelocity;
+            ball.y += ball.yVelocity;
             if(ball.x + ball.radius > stage.stageWidth)
             {
                 ball.x = stage.stageWidth - ball.radius;
-                ball.vx *= bounce;
+                ball.xVelocity *= bounce;
             }
             else if(ball.x - ball.radius < 0)
             {
                 ball.x = ball.radius;
-                ball.vx *= bounce;
+                ball.xVelocity *= bounce;
             }
             if(ball.y + ball.radius > stage.stageHeight)
             {
                 ball.y = stage.stageHeight - ball.radius;
-                ball.vy *= bounce;
+                ball.yVelocity *= bounce;
             }
             else if(ball.y - ball.radius < 0)
             {
                 ball.y = ball.radius;
-                ball.vy *= bounce;
+                ball.yVelocity *= bounce;
             }
         }
     }

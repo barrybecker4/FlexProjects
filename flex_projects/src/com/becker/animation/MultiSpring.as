@@ -45,14 +45,14 @@ package com.becker.animation
                 var handle:Ball = handles[i] as Ball;
                 var dx:Number = handle.x - ball.x;
                 var dy:Number = handle.y - ball.y;
-                ball.vx += dx * spring;
-                ball.vy += dy * spring;
+                ball.xVelocity += dx * spring;
+                ball.yVelocity += dy * spring;
             }
             
-            ball.vx *= friction;
-            ball.vy *= friction;
-            ball.x += ball.vx;
-            ball.y += ball.vy;
+            ball.xVelocity *= friction;
+            ball.yVelocity *= friction;
+            ball.x += ball.xVelocity;
+            ball.y += ball.yVelocity;
             
             graphics.clear();
             graphics.lineStyle(1);

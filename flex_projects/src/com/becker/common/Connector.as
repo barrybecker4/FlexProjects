@@ -1,6 +1,7 @@
 package com.becker.common
 {
     import flash.display.Sprite;
+    import flash.events.Event;
     import flash.geom.Point;
 
     /**
@@ -8,8 +9,8 @@ package com.becker.common
      *          
      * @author Barry Becker                       
      */ 
-    public class Connector extends Sprite
-    {
+    public class Connector extends Sprite  {
+		
         // the segment that owns this connector (and one other)
         private var owner_:Segment;
         
@@ -46,8 +47,8 @@ package com.becker.common
         private static const VELOCITY_ALPHA:Number = 0.5;
         
         
-        public function Connector(owner:Segment, isFront:Boolean, color:uint = 0x88ff00, mass:Number = 1.0)                                 
-        {
+        public function Connector(owner:Segment, isFront:Boolean, 
+								  color:uint = 0x88ff00, mass:Number = 1.0)  {
         	this.owner_ = owner;
         	this.isFront_ = isFront;
             this.radius = owner.thickness/2.0 - 2;  
@@ -67,8 +68,8 @@ package com.becker.common
         	return isFront_;
         }
      
-        private function onEnterFrame(event:Event):void
-        {  
+        private function onEnterFrame(event:Event):void {  
+			
         	graphics.clear();
         	graphics.lineStyle(0);
             graphics.beginFill(color);
@@ -93,8 +94,8 @@ package com.becker.common
         /**
          * subtract the angle that the owning segment is rotated.
          */
-        public function adjustForRotation(adjPoint:Vector2d):Point
-        {
+        public function adjustForRotation(adjPoint:Vector2d):Point {
+			
         	var len:Number = adjPoint.length;
         	var ang:Number = Math.atan2(adjPoint.y, adjPoint.x);
         	var adjAng:Number = ang - owner.rotation * Util.DEG_TO_RAD;
@@ -168,10 +169,8 @@ package com.becker.common
         private function dragChildSegments(connections:Array, 
                                            parentSegment:Segment, 
                                            pos:Point):void {
-            for each (var c:Connector in connections)
-            {
-                if (c.owner != parentSegment)
-                {
+            for each (var c:Connector in connections) {
+                if (c.owner != parentSegment) {
                     c.dragConnectingSegments(owner, pos);
                 }
             }

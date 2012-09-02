@@ -15,16 +15,16 @@ package com.becker.animation.box2d.builders
     
     import mx.core.UIComponent;
     
-    public class BasicShapeBuilder extends AbstractBuilder
-    {
+    public class BasicShapeBuilder extends AbstractBuilder {
 
-        public function BasicShapeBuilder(world:b2World, canvas:UIComponent, scale:Number)
-        {
+        public function BasicShapeBuilder(world:b2World, canvas:UIComponent, scale:Number) {
         	super(world, canvas, scale);
         }
     
         public function buildBlock(width:Number, height:Number, bodyDef:b2BodyDef, 
-                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, groupIndex:int = int.MAX_VALUE):b2Body {
+                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+				groupIndex:int = int.MAX_VALUE):b2Body {
+			
             var boxDef:b2PolygonDef = new b2PolygonDef();
             boxDef.SetAsBox(width, height);
             boxDef.density = density;
@@ -39,7 +39,9 @@ package com.becker.animation.box2d.builders
         }
         
         public function buildBall(radius:Number, bodyDef:b2BodyDef, 
-                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, groupIndex:int = int.MAX_VALUE):b2Body {           
+                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+				groupIndex:int = int.MAX_VALUE):b2Body { 
+			
             var circleDef:b2CircleDef = new b2CircleDef();
             circleDef.radius = radius;
             circleDef.density = density;
@@ -54,7 +56,8 @@ package com.becker.animation.box2d.builders
         }
         
         public function buildPolygon(pts:Array, bodyDef:b2BodyDef, 
-                                     density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, groupIndex:int = int.MAX_VALUE):b2Body {
+                                     density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+									 groupIndex:int = int.MAX_VALUE):b2Body {
    
             var polyDef:b2PolygonDef = new b2PolygonDef();
             var numPts:int = pts.length;
@@ -90,6 +93,5 @@ package com.becker.animation.box2d.builders
             bodyDef.userData = new Polygon(vpoints, scale);
             return addShape(polyDef, bodyDef); 
         }
-
     }
 }

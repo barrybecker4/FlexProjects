@@ -17,8 +17,8 @@ package com.becker.common
      * The angle of the segment is computed using
      * Math.atan2(rear.y - front.y, rear.x - front.x)          
      */ 
-    public class Segment extends Sprite
-    {
+    public class Segment extends Sprite {
+		
         // don't necessarily allow a joint to fold back on itself.
         private static const DEFAULT_ANGLE_LIMIT:Number = 0.7;         
         
@@ -37,8 +37,7 @@ package com.becker.common
         private var angleLimit:Number = DEFAULT_ANGLE_LIMIT;
         
         public function Segment(length:Number, thickness:Number, 
-                                color:uint = 0xffffff)
-        {
+                                color:uint = 0xffffff)  {
             length_ = length;
             thickness_ = thickness;
             color_ = color;
@@ -49,17 +48,13 @@ package com.becker.common
             init();
         }
         
-        public function init():void
-        {
+        public function init():void {
             // draw the segment itself
             graphics.lineStyle(0);
             graphics.beginFill(color_);
-            graphics.drawRoundRect(-thickness / 2, 
-                                   -thickness / 2,
-                                   length + thickness,
-                                   thickness,
-                                   thickness,
-                                   thickness);
+            graphics.drawRoundRect(
+				-thickness / 2,  -thickness / 2, length + thickness,
+                thickness, thickness, thickness);
             graphics.endFill();
         }
         
@@ -74,32 +69,27 @@ package com.becker.common
         	frontConnector.updateDynamics(gravity, width, height);        	
             rearConnector.updateDynamics(gravity, width, height);           	       	   	
         }
-       
-        
+               
         /*
-        private function jointAngle(seg:Segment):Number
-        {
+        private function jointAngle(seg:Segment):Number{
         	var vec1:Point = getFrontPin().subtract(getRearPin());
         	vec1.normalize(1.0);
         	var vec2:Point = seg.getFrontPin().subtract(seg.getRearPin());
         	vec2.normalize(1.0);
         	return Math.acos(vec1.x * vec2.x + vec1.y * vec2.y);
         }*/
-        
-        
+                
         /**
          * @return true if specified x, y are closer to front than rear.
          *
-        public function closerToFront(x:Number, y:Number):Boolean
-        {
+        public function closerToFront(x:Number, y:Number):Boolean {
         	var pt:Point = new Point(x, y);
         	var distToFront:Number = Point.distance(frontConnector.getPosition(), pt);
         	var distToRear:Number = Point.distance(rearConnector.getPosition(), pt);
         	return (distToFront < distToRear);
         }*/
         
-        override public function toString():String
-        {
+        override public function toString():String {
             return "Segment x="+x+" y="+y+" connections: " + 
                     "frontConnector="+ frontConnector+
                     " rearConnector=" + rearConnector;

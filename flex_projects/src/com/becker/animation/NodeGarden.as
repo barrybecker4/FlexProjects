@@ -25,8 +25,8 @@ package com.becker.animation
                 var particle:Ball = new Ball(5, 0xffffff);
                 particle.x = Math.random() * this.width;
                 particle.y = Math.random() * this.height;
-                particle.vx = Math.random() * 6 - 3;
-                particle.vy = Math.random() * 6 - 3;
+                particle.xVelocity = Math.random() * 6 - 3;
+                particle.yVelocity = Math.random() * 6 - 3;
                 addChild(particle);
                 particles.push(particle);
             }
@@ -39,8 +39,8 @@ package com.becker.animation
             for(var i:uint = 0; i < numParticles; i++)
             {
                 var particle:Ball = particles[i];
-                particle.x += particle.vx;
-                particle.y += particle.vy;
+                particle.x += particle.xVelocity;
+                particle.y += particle.yVelocity;
                 if(particle.x > this.width)
                 {
                     particle.x = 0;
@@ -83,10 +83,10 @@ package com.becker.animation
                 graphics.lineTo(partB.x, partB.y);
                 var ax:Number = dx * springAmount;
                 var ay:Number = dy * springAmount;
-                partA.vx += ax;
-                partA.vy += ay;
-                partB.vx -= ax;
-                partB.vy -= ay;
+                partA.xVelocity += ax;
+                partA.yVelocity += ay;
+                partB.xVelocity -= ax;
+                partB.yVelocity -= ay;
             }            
         }
     }

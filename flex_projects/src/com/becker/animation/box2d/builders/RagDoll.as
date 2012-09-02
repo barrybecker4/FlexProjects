@@ -1,9 +1,8 @@
-package com.becker.animation.box2d.builders
-{
+package com.becker.animation.box2d.builders {
 	import Box2D.Dynamics.b2Body;
 	
-	public class RagDoll
-	{
+	public class RagDoll {
+		
 		private var _head:b2Body;
 		private var _torso1:b2Body;
 		private var _torso2:b2Body;

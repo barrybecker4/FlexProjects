@@ -7,12 +7,15 @@
 	
 	    [Bindable]
 	    public var min:Number;
+		
 	    [Bindable]
 	    public var max:Number;
+		
 	    [Bindable]
 	    public var value:Number;
 	    
 	    public var change:Function;
+		
 	    [Bindable]
 	    public var title:String;
 	    	   

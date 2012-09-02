@@ -1,8 +1,7 @@
 package  com.becker.common {
 import flash.geom.Point;
 
-    public class Util 
-    {    
+    public class Util  {    
     	// convert from radians to degrees
         public static const RAD_TO_DEG:Number = 180.0 / Math.PI;  
            
@@ -10,8 +9,7 @@ import flash.geom.Point;
         public static const DEG_TO_RAD:Number = Math.PI / 180.0;      
         
         public function Util()
-        {
-        }
+        {}
         
         
         /**
@@ -19,8 +17,7 @@ import flash.geom.Point;
          *  @param variation (0, 1) 0 is no variation, 1 is a lot
          * @return a random RGB color
          */
-        public static function getRandomColor(lightness:Number = 1.0, variation:Number = 1.0):uint
-        {        
+        public static function getRandomColor(lightness:Number = 1.0, variation:Number = 1.0):uint {        
         	var base:Number = Math.max(lightness - variation/2.0, 0);
         	var vartn:Number = Math.min(variation, 1.0 - base);
             var r:uint = Math.random() * vartn * 256 + (base * 256);
@@ -34,20 +31,15 @@ import flash.geom.Point;
         /**
          * Rotate a point
          */
-        public static function rotate(x:Number,
-                                      y:Number,
-                                      sin:Number,
-                                      cos:Number,
-                                      reverse:Boolean):Point
+        public static function rotate(
+			x:Number,  y:Number, sin:Number,  cos:Number, reverse:Boolean):Point
         {
             var result:Point = new Point();
-            if(reverse)
-            {
+            if (reverse) {
                 result.x = x * cos + y * sin;
                 result.y = y * cos - x * sin;
             }
-            else
-            {
+            else {
                 result.x = x * cos - y * sin;
                 result.y = y * cos + x * sin;
             }
@@ -65,8 +57,7 @@ import flash.geom.Point;
         	return Math.round(value * exp) / exp;
         }
         
-        public static function distance(pt1:Point, pt2:Point):Number
-        {
+        public static function distance(pt1:Point, pt2:Point):Number {
         	var dx:Number = pt1.x - pt2.x;
         	var dy:Number = pt1.y - pt2.y;
         	return Math.sqrt(dx * dx + dy * dy);
