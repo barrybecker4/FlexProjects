@@ -17,13 +17,11 @@
     <use-resource-bundle-metadata>true</use-resource-bundle-metadata>
     <verbose-stacktraces>false</verbose-stacktraces>
     <source-path>
-      <path-element>d:\projects\flex_projects\box2dlib</path-element>
+      <path-element>d:\projects\flex_projects\box2dlib\src</path-element>
     </source-path>
   </compiler>
   <include-classes>
-    <class>HelloWorld</class>
     <class>Main</class>
-    <class>TestApp</class>
     <class>Box2D.Collision.b2AABB</class>
     <class>Box2D.Collision.b2Bound</class>
     <class>Box2D.Collision.b2BoundValues</class>
