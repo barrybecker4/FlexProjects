@@ -2,7 +2,7 @@ package  com.becker.common {
 import flash.geom.Point;
 
     public class Util  {    
-    	// convert from radians to degrees
+        // convert from radians to degrees
         public static const RAD_TO_DEG:Number = 180.0 / Math.PI;  
            
         // convert from degrees to radians 
@@ -18,8 +18,8 @@ import flash.geom.Point;
          * @return a random RGB color
          */
         public static function getRandomColor(lightness:Number = 1.0, variation:Number = 1.0):uint {        
-        	var base:Number = Math.max(lightness - variation/2.0, 0);
-        	var vartn:Number = Math.min(variation, 1.0 - base);
+            var base:Number = Math.max(lightness - variation/2.0, 0);
+            var vartn:Number = Math.min(variation, 1.0 - base);
             var r:uint = Math.random() * vartn * 256 + (base * 256);
             var g:uint = Math.random() * vartn * 256 + (base * 256);
             var b:uint = Math.random() * vartn * 256 + (base * 256);
@@ -32,7 +32,7 @@ import flash.geom.Point;
          * Rotate a point
          */
         public static function rotate(
-			x:Number,  y:Number, sin:Number,  cos:Number, reverse:Boolean):Point
+            x:Number,  y:Number, sin:Number,  cos:Number, reverse:Boolean):Point
         {
             var result:Point = new Point();
             if (reverse) {
@@ -53,14 +53,14 @@ import flash.geom.Point;
          *      round(12345.3, -2) = 12300
          */
         public static function round(value:Number, place:int):Number {
-        	var exp:Number = Math.pow(10.0, place);
-        	return Math.round(value * exp) / exp;
+            var exp:Number = Math.pow(10.0, place);
+            return Math.round(value * exp) / exp;
         }
         
         public static function distance(pt1:Point, pt2:Point):Number {
-        	var dx:Number = pt1.x - pt2.x;
-        	var dy:Number = pt1.y - pt2.y;
-        	return Math.sqrt(dx * dx + dy * dy);
+            var dx:Number = pt1.x - pt2.x;
+            var dy:Number = pt1.y - pt2.y;
+            return Math.sqrt(dx * dx + dy * dy);
         }
                   
     }

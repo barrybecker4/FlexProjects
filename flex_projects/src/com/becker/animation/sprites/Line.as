@@ -1,21 +1,21 @@
 package com.becker.animation.sprites
 {
-	
+    
     import flash.geom.Point;
     
     /**
      * Represents a 2D line and common operations on it.
      * @author Barry Becker
      */
-	public class Line extends AbstractShape
-	{
-		private var thickness:Number;
-		private var startPoint:Point;
-		private var endPoint:Point;
-		
-		public function Line(startPoint:Point, endPoint:Point, thickness:Number = 2.0, color:uint = 0xff2200)
-		{
-			super(color)
+    public class Line extends AbstractShape
+    {
+        private var thickness:Number;
+        private var startPoint:Point;
+        private var endPoint:Point;
+        
+        public function Line(startPoint:Point, endPoint:Point, thickness:Number = 2.0, color:uint = 0xff2200)
+        {
+            super(color)
             this.width = width;
             this.height = height;
             this.thickness = thickness;
@@ -24,7 +24,7 @@ package com.becker.animation.sprites
             this.endPoint = endPoint;
             
             init();
-		}
+        }
 
         private function init():void
         {         
@@ -36,7 +36,7 @@ package com.becker.animation.sprites
             graphics.drawCircle(endPoint.x, endPoint.y, 4);         
             
         }
-	}
+    }
 }
 
 

@@ -52,7 +52,7 @@ package com.becker.animation
         
         
         private function onEnterFrame(event:Event):void
-        {	
+        {    
             var dx:Number = mouseX - sprite.x;
             var dy:Number = mouseY - sprite.y;
             

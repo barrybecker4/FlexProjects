@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">  
     <mx:Script><![CDATA[
-		import com.becker.animation.walking.RealWalk;
-		import mx.events.SliderEvent;
-		import mx.events.FlexEvent;
-	
-	    [Bindable]
-	    public var min:Number;
-		
-	    [Bindable]
-	    public var max:Number;
-		
-	    [Bindable]
-	    public var value:Number;
-	    
-	    public var change:Function;
-		
-	    [Bindable]
-	    public var title:String;
-	    	   
+        import com.becker.animation.walking.RealWalk;
+        import mx.events.SliderEvent;
+        import mx.events.FlexEvent;
+    
+        [Bindable]
+        public var min:Number;
+        
+        [Bindable]
+        public var max:Number;
+        
+        [Bindable]
+        public var value:Number;
+        
+        public var change:Function;
+        
+        [Bindable]
+        public var title:String;
+               
     ]]></mx:Script>  
-        	          
+                      
     <mx:HSlider change="{change(event)}" 
-    	value="{value}" minimum="{min}"  maximum="{max}"       
-    	tickInterval="{(max-min)/10.0}" />
-    <mx:Label text="{title}" />			
+        value="{value}" minimum="{min}"  maximum="{max}"       
+        tickInterval="{(max-min)/10.0}" />
+    <mx:Label text="{title}" />            
 </mx:HBox>

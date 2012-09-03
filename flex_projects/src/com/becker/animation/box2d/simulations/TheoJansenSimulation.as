@@ -1,21 +1,21 @@
 package com.becker.animation.box2d.simulations {
-	import Box2D.Collision.Shapes.b2CircleDef;
-	import Box2D.Collision.Shapes.b2PolygonDef;
-	import Box2D.Common.Math.b2Math;
-	import Box2D.Common.Math.b2Vec2;
-	import Box2D.Dynamics.Joints.b2DistanceJointDef;
-	import Box2D.Dynamics.Joints.b2RevoluteJoint;
-	import Box2D.Dynamics.Joints.b2RevoluteJointDef;
-	import Box2D.Dynamics.b2Body;
-	import Box2D.Dynamics.b2BodyDef;
-	import Box2D.Dynamics.b2World;
-	
-	import com.becker.animation.box2d.builders.AbstractBuilder;
-	import com.becker.animation.box2d.builders.BasicShapeBuilder;
-	
-	import mx.core.UIComponent;
-	
-	public class TheoJansenSimulation extends AbstractSimulation {
+    import Box2D.Collision.Shapes.b2CircleDef;
+    import Box2D.Collision.Shapes.b2PolygonDef;
+    import Box2D.Common.Math.b2Math;
+    import Box2D.Common.Math.b2Vec2;
+    import Box2D.Dynamics.Joints.b2DistanceJointDef;
+    import Box2D.Dynamics.Joints.b2RevoluteJoint;
+    import Box2D.Dynamics.Joints.b2RevoluteJointDef;
+    import Box2D.Dynamics.b2Body;
+    import Box2D.Dynamics.b2BodyDef;
+    import Box2D.Dynamics.b2World;
+    
+    import com.becker.animation.box2d.builders.AbstractBuilder;
+    import com.becker.animation.box2d.builders.BasicShapeBuilder;
+    
+    import mx.core.UIComponent;
+    
+    public class TheoJansenSimulation extends AbstractSimulation {
         private static const T_SCALE:Number = 4.0;
         
         
@@ -27,14 +27,14 @@ package com.becker.animation.box2d.simulations {
         private var wheel:b2Body;
             
         
-		public function TheoJansenSimulation(world:b2World, canvas:UIComponent,
+        public function TheoJansenSimulation(world:b2World, canvas:UIComponent,
                             density:Number, friction:Number, restitution:Number) {
-			super(world, canvas, density, friction, restitution);
-			builder = new BasicShapeBuilder(world, canvas, scale);
-		}
-		
-		override public function addStaticElements():void {
-			
+            super(world, canvas, density, friction, restitution);
+            builder = new BasicShapeBuilder(world, canvas, scale);
+        }
+        
+        override public function addStaticElements():void {
+            
             // Add ground body
             var bodyDef:b2BodyDef = new b2BodyDef();
             // bodyDef.position.Set(20, 20);
@@ -46,13 +46,13 @@ package com.becker.animation.box2d.simulations {
         }
         
         override public function addDynamicElements():void {
-        	var bodyDef:b2BodyDef = new b2BodyDef();
+            var bodyDef:b2BodyDef = new b2BodyDef();
             
             
             for (var j:int = 0; j < 40; ++j)
             {
-            	bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
-            	builder.buildBall(0.35, bodyDef, 1.0, friction, restitution);
+                bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
+                builder.buildBall(0.35, bodyDef, 1.0, friction, restitution);
             }
                        
             // Add some objects
@@ -71,11 +71,11 @@ package com.becker.animation.box2d.simulations {
             }
             
             var offset:b2Vec2 = new b2Vec2();
-	        var motorJoint:b2RevoluteJoint;
-	        var motorOn:Boolean = true;
-	        var motorSpeed:Number = -2;
-	        
-	        var pd:b2PolygonDef;
+            var motorJoint:b2RevoluteJoint;
+            var motorOn:Boolean = true;
+            var motorSpeed:Number = -2;
+            
+            var pd:b2PolygonDef;
             var cd:b2CircleDef;
             var body:b2Body;
             var tscale:Number = T_SCALE;
@@ -118,68 +118,68 @@ package com.becker.animation.box2d.simulations {
         }
                
         
-	    private function CreateLeg(s:Number, wheelAnchor:b2Vec2, offset:b2Vec2):void {
-	        
-	        var tScale:Number = T_SCALE;
-	        var p1:b2Vec2 = new b2Vec2(16.2 * s/tScale, 18.3/tScale);
-	        var p2:b2Vec2 = new b2Vec2(21.6 * s/tScale, 3.6 /tScale);
-	        var p3:b2Vec2 = new b2Vec2(12.9 * s/tScale, 5.7 /tScale);
-	        var p4:b2Vec2 = new b2Vec2( 9.3 * s/tScale, -2.4 /tScale);
-	        var p5:b2Vec2 = new b2Vec2(18.0 * s/tScale, -4.5 /tScale);
-	        var p6:b2Vec2 = new b2Vec2( 7.5 * s/tScale, -11.1 /tScale);
+        private function CreateLeg(s:Number, wheelAnchor:b2Vec2, offset:b2Vec2):void {
+            
+            var tScale:Number = T_SCALE;
+            var p1:b2Vec2 = new b2Vec2(16.2 * s/tScale, 18.3/tScale);
+            var p2:b2Vec2 = new b2Vec2(21.6 * s/tScale, 3.6 /tScale);
+            var p3:b2Vec2 = new b2Vec2(12.9 * s/tScale, 5.7 /tScale);
+            var p4:b2Vec2 = new b2Vec2( 9.3 * s/tScale, -2.4 /tScale);
+            var p5:b2Vec2 = new b2Vec2(18.0 * s/tScale, -4.5 /tScale);
+            var p6:b2Vec2 = new b2Vec2( 7.5 * s/tScale, -11.1 /tScale);
 
             
             var sd1Pts:Array = new Array();
             var sd2Pts:Array = new Array();
-	  
-	        if (s > 0.0)
-	        {
-	        	sd1Pts.push(p3);
-	        	sd1Pts.push(p2);
-	        	sd1Pts.push(p1);
-	            
-	            sd2Pts.push(b2Math.SubtractVV(p6, p4));
+      
+            if (s > 0.0)
+            {
+                sd1Pts.push(p3);
+                sd1Pts.push(p2);
+                sd1Pts.push(p1);
+                
+                sd2Pts.push(b2Math.SubtractVV(p6, p4));
                 sd2Pts.push(b2Math.SubtractVV(p5, p4));
                 sd2Pts.push(new b2Vec2());
-	        }
-	        else
-	        {
-	        	sd1Pts.push(p2);
+            }
+            else
+            {
+                sd1Pts.push(p2);
                 sd1Pts.push(p3);
                 sd1Pts.push(p1);
                 
                 sd2Pts.push(b2Math.SubtractVV(p5, p4));
                 sd2Pts.push(b2Math.SubtractVV(p6, p4));
                 sd2Pts.push(new b2Vec2());
-	        }
+            }
 
-	        var bodyDef:b2BodyDef = new b2BodyDef(); 
-	        bodyDef.angularDamping = 10.0;
-	        bodyDef.position.SetV(offset);
-	        var body1:b2Body = builder.buildPolygon(sd1Pts, bodyDef, density, friction, restitution, -1);
-	        
-	        bodyDef.position = b2Math.AddVV(p4, offset); 
-	        var body2:b2Body = builder.buildPolygon(sd2Pts, bodyDef, density, friction, restitution, -1);
-	        
-	        var djd:b2DistanceJointDef = new b2DistanceJointDef();
-	        
-	        djd.Initialize(body1, body2, b2Math.AddVV(p2, offset), b2Math.AddVV(p5, offset));
-	        world.CreateJoint(djd);
-	        
-	        djd.Initialize(body1, body2, b2Math.AddVV(p3, offset), b2Math.AddVV(p4, offset));
-	        world.CreateJoint(djd);
-	        
-	        djd.Initialize(body1, wheel, b2Math.AddVV(p3, offset), b2Math.AddVV(wheelAnchor, offset));
-	        world.CreateJoint(djd);
-	        
-	        djd.Initialize(body2, wheel, b2Math.AddVV(p6, offset), b2Math.AddVV(wheelAnchor, offset));
-	        world.CreateJoint(djd);
-	        
-	        var rjd:b2RevoluteJointDef = new b2RevoluteJointDef();
-	        
-	        rjd.Initialize(body2, chassis, b2Math.AddVV(p4, offset));
-	        world.CreateJoint(rjd);   	                 
-	    }
-	}
+            var bodyDef:b2BodyDef = new b2BodyDef(); 
+            bodyDef.angularDamping = 10.0;
+            bodyDef.position.SetV(offset);
+            var body1:b2Body = builder.buildPolygon(sd1Pts, bodyDef, density, friction, restitution, -1);
+            
+            bodyDef.position = b2Math.AddVV(p4, offset); 
+            var body2:b2Body = builder.buildPolygon(sd2Pts, bodyDef, density, friction, restitution, -1);
+            
+            var djd:b2DistanceJointDef = new b2DistanceJointDef();
+            
+            djd.Initialize(body1, body2, b2Math.AddVV(p2, offset), b2Math.AddVV(p5, offset));
+            world.CreateJoint(djd);
+            
+            djd.Initialize(body1, body2, b2Math.AddVV(p3, offset), b2Math.AddVV(p4, offset));
+            world.CreateJoint(djd);
+            
+            djd.Initialize(body1, wheel, b2Math.AddVV(p3, offset), b2Math.AddVV(wheelAnchor, offset));
+            world.CreateJoint(djd);
+            
+            djd.Initialize(body2, wheel, b2Math.AddVV(p6, offset), b2Math.AddVV(wheelAnchor, offset));
+            world.CreateJoint(djd);
+            
+            var rjd:b2RevoluteJointDef = new b2RevoluteJointDef();
+            
+            rjd.Initialize(body2, chassis, b2Math.AddVV(p4, offset));
+            world.CreateJoint(rjd);                        
+        }
+    }
 }
 

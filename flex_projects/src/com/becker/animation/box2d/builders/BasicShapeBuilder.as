@@ -18,20 +18,20 @@ package com.becker.animation.box2d.builders
     public class BasicShapeBuilder extends AbstractBuilder {
 
         public function BasicShapeBuilder(world:b2World, canvas:UIComponent, scale:Number) {
-        	super(world, canvas, scale);
+            super(world, canvas, scale);
         }
     
         public function buildBlock(width:Number, height:Number, bodyDef:b2BodyDef, 
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
-				groupIndex:int = int.MAX_VALUE):b2Body {
-			
+                groupIndex:int = int.MAX_VALUE):b2Body {
+            
             var boxDef:b2PolygonDef = new b2PolygonDef();
             boxDef.SetAsBox(width, height);
             boxDef.density = density;
             boxDef.friction = friction;
             boxDef.restitution = restitution;
             if (groupIndex != int.MAX_VALUE) {
-            	boxDef.filter.groupIndex = groupIndex;
+                boxDef.filter.groupIndex = groupIndex;
             }
             bodyDef.userData = new Rectangle(width * 2 * scale, height * 2 * scale);  
             
@@ -40,8 +40,8 @@ package com.becker.animation.box2d.builders
         
         public function buildBall(radius:Number, bodyDef:b2BodyDef, 
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
-				groupIndex:int = int.MAX_VALUE):b2Body { 
-			
+                groupIndex:int = int.MAX_VALUE):b2Body { 
+            
             var circleDef:b2CircleDef = new b2CircleDef();
             circleDef.radius = radius;
             circleDef.density = density;
@@ -57,7 +57,7 @@ package com.becker.animation.box2d.builders
         
         public function buildPolygon(pts:Array, bodyDef:b2BodyDef, 
                                      density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
-									 groupIndex:int = int.MAX_VALUE):b2Body {
+                                     groupIndex:int = int.MAX_VALUE):b2Body {
    
             var polyDef:b2PolygonDef = new b2PolygonDef();
             var numPts:int = pts.length;
@@ -65,15 +65,15 @@ package com.becker.animation.box2d.builders
             var vpoints:Array;
             var i:int;
             if (pts[0] is Point) {
-	            for (i = 0; i < numPts; i++) {	           	 
-	                var pt:Point = pts[i];
-	                polyDef.vertices[i].Set(pt.x, pt.y);
-	            }
-	            vpoints = pts;
+                for (i = 0; i < numPts; i++) {                    
+                    var pt:Point = pts[i];
+                    polyDef.vertices[i].Set(pt.x, pt.y);
+                }
+                vpoints = pts;
             }
             else if (pts[0] is b2Vec2) {
-            	vpoints = new Array();
-            	for (i = 0; i < numPts; i++) {
+                vpoints = new Array();
+                for (i = 0; i < numPts; i++) {
                  
                     var v:b2Vec2 = pts[i];
                     polyDef.vertices[i].Set(v.x, v.y);
@@ -81,7 +81,7 @@ package com.becker.animation.box2d.builders
                 }
             }
             else {
-            	throw new Error("invalid vertix type:"+ pts[0]);
+                throw new Error("invalid vertix type:"+ pts[0]);
             }
             polyDef.density = density;
             polyDef.friction = friction;

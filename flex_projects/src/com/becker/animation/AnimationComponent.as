@@ -1,5 +1,5 @@
 package com.becker.animation {
-	
+    
     import com.becker.animation.box2d.BoxWorld;
     import com.becker.animation.walking.*;
     
@@ -11,7 +11,7 @@ package com.becker.animation {
     
     /**
      * The idea is to embedd a flash animation component inside a flex application.
-	 * 
+     * 
      * @author Barry Becker
      */
     public class AnimationComponent extends VBox {
@@ -49,15 +49,15 @@ package com.becker.animation {
         }
         
         public function set animClass(className:String):void {
-			
-        	trace(" about to load "+ className);
+            
+            trace(" about to load "+ className);
             var objClass:Class = getDefinitionByName(className) as Class;            
             if( objClass != null) {
                 _animatible = Animatible(new objClass());                                    
             }
                         
             if (_currentComponent != null) {
-            	this.removeChild(_currentComponent);
+                this.removeChild(_currentComponent);
             }
             _currentComponent = UIComponent(_animatible);    
             _currentComponent.percentWidth = 100;
@@ -72,7 +72,7 @@ package com.becker.animation {
          * return Animatible, internal UIComponent.
          */
         public function get sprite():Animatible {
-        	return _animatible;
+            return _animatible;
         }
         
         public function init(evt:FlexEvent):void {

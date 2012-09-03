@@ -15,8 +15,8 @@ package com.becker.animation.box2d.builders {
     
         
         public function RagDollBuilder(world:b2World, canvas:UIComponent, scale:Number) {
-        	super(world, canvas, scale);
-        	shapeBuilder = new BasicShapeBuilder(world, canvas, scale);
+            super(world, canvas, scale);
+            shapeBuilder = new BasicShapeBuilder(world, canvas, scale);
         }
         
        
@@ -84,8 +84,8 @@ package com.becker.animation.box2d.builders {
         }
         
         private function createJoints(startX:Number, startY:Number, ragDoll:RagDoll):void {
-			
-        	// JOINTS
+            
+            // JOINTS
             var jd:b2RevoluteJointDef = new b2RevoluteJointDef();
             jd.enableLimit = true;
             

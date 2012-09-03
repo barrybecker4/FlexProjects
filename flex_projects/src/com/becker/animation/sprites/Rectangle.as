@@ -15,7 +15,7 @@ package  com.becker.animation.sprites {
         private var img:DisplayObject;
         
         public function Rectangle(width:Number, height:Number, color:uint = 0xaa77ff) {
-        	super(color)
+            super(color)
             this.width = width;
             this.height = height;
             img = new Images.GOLD;
@@ -37,12 +37,12 @@ package  com.becker.animation.sprites {
    
         private function init():void
         {         
-        	img.x = x - width/2.0;
-        	img.y = y - height/2.0;
-        	img.width = width;
-        	img.height = height;
+            img.x = x - width/2.0;
+            img.y = y - height/2.0;
+            img.width = width;
+            img.height = height;
 
-        	graphics.lineStyle(0);
+            graphics.lineStyle(0);
             //graphics.beginFill(color, 0.5);
             //var bitMap:BitMap = new Bitmap(new BitmapData(
             //graphics.beginBitmapFill(bitMap); 

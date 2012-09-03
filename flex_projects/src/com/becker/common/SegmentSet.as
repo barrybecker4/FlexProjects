@@ -37,7 +37,7 @@ package com.becker.common
         }
         
         public function initializeSegmentString(numSegments:Number, segmentLength:Number):void {
-        	var lastSegment:Segment;
+            var lastSegment:Segment;
             for (var i:uint = 0; i < numSegments; i++) {
                 var segment:Segment = 
                     new Segment(segmentLength, 12,  0x0fff88);
@@ -60,8 +60,8 @@ package com.becker.common
         
         public function set showForces(show:Boolean):void {
             for each (var segment:Segment in segments) {
-            	segment.frontConnector.showForce = show;
-            	segment.rearConnector.showForce = show;
+                segment.frontConnector.showForce = show;
+                segment.rearConnector.showForce = show;
             }
         }
         

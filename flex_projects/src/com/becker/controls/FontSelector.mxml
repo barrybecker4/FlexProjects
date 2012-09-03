@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
-	
-	<mx:Script><![CDATA[
+    
+    <mx:Script><![CDATA[
 
         import mx.events.FlexEvent;
      
         public static const FONT_VALUES:Array = [ 
             "dreamFont", 
-			"agentFont", 
+            "agentFont", 
             "abductionFont", 
-			"abscissaFont", 
+            "abscissaFont", 
             "acklinFont", 
-			"acquaintanceFont", 
+            "acquaintanceFont", 
             "actionFont", 
-			"actionShadedFont", 
+            "actionShadedFont", 
             "cutAboveFont"
-		];
+        ];
  
         
         [Bindable]
@@ -23,7 +23,7 @@
         
         public function get selectedFont():String
         {
-        	return String(fontCombo.selectedItem);
+            return String(fontCombo.selectedItem);
         }
    
         private function fontSelected():void {
@@ -31,8 +31,8 @@
         }   
         
     ]]></mx:Script>
-	
-	
-	<mx:Label text="Font" />
+    
+    
+    <mx:Label text="Font" />
     <mx:ComboBox id="fontCombo" dataProvider="{FONT_VALUES}"  selectedIndex="7" change="changeHandler()" />    
 </mx:HBox>

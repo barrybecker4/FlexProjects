@@ -16,28 +16,28 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 package com.becker.animation.box2d.simulations {
-	import Box2D.Collision.Shapes.b2PolygonDef;
-	import Box2D.Dynamics.b2Body;
-	import Box2D.Dynamics.b2BodyDef;
-	import Box2D.Dynamics.b2World;
-	
-	import com.becker.animation.box2d.builders.RagDollBuilder;
-	import com.becker.animation.sprites.Rectangle;
-	
-	import mx.core.UIComponent;
-	
-	public class RagDollSimulation extends AbstractSimulation {
+    import Box2D.Collision.Shapes.b2PolygonDef;
+    import Box2D.Dynamics.b2Body;
+    import Box2D.Dynamics.b2BodyDef;
+    import Box2D.Dynamics.b2World;
+    
+    import com.becker.animation.box2d.builders.RagDollBuilder;
+    import com.becker.animation.sprites.Rectangle;
+    
+    import mx.core.UIComponent;
+    
+    public class RagDollSimulation extends AbstractSimulation {
         private static const NUM_DOLLS:Number = 10;
         
         private var ragDollBuilder:RagDollBuilder;
         
-		public function RagDollSimulation(world:b2World, canvas:UIComponent,
+        public function RagDollSimulation(world:b2World, canvas:UIComponent,
                                      density:Number, friction:Number, restitution:Number) {
-			super(world, canvas, density, friction, restitution);
-			ragDollBuilder = new RagDollBuilder(world, canvas, scale);			
-		}
-		
-		override public function addStaticElements():void {
+            super(world, canvas, density, friction, restitution);
+            ragDollBuilder = new RagDollBuilder(world, canvas, scale);            
+        }
+        
+        override public function addStaticElements():void {
             // Add ground body
             var bodyDef:b2BodyDef = new b2BodyDef();
             bodyDef.position.Set(20, 20);
@@ -62,10 +62,10 @@ package com.becker.animation.box2d.simulations {
             
             // Add some objects
             for (var i:int = 0; i < NUM_DOLLS; i++){
-            	var startX:Number = 70 + Math.random() * 20 + 70 * i;
+                var startX:Number = 70 + Math.random() * 20 + 70 * i;
                 var startY:Number = 20 + Math.random() * 50;
                 ragDollBuilder.buildInstance(startX, startY, density, friction, restitution);
             }
         }
-	}
+    }
 }
