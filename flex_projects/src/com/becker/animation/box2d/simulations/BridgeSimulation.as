@@ -4,6 +4,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.common.PhysicalParameters;
     
     import com.becker.animation.box2d.builders.AbstractBuilder;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
@@ -23,8 +24,8 @@ package com.becker.animation.box2d.simulations {
         
         
         override public function initialize(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number):void {
-            super.initialize(world, canvas, density, friction, restitution);
+                            params:PhysicalParameters):void {
+            super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);
         }
         
@@ -58,8 +59,7 @@ package com.becker.animation.box2d.simulations {
             
             var prevBody:b2Body = ground;
             
-            for (var i:int = 0; i < NUM_PLANKS; ++i)
-            {
+            for (var i:int = 0; i < NUM_PLANKS; ++i) {
                 bodyDef.position.Set((100 + 22 + 44 * i) / scale, 250 / scale);
                 body = builder.buildBlock(24/scale, 5/scale, bodyDef, 20.0, 0.2, 0.1);  
                 

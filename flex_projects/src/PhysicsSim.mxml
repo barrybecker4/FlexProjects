@@ -14,6 +14,7 @@
         import com.becker.animation.box2d.Simulation;
         import com.becker.animation.box2d.simulations.RagDollSimulation;
         import com.becker.animation.walking.RealWalk;
+        import com.becker.common.PhysicalParameters;
         import com.becker.controls.FontSelector;
         
         import mx.controls.HSlider;
@@ -61,8 +62,10 @@
             
             var sim:Simulation = 
                 simulations.getSimulation(String(simulationCombo.selectedItem)); 
-            app.setSimulation(sim, 
-                densityStepper.value, frictionStepper.value, restitutionStepper.value);  
+            var params:PhysicalParameters = 
+            new PhysicalParameters(densityStepper.value, frictionStepper.value, restitutionStepper.value);
+            
+            app.setSimulation(sim,  params);  
         }   
         
         private function toggleAnimation():void {      

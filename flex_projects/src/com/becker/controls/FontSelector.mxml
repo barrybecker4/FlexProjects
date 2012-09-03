@@ -6,6 +6,7 @@
         import mx.events.FlexEvent;
      
         public static const FONT_VALUES:Array = [ 
+            "sanserif",
             "dreamFont", 
             "agentFont", 
             "abductionFont", 
@@ -33,5 +34,5 @@
     
     
     <mx:Label text="Font" />
-    <mx:ComboBox id="fontCombo" dataProvider="{FONT_VALUES}"  selectedIndex="7" change="changeHandler()" />    
+    <mx:ComboBox id="fontCombo" dataProvider="{FONT_VALUES}"  selectedIndex="0" change="changeHandler()" />    
 </mx:HBox>

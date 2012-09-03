@@ -6,6 +6,7 @@ package com.becker.animation.box2d.builders
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.common.PhysicalParameters;
     
     import com.becker.animation.sprites.Circle;
     import com.becker.animation.sprites.Polygon;
@@ -20,6 +21,7 @@ package com.becker.animation.box2d.builders
         public function BasicShapeBuilder(world:b2World, canvas:UIComponent, scale:Number) {
             super(world, canvas, scale);
         }
+       
     
         public function buildBlock(width:Number, height:Number, bodyDef:b2BodyDef, 
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 

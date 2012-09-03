@@ -1,4 +1,5 @@
-package  com.becker.animation {
+package  com.becker.animation.demos {
+	import com.becker.animation.Animatible;
     import com.becker.animation.threed.*;
     import com.becker.common.Util;
     
