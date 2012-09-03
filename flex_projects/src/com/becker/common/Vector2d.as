@@ -1,7 +1,7 @@
 package com.becker.common {
-	
-	import flash.geom.Point;
-	
+    
+    import flash.geom.Point;
+    
   
     /**
      * A set of connected segments.
@@ -21,15 +21,15 @@ package com.becker.common {
          * scale this vector by the specified amount.
          */
         public function scale(s:Number):void {
-        	x *= s;
-        	y *= s;
+            x *= s;
+            y *= s;
         }
         
         /**
          * make the vector have unit length.
          */
         override public function normalize(len:Number):void {
-        	var len:Number = this.length;
+            var len:Number = this.length;
             x = (x / length) * len;
             y = (y / length) * len;
         }     
@@ -54,7 +54,7 @@ package com.becker.common {
          * a.length * b*length * sin(angle between a and b)
          */
         public function dot(vec:Vector2d):Number {
-        	return x * vec.x + y * vec.y;
+            return x * vec.x + y * vec.y;
         }
         
         /**

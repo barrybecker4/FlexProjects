@@ -1,25 +1,25 @@
 package com.becker.animation.box2d.builders {
-	import Box2D.Dynamics.b2Body;
-	
-	public class RagDoll {
-		
-		private var _head:b2Body;
-		private var _torso1:b2Body;
-		private var _torso2:b2Body;
-		private var _torso3:b2Body
-		private var _upperArmL:b2Body; 
-		private var _upperArmR:b2Body;
-		private var _lowerArmL:b2Body;
-		private var _lowerArmR:b2Body; 
+    import Box2D.Dynamics.b2Body;
+    
+    public class RagDoll {
+        
+        private var _head:b2Body;
+        private var _torso1:b2Body;
+        private var _torso2:b2Body;
+        private var _torso3:b2Body
+        private var _upperArmL:b2Body; 
+        private var _upperArmR:b2Body;
+        private var _lowerArmL:b2Body;
+        private var _lowerArmR:b2Body; 
         private var _upperLegL:b2Body; 
         private var _upperLegR:b2Body;
         private var _lowerLegL:b2Body; 
         private var _lowerLegR:b2Body;
                                   
-		public function RagDoll(head:b2Body, torso1:b2Body, torso2:b2Body, torso3:b2Body, 
-			    upperArmL:b2Body, upperArmR:b2Body, lowerArmL:b2Body, lowerArmR:b2Body, 
+        public function RagDoll(head:b2Body, torso1:b2Body, torso2:b2Body, torso3:b2Body, 
+                upperArmL:b2Body, upperArmR:b2Body, lowerArmL:b2Body, lowerArmR:b2Body, 
                 upperLegL:b2Body, upperLegR:b2Body, lowerLegL:b2Body, lowerLegR:b2Body) {
-                	
+                    
              _head = head;
              _torso1 = torso1;  
              _torso2 = torso2;  
@@ -32,10 +32,10 @@ package com.becker.animation.box2d.builders {
              _upperLegR = upperLegR;  
              _lowerLegL = lowerLegL;  
              _lowerLegR = lowerLegR;  
-		}
+        }
 
         public function get head():b2Body {
-        	return _head;
+            return _head;
         }        
         public function get torso1():b2Body {
             return _torso1;
@@ -71,5 +71,5 @@ package com.becker.animation.box2d.builders {
             return _lowerLegR;
         }      
         
-	}
+    }
 }

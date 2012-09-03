@@ -40,7 +40,7 @@ package com.becker.animation
         }
         
         private function onEnterFrame(event:Event):void {
-			
+            
             for(var i:uint = 0; i < numBalls - 1; i++) {
                 var ball0:Ball = balls[i];
                 for(var j:uint = i + 1; j < numBalls; j++){

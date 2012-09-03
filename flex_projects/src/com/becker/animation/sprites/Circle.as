@@ -19,7 +19,7 @@ package  com.becker.animation.sprites {
        
         
         public function Circle(radius:Number, color:uint = 0x9988cc) {
-        	super(color);
+            super(color);
             this.radius = radius;
             circle = new Shape(); 
             addChild( circle ); 

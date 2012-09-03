@@ -1,7 +1,7 @@
 package  com.becker.common {
-	import flash.media.Sound;
-	import flash.media.SoundTransform;
-	
+    import flash.media.Sound;
+    import flash.media.SoundTransform;
+    
 
     public class Sounds
     {    
@@ -18,7 +18,7 @@ package  com.becker.common {
         
         public static function playHit(volume:Number = 1.0):void
         {
-        	playSound(hitClass, volume);
+            playSound(hitClass, volume);
         }
         
         public static function playScrape(volume:Number = 1.0):void

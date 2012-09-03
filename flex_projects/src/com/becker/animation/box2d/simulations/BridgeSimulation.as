@@ -1,18 +1,18 @@
 package com.becker.animation.box2d.simulations {
-	import Box2D.Common.Math.b2Vec2;
-	import Box2D.Dynamics.Joints.b2RevoluteJointDef;
-	import Box2D.Dynamics.b2Body;
-	import Box2D.Dynamics.b2BodyDef;
-	import Box2D.Dynamics.b2World;
-	
-	import com.becker.animation.box2d.builders.AbstractBuilder;
-	import com.becker.animation.box2d.builders.BasicShapeBuilder;
-	
-	import flash.geom.Point;
-	
-	import mx.core.UIComponent;
-	
-	public class BridgeSimulation extends AbstractSimulation {
+    import Box2D.Common.Math.b2Vec2;
+    import Box2D.Dynamics.Joints.b2RevoluteJointDef;
+    import Box2D.Dynamics.b2Body;
+    import Box2D.Dynamics.b2BodyDef;
+    import Box2D.Dynamics.b2World;
+    
+    import com.becker.animation.box2d.builders.AbstractBuilder;
+    import com.becker.animation.box2d.builders.BasicShapeBuilder;
+    
+    import flash.geom.Point;
+    
+    import mx.core.UIComponent;
+    
+    public class BridgeSimulation extends AbstractSimulation {
         private static const NUM_SHAPES:Number = 50;
         private static const NUM_PLANKS:int = 10;
         
@@ -22,19 +22,19 @@ package com.becker.animation.box2d.simulations {
         private var anchor:b2Vec2;   
         
         
-		public function BridgeSimulation(world:b2World, canvas:UIComponent,
+        public function BridgeSimulation(world:b2World, canvas:UIComponent,
                             density:Number, friction:Number, restitution:Number) {
-			super(world, canvas, density, friction, restitution);
-			builder = new BasicShapeBuilder(world, canvas, scale);
-		}
-		
-		override public function addStaticElements():void {
+            super(world, canvas, density, friction, restitution);
+            builder = new BasicShapeBuilder(world, canvas, scale);
+        }
+        
+        override public function addStaticElements():void {
             
             ground = world.GetGroundBody();
             anchor = new b2Vec2();   
         }
         
-	
+    
         override public function addDynamicElements():void {
             
             addBridge();
@@ -79,9 +79,9 @@ package com.becker.animation.box2d.simulations {
          * Spawn in a bunch of crap to fall on the bridge.
          */
         private function createBridgeCrap():void {
-        	           
-        	var body:b2Body;
-        	var bodyDef:b2BodyDef = new b2BodyDef();
+                       
+            var body:b2Body;
+            var bodyDef:b2BodyDef = new b2BodyDef();
 
             // some blocks.
             for (var i:int = 0; i < 5; i++){
@@ -130,5 +130,5 @@ package com.becker.animation.box2d.simulations {
                 body = builder.buildPolygon(pts, bodyDef, 1.0, 0.3, 0.1); 
             }
         }       
-	}
+    }
 }

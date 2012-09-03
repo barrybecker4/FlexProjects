@@ -16,34 +16,34 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 package com.becker.animation.box2d.simulations {
-	
-	import Box2D.Dynamics.Joints.b2RevoluteJointDef;
-	import Box2D.Dynamics.b2Body;
-	import Box2D.Dynamics.b2BodyDef;
-	import Box2D.Dynamics.b2World;
-	
-	import com.becker.animation.box2d.builders.AbstractBuilder;
-	import com.becker.animation.box2d.builders.BasicShapeBuilder;
-	
-	import mx.core.UIComponent;
-	
-	public class HelloWorldSimulation extends AbstractSimulation
-	{
+    
+    import Box2D.Dynamics.Joints.b2RevoluteJointDef;
+    import Box2D.Dynamics.b2Body;
+    import Box2D.Dynamics.b2BodyDef;
+    import Box2D.Dynamics.b2World;
+    
+    import com.becker.animation.box2d.builders.AbstractBuilder;
+    import com.becker.animation.box2d.builders.BasicShapeBuilder;
+    
+    import mx.core.UIComponent;
+    
+    public class HelloWorldSimulation extends AbstractSimulation
+    {
         private static const NUM_SHAPES:Number = 50;
         
         private var builder:BasicShapeBuilder;
         
         private var staticCircle:b2Body;
         
-		public function HelloWorldSimulation(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number)		
-		{
-			super(world, canvas, density, friction, restitution);
-			builder = new BasicShapeBuilder(world, canvas, scale);
-		}
-		
-		override public function addStaticElements():void {
-			            
+        public function HelloWorldSimulation(world:b2World, canvas:UIComponent,
+                            density:Number, friction:Number, restitution:Number)        
+        {
+            super(world, canvas, density, friction, restitution);
+            builder = new BasicShapeBuilder(world, canvas, scale);
+        }
+        
+        override public function addStaticElements():void {
+                        
             var bodyDef:b2BodyDef = new b2BodyDef();         
             bodyDef.position.Set(30, 19);
             // a pivot point for the see saw plank
@@ -85,5 +85,5 @@ package com.becker.animation.box2d.simulations {
                 }  
             }
         }
-	}
+    }
 }

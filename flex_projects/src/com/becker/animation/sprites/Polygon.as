@@ -36,17 +36,17 @@ package  com.becker.animation.sprites {
          * Note: the points get scaled by this
          */
         private function initBounds(pts:Array):void {
-        	min = new Point(Number.MAX_VALUE, Number.MAX_VALUE);
-        	max = new Point(-Number.MAX_VALUE, -Number.MAX_VALUE);
-        	for each (var pt:Point in pts) {
-        		
-        		// @@ side effect : scale the points
-        		pt.x *= scale;
-        		pt.y *= scale;
-        		if (pt.x < min.x) {
-        			min.x = pt.x;
-        		}
-        		if (pt.y < min.y) {
+            min = new Point(Number.MAX_VALUE, Number.MAX_VALUE);
+            max = new Point(-Number.MAX_VALUE, -Number.MAX_VALUE);
+            for each (var pt:Point in pts) {
+                
+                // @@ side effect : scale the points
+                pt.x *= scale;
+                pt.y *= scale;
+                if (pt.x < min.x) {
+                    min.x = pt.x;
+                }
+                if (pt.y < min.y) {
                     min.y = pt.y;
                 }
                 if (pt.x > max.x) {
@@ -55,7 +55,7 @@ package  com.becker.animation.sprites {
                 if (pt.y > max.y) {
                     max.y = pt.y;
                 }
-        	}
+            }
         }
         
         protected function init():void
@@ -70,11 +70,11 @@ package  com.becker.animation.sprites {
             var matrix:Matrix = new Matrix(boundingWidth/img.width, 0, 0, boundingHeight/img.height, min.x, min.y);
              
             poly.graphics.beginBitmapFill(bmd, matrix, true, true);              
-		    poly.graphics.moveTo(points[0].x, points[0].y);  
-		   
-		    for(var i:int = 1; i < points.length; i++){  
-		         poly.graphics.lineTo(points[i].x, points[i].y);  
-		    }  
+            poly.graphics.moveTo(points[0].x, points[0].y);  
+           
+            for(var i:int = 1; i < points.length; i++){  
+                 poly.graphics.lineTo(points[i].x, points[i].y);  
+            }  
 
             poly.graphics.endFill();                                          
         } 
