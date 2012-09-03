@@ -21,6 +21,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.common.PhysicalParameters;
     
     import com.becker.animation.box2d.builders.AbstractBuilder;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
@@ -36,8 +37,8 @@ package com.becker.animation.box2d.simulations {
         private var staticCircle:b2Body;
         
         override public function initialize(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number):void {
-            super.initialize(world, canvas, density, friction, restitution);
+                            params:PhysicalParameters):void {
+            super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);
         }
         
@@ -46,7 +47,7 @@ package com.becker.animation.box2d.simulations {
             var bodyDef:b2BodyDef = new b2BodyDef();         
             bodyDef.position.Set(28, 23);
             // a pivot point for the see-saw plank
-            staticCircle = builder.buildBall(1, bodyDef, 0, friction, restitution);
+            staticCircle = builder.buildBall(1, bodyDef, 0, params.friction, params.restitution);
         }
         
         override public function addDynamicElements():void {
@@ -55,7 +56,7 @@ package com.becker.animation.box2d.simulations {
             var bodyDef:b2BodyDef = new b2BodyDef();
             bodyDef.position.Set(28, 20);
             bodyDef.angle = -0.1;
-            var groundBlock:b2Body = builder.buildBlock(24, 2, bodyDef, density, friction, restitution);
+            var groundBlock:b2Body = builder.buildBlock(24, 2, bodyDef, params.density, params.friction, params.restitution);
             
             var jd:b2RevoluteJointDef = new b2RevoluteJointDef();
             jd.enableLimit = true;
@@ -77,10 +78,10 @@ package com.becker.animation.box2d.simulations {
                 var rY:Number = Math.random() + 0.5;
           
                 if (Math.random() < 0.5) {
-                    builder.buildBlock(rX, rY, bodyDef, density, friction, restitution);
+                    builder.buildBlock(rX, rY, bodyDef, params.density, params.friction, params.restitution);
                 } 
                 else {
-                    builder.buildBall(rX, bodyDef, density, friction, restitution);
+                    builder.buildBall(rX, bodyDef, params.density, params.friction, params.restitution);
                 }  
             }
         }

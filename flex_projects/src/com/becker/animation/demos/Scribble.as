@@ -1,5 +1,6 @@
-package com.becker.animation
+package com.becker.animation.demos
 {
+	import com.becker.animation.Animatible;
     import flash.events.Event;
     
     import mx.core.UIComponent;

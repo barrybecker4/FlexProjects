@@ -9,6 +9,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.common.PhysicalParameters;
     
     import com.becker.animation.box2d.builders.AbstractBuilder;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
@@ -28,8 +29,8 @@ package com.becker.animation.box2d.simulations {
             
         
         override public function initialize(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number):void {
-            super.initialize(world, canvas, density, friction, restitution);
+                            params:PhysicalParameters):void {
+            super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);
         }
         
@@ -42,7 +43,7 @@ package com.becker.animation.box2d.simulations {
             // var groundBlock:b2Body = builder.buildBlock(20, 2, bodyDef, 0, friction, restitution);
             
             bodyDef.position.Set(20, 46);
-            staticCircle = builder.buildBlock(100, 4, bodyDef, 0, friction, restitution);
+            staticCircle = builder.buildBlock(100, 4, bodyDef, 0, params.friction, params.restitution);
         }
         
         override public function addDynamicElements():void {
@@ -52,7 +53,7 @@ package com.becker.animation.box2d.simulations {
             for (var j:int = 0; j < 40; ++j)
             {
                 bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
-                builder.buildBall(0.35, bodyDef, 1.0, friction, restitution);
+                builder.buildBall(0.35, bodyDef, 1.0, params.friction, params.restitution);
             }
                        
             // Add some objects
@@ -63,10 +64,10 @@ package com.becker.animation.box2d.simulations {
                 var rY:Number = Math.random() + 0.5;
           
                 if (Math.random() < 0.5) {
-                    builder.buildBlock(rX, rY, bodyDef, density, friction, restitution);
+                    builder.buildBlock(rX, rY, bodyDef, params.density, params.friction, params.restitution);
                 } 
                 else {
-                    builder.buildBall(rX, bodyDef, density, friction, restitution);
+                    builder.buildBall(rX, bodyDef, params.density, params.friction, params.restitution);
                 }  
             }
             
@@ -85,10 +86,10 @@ package com.becker.animation.box2d.simulations {
             var pivot:b2Vec2 = new b2Vec2(0.0, -24.0/tscale);
             
             bodyDef.position = b2Math.AddVV(pivot, offset);
-            chassis = builder.buildBlock(7.5/tscale, 3.0/tscale, bodyDef, 1.0, friction, restitution, -1);
+            chassis = builder.buildBlock(7.5/tscale, 3.0/tscale, bodyDef, 1.0, params.friction, params.restitution, -1);
               
             bodyDef.position = b2Math.AddVV(pivot, offset);
-            wheel = builder.buildBall(4.8/tscale, bodyDef, 1.0, friction, restitution, -1);
+            wheel = builder.buildBall(4.8/tscale, bodyDef, 1.0, params.friction, params.restitution, -1);
         
             var jd:b2RevoluteJointDef = new b2RevoluteJointDef();
             var po:b2Vec2 = pivot.Copy();
@@ -156,10 +157,10 @@ package com.becker.animation.box2d.simulations {
             var bodyDef:b2BodyDef = new b2BodyDef(); 
             bodyDef.angularDamping = 10.0;
             bodyDef.position.SetV(offset);
-            var body1:b2Body = builder.buildPolygon(sd1Pts, bodyDef, density, friction, restitution, -1);
+            var body1:b2Body = builder.buildPolygon(sd1Pts, bodyDef, params.density, params.friction, params.restitution, -1);
             
             bodyDef.position = b2Math.AddVV(p4, offset); 
-            var body2:b2Body = builder.buildPolygon(sd2Pts, bodyDef, density, friction, restitution, -1);
+            var body2:b2Body = builder.buildPolygon(sd2Pts, bodyDef, params.density, params.friction, params.restitution, -1);
             
             var djd:b2DistanceJointDef = new b2DistanceJointDef();
             

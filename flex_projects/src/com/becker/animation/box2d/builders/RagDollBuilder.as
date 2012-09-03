@@ -5,6 +5,7 @@ package com.becker.animation.box2d.builders {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.common.PhysicalParameters;
     
     import mx.core.UIComponent;
     
@@ -21,7 +22,7 @@ package com.becker.animation.box2d.builders {
         
        
         public function buildInstance(startX:Number, startY:Number, 
-                            density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2):RagDoll  {           
+                            params:PhysicalParameters):RagDoll  {           
             var bodyDef:b2BodyDef;    
             var box:b2PolygonDef = new b2PolygonDef();      
             

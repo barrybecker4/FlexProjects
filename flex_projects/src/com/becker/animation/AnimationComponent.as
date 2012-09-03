@@ -2,6 +2,7 @@ package com.becker.animation {
     
     import com.becker.animation.box2d.BoxWorld;
     import com.becker.animation.walking.*;
+	import com.becker.animation.demos.*;
     
     import flash.utils.getDefinitionByName;
     
@@ -84,7 +85,7 @@ package com.becker.animation {
             
             //if(w-bt>0 && h-bt>1) {bitmapData = new BitmapData(w-bt, h-bt, true, 0x0);}
             //_bitmap.bitmapData = bitmapData;
-            trace("w="+w +" h="+ h);
+            //trace("w="+w +" h="+ h);
             //_sprite.width = w;
             //_sprite.height = h;
         }

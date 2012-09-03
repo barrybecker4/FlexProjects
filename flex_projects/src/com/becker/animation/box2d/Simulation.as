@@ -1,6 +1,7 @@
 package com.becker.animation.box2d {
     
     import Box2D.Dynamics.b2World;
+    import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
     
     /**
@@ -10,7 +11,7 @@ package com.becker.animation.box2d {
     public interface Simulation {
         
         function initialize(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number):void;
+                            params:PhysicalParameters):void;
         
         function addStaticElements():void
         

@@ -3,6 +3,7 @@ import Box2D.Collision.*;
 import Box2D.Collision.Shapes.*;
 import Box2D.Common.Math.*;
 import Box2D.Dynamics.*;
+import com.becker.common.PhysicalParameters;
 
 import com.becker.animation.Animatible;
 import com.becker.animation.box2d.simulations.BridgeSimulation;
@@ -32,7 +33,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     private var simulation:Simulation;
     
     private static const NUM_ITERATIONS:int = 10;
-    private static const TIME_STEP:Number = 1.0/20.0;      
+    private static const TIME_STEP:Number = 1.0/20.0;
     private static const ORIG_WIDTH:int = 1200;
     
     [Bindable]
@@ -56,10 +57,10 @@ public class BoxWorld extends UIComponent implements Animatible {
      * @param the name of a class that implements Simulation
      */
     public function setSimulation(simulation:Simulation, 
-                                  density:Number, friction:Number, restitution:Number):void {
+                                  params:PhysicalParameters):void {
         firstTime = true;
         world = createWorld();
-        simulation.initialize(world, this, density, friction, restitution);
+        simulation.initialize(world, this, params);
         this.simulation = simulation;
         startAnimation();
     }

@@ -20,6 +20,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.common.PhysicalParameters;
     
     import com.becker.animation.box2d.builders.RagDollBuilder;
     import com.becker.animation.sprites.Rectangle;
@@ -32,8 +33,8 @@ package com.becker.animation.box2d.simulations {
         private var ragDollBuilder:RagDollBuilder;
         
         override public function initialize(world:b2World, canvas:UIComponent,
-                                     density:Number, friction:Number, restitution:Number):void {
-            super.initialize(world, canvas, density, friction, restitution);
+                                     params:PhysicalParameters):void {
+            super.initialize(world, canvas, params);
             ragDollBuilder = new RagDollBuilder(world, canvas, scale);    
         }
         
@@ -44,7 +45,7 @@ package com.becker.animation.box2d.simulations {
             bodyDef.angle = 0.1;
             var boxDef:b2PolygonDef = new b2PolygonDef();
             boxDef.SetAsBox(20, 2);
-            boxDef.friction = friction;
+            boxDef.friction = params.friction;
             boxDef.density = 0; // static bodies require zero density
             
             // Add sprite to body userData. The ground.
@@ -64,7 +65,7 @@ package com.becker.animation.box2d.simulations {
             for (var i:int = 0; i < NUM_DOLLS; i++){
                 var startX:Number = 70 + Math.random() * 20 + 70 * i;
                 var startY:Number = 20 + Math.random() * 50;
-                ragDollBuilder.buildInstance(startX, startY, density, friction, restitution);
+                ragDollBuilder.buildInstance(startX, startY, params);
             }
         }
     }

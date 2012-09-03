@@ -1,11 +1,11 @@
-package com.becker.animation
+package com.becker.animation.demos
 {
+	import com.becker.animation.Animatible;
     import com.becker.common.Ball;    
     import flash.events.Event;    
     import mx.core.UIComponent;
     
-    public class ChainArray extends UIComponent implements Animatible
-    {
+    public class ChainArray extends UIComponent implements Animatible {
         private var balls:Array;
         private var numBalls:Number = 5;
         private var spring:Number = 0.1;
@@ -13,11 +13,9 @@ package com.becker.animation
         private var gravity:Number = 5;
         
         public function ChainArray()
-        {
-        }
+        {}
         
-        public function startAnimating():void
-        {
+        public function startAnimating():void {
             balls = new Array();
             for(var i:uint = 0; i < numBalls; i++)
             {
@@ -29,8 +27,7 @@ package com.becker.animation
         }
 
         
-        private function onEnterFrame(event:Event):void
-        {
+        private function onEnterFrame(event:Event):void {
             graphics.clear();
             graphics.lineStyle(1);
             graphics.moveTo(mouseX, mouseY);
@@ -46,8 +43,7 @@ package com.becker.animation
             }
         }
         
-        private function moveBall(ball:Ball, targetX:Number, targetY:Number):void
-        {
+        private function moveBall(ball:Ball, targetX:Number, targetY:Number):void {
             ball.xVelocity += (targetX - ball.x) * spring;
             ball.yVelocity += (targetY - ball.y) * spring;
             ball.yVelocity += gravity;

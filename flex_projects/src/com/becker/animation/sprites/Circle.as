@@ -16,8 +16,7 @@ package  com.becker.animation.sprites {
         private var radius:Number;
         private var circle:Shape;
         
-       
-        
+               
         public function Circle(radius:Number, color:uint = 0x9988cc) {
             super(color);
             this.radius = radius;

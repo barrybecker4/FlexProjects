@@ -1,5 +1,6 @@
-package  com.becker.animation
+package  com.becker.animation.demos
 {
+	import com.becker.animation.Animatible;
     import com.becker.common.Connector;
     import com.becker.common.SegmentSet;
     import com.becker.common.Vector2d;
