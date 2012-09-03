@@ -73,7 +73,7 @@ package General {
         //======================
         // update
         //======================
-        static public function update(){
+        static public function update():void{
             
             // array of used keys
             /*var kArr:Array = new Array(
@@ -110,11 +110,10 @@ package General {
         }
         
         
-        
         //======================
         // mousePress listener
         //======================
-        public function mousePress(e:MouseEvent){
+        public function mousePress(e:MouseEvent):void {
             mousePressed = true;
             mouseDown = true;
             mouseDragX = 0;
@@ -122,15 +121,13 @@ package General {
         }
         
         
-        
         //======================
         // mousePress listener
         //======================
-        public function mouseRelease(e:MouseEvent){
+        public function mouseRelease(e:MouseEvent):void {
             mouseDown = false;
             mouseReleased = true;
         }
-        
         
         
         //======================
@@ -358,7 +355,7 @@ package General {
         
         // last key pressed
         static public var lastKey:int = 0;
-        static public var timeSinceLastKey = 0;
+        static public var timeSinceLastKey:int = 0;
         
         // mouse states
         static public var mouseDown:Boolean = false;
@@ -375,9 +372,7 @@ package General {
         
         // stage
         static public var m_stageMc:Sprite;
-    }
-    
-    
+    }  
 }
 
 
