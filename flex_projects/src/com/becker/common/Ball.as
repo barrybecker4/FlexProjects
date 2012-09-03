@@ -1,5 +1,5 @@
 package com.becker.common {
-	
+    
     import flash.geom.Point;    
     import mx.core.UIComponent;
     
@@ -7,7 +7,7 @@ package com.becker.common {
      * Represents a 2D ball and common operations on it.
      */
     public class Ball extends UIComponent  {
-		
+        
         public var radius:Number;
         private var color:uint;
         public var xVelocity:Number = 0;
@@ -21,11 +21,11 @@ package com.becker.common {
         }
         
         private function init():void {
-        	graphics.beginFill(color);
+            graphics.beginFill(color);
             graphics.drawCircle(0, 0, radius);
             graphics.endFill();
         }
-		
+        
         /*
         override protected function updateDisplayList(w:Number, h:Number):void {
             super.updateDisplayList(w, h);
@@ -39,8 +39,8 @@ package com.becker.common {
          * controls the bouncing ball.
          * Handles collision with a wall.
          * @param bounce controls the elasticity of the bounce (1 = totally elastic)
-		 * @param gravity the force of gravity in m/s^2
-		 * @param container defines the borders used for bouncing.
+         * @param gravity the force of gravity in m/s^2
+         * @param container defines the borders used for bouncing.
          */
         public function bounce(bounce:Number, gravity:Number, 
                                container:UIComponent):void {
@@ -75,9 +75,9 @@ package com.becker.common {
             var dx:Number = ball1.x - x;
             var dy:Number = ball1.y - y;
             var dist:Number = Math.sqrt(dx*dx + dy*dy);
-			
+            
             if (dist < radius + ball1.radius)  {
-				
+                
                 // calculate angle, sine and cosine
                 var angle:Number = Math.atan2(dy, dx);
                 var sin:Number = Math.sin(angle);
@@ -91,11 +91,11 @@ package com.becker.common {
                 
                 // rotate our velocity
                 var vel0:Point = 
-					Util.rotate(xVelocity, yVelocity, sin, cos, true);
+                    Util.rotate(xVelocity, yVelocity, sin, cos, true);
                 
                 // rotate ball's velocity
                 var vel1:Point = 
-					Util.rotate(ball1.xVelocity, ball1.yVelocity, sin, cos, true);
+                    Util.rotate(ball1.xVelocity, ball1.yVelocity, sin, cos, true);
                 
                 // collision reaction
                 var vxTotal:Number = vel0.x - vel1.x;
@@ -112,10 +112,10 @@ package com.becker.common {
                 
                 // rotate positions back
                 var pos0F:Object = 
-					Util.rotate(pos0.x, pos0.y, sin, cos, false);
+                    Util.rotate(pos0.x, pos0.y, sin, cos, false);
                                           
                 var pos1F:Object = 
-					Util.rotate(pos1.x, pos1.y, sin, cos, false);
+                    Util.rotate(pos1.x, pos1.y, sin, cos, false);
 
                 // adjust positions to actual screen positions
                 ball1.x = x + pos1F.x;
@@ -125,10 +125,10 @@ package com.becker.common {
                 
                 // rotate velocities back
                 var vel0F:Object = 
-					Util.rotate(vel0.x, vel0.y, sin, cos, false);
+                    Util.rotate(vel0.x, vel0.y, sin, cos, false);
                 var vel1F:Object = 
-					Util.rotate(vel1.x, vel1.y, sin, cos, false);
-				
+                    Util.rotate(vel1.x, vel1.y, sin, cos, false);
+                
                 xVelocity = vel0F.x;
                 yVelocity = vel0F.y;
                 ball1.xVelocity = vel1F.x;

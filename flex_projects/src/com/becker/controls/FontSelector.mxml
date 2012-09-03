@@ -21,8 +21,7 @@
         [Bindable]
         public var changeHandler:Function = fontSelected;
         
-        public function get selectedFont():String
-        {
+        public function get selectedFont():String {
             return String(fontCombo.selectedItem);
         }
    
