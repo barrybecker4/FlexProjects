@@ -3,21 +3,17 @@
 	import flash.display.Sprite;
 	import flash.events.Event;
 	// Classes used in this example
-	import Box2D.Dynamics.*;
-	import Box2D.Collision.*;
-	import Box2D.Collision.Shapes.*;
-	import Box2D.Common.Math.*;
+	import src.Box2D.Dynamics.*;
+	import src.Box2D.Collision.*;
+	import src.Box2D.Collision.Shapes.*;
+	import src.Box2D.Common.Math.*;
 	
 	public class HelloWorld extends Sprite{
 		
 		public function HelloWorld(){
 			
-			
-			
 			// Add event for main loop
 			addEventListener(Event.ENTER_FRAME, Update, false, 0, true);
-			
-			
 			
 			// Creat world AABB
 			var worldAABB:b2AABB = new b2AABB();
