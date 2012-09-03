@@ -31,10 +31,10 @@ package com.becker.animation.box2d.simulations {
         
         private var ragDollBuilder:RagDollBuilder;
         
-        public function RagDollSimulation(world:b2World, canvas:UIComponent,
-                                     density:Number, friction:Number, restitution:Number) {
-            super(world, canvas, density, friction, restitution);
-            ragDollBuilder = new RagDollBuilder(world, canvas, scale);            
+        override public function initialize(world:b2World, canvas:UIComponent,
+                                     density:Number, friction:Number, restitution:Number):void {
+            super.initialize(world, canvas, density, friction, restitution);
+            ragDollBuilder = new RagDollBuilder(world, canvas, scale);    
         }
         
         override public function addStaticElements():void {

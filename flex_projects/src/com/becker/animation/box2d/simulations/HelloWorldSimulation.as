@@ -27,26 +27,25 @@ package com.becker.animation.box2d.simulations {
     
     import mx.core.UIComponent;
     
-    public class HelloWorldSimulation extends AbstractSimulation
-    {
+    public class HelloWorldSimulation extends AbstractSimulation {
+        
         private static const NUM_SHAPES:Number = 50;
         
         private var builder:BasicShapeBuilder;
         
         private var staticCircle:b2Body;
         
-        public function HelloWorldSimulation(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number)        
-        {
-            super(world, canvas, density, friction, restitution);
+        override public function initialize(world:b2World, canvas:UIComponent,
+                            density:Number, friction:Number, restitution:Number):void {
+            super.initialize(world, canvas, density, friction, restitution);
             builder = new BasicShapeBuilder(world, canvas, scale);
         }
         
         override public function addStaticElements():void {
                         
             var bodyDef:b2BodyDef = new b2BodyDef();         
-            bodyDef.position.Set(30, 19);
-            // a pivot point for the see saw plank
+            bodyDef.position.Set(28, 23);
+            // a pivot point for the see-saw plank
             staticCircle = builder.buildBall(1, bodyDef, 0, friction, restitution);
         }
         

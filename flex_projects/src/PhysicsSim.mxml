@@ -6,53 +6,63 @@
     layout="absolute"  
     creationComplete="createComplete()">
     
-    <mx:Style source="../assets/flexStyles.css" />
+    <mx:Style source="assets/flexStyles.css" />
     
     <mx:Script><![CDATA[
-        import com.becker.animation.box2d.simulations.RagDollSimulation;
-        import com.becker.animation.box2d.Simulation;
+        import com.becker.animation.box2d.AvailableSimulations;
         import com.becker.animation.box2d.BoxWorld;
-        import mx.events.IndexChangedEvent;
-        import mx.controls.HSlider;
+        import com.becker.animation.box2d.Simulation;
+        import com.becker.animation.box2d.simulations.RagDollSimulation;
         import com.becker.animation.walking.RealWalk;
-        import mx.events.SliderEvent;
-        import mx.events.FlexEvent;
         import com.becker.controls.FontSelector;
+        
+        import mx.controls.HSlider;
+        import mx.events.FlexEvent;
+        import mx.events.IndexChangedEvent;
+        import mx.events.SliderEvent; 
     
         private static const BUILD_LABEL:String = "Build";
         private static const SIMULATE_LABEL:String = "Simulate";
         
         private static const DEFAULT_GRAVITY:Number = 9.0;
         private static const DEFAULT_FRICTION:Number = 0.5;
+        private static const DEFAULT_DENSITY:Number = 1.0;
+        private static const DEFAULT_RESTITUTION:Number = 0.2;
         
         private static const RESUME_LABEL:String = "Resume";
         private static const PAUSE_LABEL:String = "Pause";
         
-        private static const INSTRUCTIONS:String = "Use this Flash application, based on <a href=\"http://box2dflash.sourceforge.net/\">Box2DAS3</a> " + 
-                "to simulate dynamic structures. You can click on things and drag them around, " + 
-                "and you can press 'd' over an object to delete it." 
+        private static const INSTRUCTIONS:String = 
+            "Use this Flash application, based on <a href=\"http://box2dflash.sourceforge.net/\">Box2DAS3</a> " + 
+            "to simulate dynamic structures. You can click on things and drag them around, " + 
+            "and you can press 'd' over an object to delete it." 
                 
         private var app:BoxWorld;
+        private var simulations:AvailableSimulations = new AvailableSimulations();
         
         [Bindable]
         private var selectedFont:String;
         
-        
         private function createComplete():void {
             app = BoxWorld(animComp.sprite);
-            simulationSelected();   
                    
             selectedFont = fontSelector.selectedFont;
             gravityStepper.stepSize = 0.1; 
             gravityStepper.maximum = 20;
             gravityStepper.value = DEFAULT_GRAVITY; 
-            frictionStepper.value = DEFAULT_FRICTION;   
-            app.enableSimulation = true;    
+            frictionStepper.value = DEFAULT_FRICTION;
+            densityStepper.value = DEFAULT_DENSITY;
+            restitutionStepper.value = DEFAULT_RESTITUTION;
+            app.enableSimulation = true;  
+            simulationSelected(); 
         }
         
         private function simulationSelected():void {
             
-            app.setSimulation(String(simulationCombo.selectedItem));  
+            var sim:Simulation = 
+                simulations.getSimulation(String(simulationCombo.selectedItem)); 
+            app.setSimulation(sim, 
+                densityStepper.value, frictionStepper.value, restitutionStepper.value);  
         }   
         
         private function toggleAnimation():void {      
@@ -64,8 +74,8 @@
         }      
         
         private function restartAnimation():void {
-            
-            app.setSimulation(String(simulationCombo.selectedItem)); 
+             
+            simulationSelected();
             app.enableSimulation = true;     
             animateButton.label = PAUSE_LABEL; 
         }   
@@ -77,9 +87,6 @@
     ]]></mx:Script>
     
     <mx:Binding source="gravityStepper.value" destination="app.gravity" />
-    
-    <mx:Binding source="frictionStepper.value" destination="app.friction" />
-    
     <mx:Binding source="forcesCheckbox.selected" destination="app.showForces" />
     <mx:Binding source="velocitiesCheckbox.selected" destination="app.showVelocities" />
     
@@ -89,25 +96,13 @@
         <mx:VBox  width="100%"> 
              <mx:TextArea  htmlText="{INSTRUCTIONS}"
                     width="100%" height="50" />   
-             <!--mx:HBox width="100%">                         
-                 <mx:HBox>
-                      <mx:ColorPicker/>
-                      <mx:Label text="Segment Color"  />
-                 </mx:HBox>
-                 <mx:HBox >
-                      <mx:NumericStepper value="60" maximum="200" />
-                      <mx:Label text="Length" styleName="{selectedFont}"/>
-                 </mx:HBox>
-                 <mx:HBox >
-                      <mx:NumericStepper value="12" maximum="40" />
-                      <mx:Label text="Thickness/Mass" />
-                 </mx:HBox>
-             </mx:HBox-->
              
              <mx:HBox width="100%">          
                 <mx:HBox>
                      <mx:Label text="Simulation" />
-                     <mx:ComboBox id="simulationCombo" dataProvider="{BoxWorld.AVAILABLE_SIMULATIONS}"  selectedIndex="0" change="simulationSelected()" />  
+                     <mx:ComboBox id="simulationCombo" 
+                                  dataProvider="{AvailableSimulations.AVAILABLE_SIMULATIONS}"  
+                                  selectedIndex="0" change="simulationSelected()" />  
                 </mx:HBox>
                 <mx:Spacer width="100%" />
                 <control:FontSelector id="fontSelector" changeHandler="fontSelected" />
@@ -121,6 +116,14 @@
                      <mx:Label text="Friction" />   
                      <mx:NumericStepper id="frictionStepper"  stepSize="0.1" width="60"/>
                   </mx:HBox>
+                  <mx:HBox>
+                     <mx:Label text="Density" />   
+                     <mx:NumericStepper id="densityStepper"  stepSize="0.1" width="60"/>
+                  </mx:HBox>
+                  <mx:HBox>
+                     <mx:Label text="Restitution" />   
+                     <mx:NumericStepper id="restitutionStepper"  stepSize="0.05" width="60"/>
+                  </mx:HBox>
                   <mx:Spacer width="40" />
                   <mx:HBox>
                       <mx:CheckBox id="forcesCheckbox" label="Show force vectors" selected="false" />
@@ -131,12 +134,10 @@
              <mx:HBox >
                   <mx:Button id="animateButton" label="{PAUSE_LABEL}"  click="toggleAnimation()"   toolTip="toggle the animation"  />                
                   <mx:Button id="restart" label="Restart"  click="restartAnimation()" />             
-                  <!-- mx:Button label="Add Segment" click="app.addBoxes()" /-->     
              </mx:HBox>
        </mx:VBox>
        
        <app:AnimationComponent id="animComp" animClass="com.becker.animation.box2d.BoxWorld" /> 
-                            
     </mx:Panel>
      
 </mx:Application>

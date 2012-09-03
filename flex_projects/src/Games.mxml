@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application 
-	xmlns:mx="http://www.adobe.com/2006/mxml" 
-	xmlns:app="com.becker.animation.*"	
-	width="100%" height="100%"
-	layout="vertical" horizontalScrollPolicy="off" verticalScrollPolicy="off">
-	<mx:Style source="assets/flexStyles.css" />
-	<mx:Script><![CDATA[
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    xmlns:app="com.becker.animation.*"    
+    width="100%" height="100%"
+    layout="vertical" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+    <mx:Style source="assets/flexStyles.css" />
+    <mx:Script><![CDATA[
         
         private static const PACKAGE:String = "com.becker.animation.";
-        		
+                
         /** some different demos to select from */
         private static const demoList:Array = [
             "AnimatedFilters",     
@@ -36,14 +36,14 @@
         }   
         
     ]]></mx:Script>
-	<mx:VBox width="100%" height="100%" >       
-	    <mx:Label text="Flash Inside of Flex" styleName="cutAboveFont" fontSize="24" paddingLeft="5" paddingTop="5" width="100%"/>
-	    <mx:Text text="Most of the demos you see here were derived from Foundation Actionscript 3.0 Animation: Making Things Move! by Keith Peters"  truncateToFit="true" width="100%" />
-	    <mx:ComboBox id="demoCombo" dataProvider="{demoList}"  selectedIndex="0" change="demoSelected()" />
-	    <mx:VBox backgroundColor="0x44AAff"  width="100%" height="100%">     					    			    	    		    
-	      <app:AnimationComponent animClass="{selectedDemo}"  width="100%" height="100%"/>
-	    </mx:VBox>
-	    	       	        
+    <mx:VBox width="100%" height="100%" >       
+        <mx:Label text="Flash Inside of Flex" styleName="cutAboveFont" fontSize="24" paddingLeft="5" paddingTop="5" width="100%"/>
+        <mx:Text text="Most of the demos you see here were derived from Foundation Actionscript 3.0 Animation: Making Things Move! by Keith Peters"  truncateToFit="true" width="100%" />
+        <mx:ComboBox id="demoCombo" dataProvider="{demoList}"  selectedIndex="0" change="demoSelected()" />
+        <mx:VBox backgroundColor="0x44AAff"  width="100%" height="100%">                                                                 
+          <app:AnimationComponent animClass="{selectedDemo}"  width="100%" height="100%"/>
+        </mx:VBox>
+                               
     </mx:VBox>
   
 </mx:Application>

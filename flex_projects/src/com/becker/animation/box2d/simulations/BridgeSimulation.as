@@ -22,9 +22,9 @@ package com.becker.animation.box2d.simulations {
         private var anchor:b2Vec2;   
         
         
-        public function BridgeSimulation(world:b2World, canvas:UIComponent,
-                            density:Number, friction:Number, restitution:Number) {
-            super(world, canvas, density, friction, restitution);
+        override public function initialize(world:b2World, canvas:UIComponent,
+                            density:Number, friction:Number, restitution:Number):void {
+            super.initialize(world, canvas, density, friction, restitution);
             builder = new BasicShapeBuilder(world, canvas, scale);
         }
         

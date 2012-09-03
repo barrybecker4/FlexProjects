@@ -1,11 +1,11 @@
 package com.becker.animation {
-	
+    
     import com.becker.common.Ball;   
     import flash.events.Event;   
     import mx.core.UIComponent;
     
     public class Bouncing extends UIComponent implements Animatible {
-		
+        
         private var ball:Ball;
         
         private var origWidth:Number = 1;
@@ -17,7 +17,7 @@ package com.becker.animation {
         public function Bouncing() {}
         
         public function startAnimating():void {
-        	origWidth = this.width;
+            origWidth = this.width;
             origHeight = this.height;            
             
             addEventListener(Event.ENTER_FRAME, onEnterFrame);  
@@ -28,8 +28,8 @@ package com.becker.animation {
             ball = new Ball(RADIUS);
             ball.x = this.width / 2.0;
             ball.y = this.height / 2.0;
-			ball.xVelocity = SPEED * Math.sin(Math.random());
-			ball.yVelocity = SPEED * Math.cos(Math.random()); 
+            ball.xVelocity = SPEED * Math.sin(Math.random());
+            ball.yVelocity = SPEED * Math.cos(Math.random()); 
             
             addChild(ball);       
         }
