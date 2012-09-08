@@ -7,7 +7,7 @@
     <mx:Style source="assets/flexStyles.css" />
     <mx:Script><![CDATA[
         
-        private static const PACKAGE:String = "com.becker.animation.";
+        private static const PACKAGE:String = "com.becker.animation.demos.";
                 
         /** some different demos to select from */
         private static const demoList:Array = [
@@ -30,9 +30,8 @@
         [Bindable]
         private var selectedDemo:String = PACKAGE + demoList[0];
         
-        private function demoSelected():void {
+        private function demoSelected():void { 
             selectedDemo = PACKAGE + demoCombo.selectedItem;
-              
         }   
         
     ]]></mx:Script>
@@ -43,7 +42,6 @@
         <mx:VBox backgroundColor="0x44AAff"  width="100%" height="100%">                                                                 
           <app:AnimationComponent animClass="{selectedDemo}"  width="100%" height="100%"/>
         </mx:VBox>
-                               
     </mx:VBox>
   
 </mx:Application>

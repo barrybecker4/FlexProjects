@@ -10,12 +10,12 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="SegmentSim.mxml"/>
+    <application path="PhysicsSim.mxml"/>
     <application path="WalkingSim.mxml"/>
     <application path="Games.mxml"/>
-    <application path="EventFlow.mxml"/>
-    <application path="PhysicsSim.mxml"/>
     <application path="BriansApp.mxml"/>
+    <application path="EventFlow.mxml"/>
+    <application path="SegmentSim.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

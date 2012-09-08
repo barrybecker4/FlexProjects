@@ -1,7 +1,6 @@
-package com.becker.animation.threed
-{
-    public class Room extends Object
-    {
+package com.becker.animation.threed {
+    
+    public class Room extends Object {
         public var top:Number;
         public var bottom:Number;
         public var left:Number;
@@ -9,8 +8,7 @@ package com.becker.animation.threed
         public var front:Number;
         public var back:Number;
             
-        public function Room(size:Number)
-        {
+        public function Room(size:Number) {
             top = -size;            
             bottom = size;
             left = -size;

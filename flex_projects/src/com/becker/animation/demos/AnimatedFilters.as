@@ -1,5 +1,6 @@
-package com.becker.animation
+package com.becker.animation.demos
 {
+    import com.becker.animation.Animatible;
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.filters.DropShadowFilter;
@@ -7,19 +8,17 @@ package com.becker.animation
     import mx.containers.VBox;
     import mx.core.UIComponent;
     
-    public class AnimatedFilters extends UIComponent implements Animatible
-    {
+    public class AnimatedFilters extends UIComponent 
+                                 implements Animatible {
         private var filter:DropShadowFilter;
         private var sprite:Sprite;
         
         private var origWidth:Number = 1;
         private var origHeight:Number = 1;
         
-        public function AnimatedFilters() {
-        }
+        public function AnimatedFilters() { }
         
-        public function startAnimating():void
-        {
+        public function startAnimating():void {
             origWidth = this.width;
             origHeight = this.height;
             
@@ -51,8 +50,7 @@ package com.becker.animation
         }
         
         
-        private function onEnterFrame(event:Event):void
-        {    
+        private function onEnterFrame(event:Event):void {    
             var dx:Number = mouseX - sprite.x;
             var dy:Number = mouseY - sprite.y;
             

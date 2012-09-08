@@ -97,12 +97,12 @@
               titleStyleName="actionShadedLargeFont"  styleName="{selectedFont}" >
       
         <mx:VBox  width="100%"> 
-             <mx:TextArea  htmlText="{INSTRUCTIONS}"
+             <mx:TextArea htmlText="{INSTRUCTIONS}"
                     width="100%" height="50" />   
              
              <mx:HBox width="100%">          
                 <mx:HBox>
-                     <mx:Label text="Simulation" />
+                     <mx:Label text="Simulation3" />
                      <mx:ComboBox id="simulationCombo" 
                                   dataProvider="{AvailableSimulations.AVAILABLE_SIMULATIONS}"  
                                   selectedIndex="0" change="simulationSelected()" />  
