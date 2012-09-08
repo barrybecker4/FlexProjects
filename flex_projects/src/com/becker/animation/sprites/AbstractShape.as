@@ -1,4 +1,5 @@
 package  com.becker.animation.sprites {
+    
     import mx.core.UIComponent;
     
     /**

@@ -1,6 +1,6 @@
-package com.becker.animation.demos
-{
-	import com.becker.animation.Animatible;
+package com.becker.animation.demos {
+    
+    import com.becker.animation.Animatible;
     import com.becker.common.Ball;
     
     import flash.events.Event;
@@ -8,8 +8,7 @@ package com.becker.animation.demos
     
     import mx.core.UIComponent;
     
-    public class Bubbles2 extends UIComponent implements Animatible
-    {
+    public class Bubbles2 extends UIComponent implements Animatible {
         private var balls:Array;
         private var numBalls:Number = 30;
         private var bounce:Number = -0.5;
@@ -28,8 +27,8 @@ package com.becker.animation.demos
                 var ball:Ball = new Ball(Math.random() * 30 + 20, Math.random() * 0xffffff);
                 ball.addEventListener(MouseEvent.MOUSE_DOWN, onPress);
                 
-                ball.x = Math.random() * stage.stageWidth;
-                ball.y = Math.random() * stage.stageHeight;
+                ball.x = Math.random() * this.width;
+                ball.y = Math.random() * this.height;
                 ball.xVelocity = Math.random() * 6 - 3;
                 ball.yVelocity = Math.random() * 6 - 3;
                 addChild(ball);
@@ -42,6 +41,12 @@ package com.becker.animation.demos
         
         private function onEnterFrame(event:Event):void {
             
+            updateBallVelocities();
+            moveBalls();
+        }
+        
+        /** Takes into accound balls colliding and bouncing off of each other */
+        private function updateBallVelocities():void {
             for(var i:uint = 0; i < numBalls - 1; i++) {
                 var ball0:Ball = balls[i];
                 for(var j:uint = i + 1; j < numBalls; j++){
@@ -63,13 +68,15 @@ package com.becker.animation.demos
                     }
                 }
             }
-            
-            for(i = 0; i < numBalls; i++) {
+        }
+        
+        private function moveBalls():void {
+           for(var i:int = 0; i < numBalls; i++) {
                 var ball:Ball = balls[i];
                 if (ball && ball != draggedBall) {
                     moveBall(ball);
                 }
-            }
+            } 
         }
         
         private function onPress(event:MouseEvent):void {
@@ -89,22 +96,23 @@ package com.becker.animation.demos
         }
         
         private function moveBall(ball:Ball):void {
+            
             ball.yVelocity += gravity;
             ball.x += ball.xVelocity;
             ball.y += ball.yVelocity;
-            if(ball.x + ball.radius > stage.stageWidth)  {
-                ball.x = stage.stageWidth - ball.radius;
+            if (ball.x + ball.radius > width)  {
+                ball.x = width - ball.radius;
                 ball.xVelocity *= bounce;
             }
-            else if(ball.x - ball.radius < 0) {
+            else if (ball.x - ball.radius < 0) {
                 ball.x = ball.radius;
                 ball.xVelocity *= bounce;
             }
-            if(ball.y + ball.radius > stage.stageHeight) {
-                ball.y = stage.stageHeight - ball.radius;
+            if (ball.y + ball.radius > height) {
+                ball.y = height - ball.radius;
                 ball.yVelocity *= bounce;
             }
-            else if(ball.y - ball.radius < 0) {
+            else if (ball.y - ball.radius < 0) {
                 ball.y = ball.radius;
                 ball.yVelocity *= bounce;
             }

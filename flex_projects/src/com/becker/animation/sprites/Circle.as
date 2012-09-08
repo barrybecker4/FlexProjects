@@ -27,8 +27,8 @@ package  com.becker.animation.sprites {
         }
     
         
-        protected function init():void
-        {
+        protected function init():void {
+            
             var img:DisplayObject = new Images.GRUNGE;
             var bmd:BitmapData = new BitmapData(img.width, img.height);
             bmd.draw(img);

@@ -25,16 +25,7 @@ package com.becker.common {
             graphics.drawCircle(0, 0, radius);
             graphics.endFill();
         }
-        
-        /*
-        override protected function updateDisplayList(w:Number, h:Number):void {
-            super.updateDisplayList(w, h);
-            
-            graphics.beginFill(color);
-            graphics.drawCircle(0, 0, radius);
-            graphics.endFill();
-        }*/
-        
+     
         /** 
          * controls the bouncing ball.
          * Handles collision with a wall.

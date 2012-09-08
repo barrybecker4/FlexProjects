@@ -41,7 +41,7 @@
     <option linkReport="" />
     <option loadExterns="" />
     <option staticLinkRSL="True" />
-    <option additional="" />
+    <option additional="-compatibility-version=4.6" />
     <option compilerConstants="" />
     <option minorVersion="" />
   </build>
@@ -71,7 +71,7 @@
   </library>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\PhysicsSim.mxml" />
+    <compile path="src\Games.mxml" />
   </compileTargets>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
@@ -84,7 +84,7 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="NewWindow" />
+    <option testMovie="Default" />
   </options>
   <!-- Plugin storage -->
   <storage />
