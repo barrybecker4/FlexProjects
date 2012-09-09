@@ -51,7 +51,6 @@ package com.becker.animation {
         
         public function set animClass(className:String):void {
             
-            trace(" about to load "+ className);
             var objClass:Class = getDefinitionByName(className) as Class;            
             if( objClass != null) {
                 _animatible = Animatible(new objClass());                                    
@@ -63,11 +62,10 @@ package com.becker.animation {
             _currentComponent = UIComponent(_animatible);    
             _currentComponent.percentWidth = 100;
             _currentComponent.percentHeight = 100;        
-            this.addChild(_currentComponent);            
+            this.addChild(_currentComponent);  
             
             _currentComponent.addEventListener(FlexEvent.CREATION_COMPLETE, init);                
         }
-                
         
         /**
          * return Animatible, internal UIComponent.
@@ -79,17 +77,6 @@ package com.becker.animation {
         public function init(evt:FlexEvent):void {
             _animatible.startAnimating();
         }
-        
-        override protected function updateDisplayList(w:Number, h:Number):void {
-            super.updateDisplayList(w, h);
-            
-            //if(w-bt>0 && h-bt>1) {bitmapData = new BitmapData(w-bt, h-bt, true, 0x0);}
-            //_bitmap.bitmapData = bitmapData;
-            //trace("w="+w +" h="+ h);
-            //_sprite.width = w;
-            //_sprite.height = h;
-        }
-        
-        
+           
     }
 }

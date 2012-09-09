@@ -62,7 +62,7 @@ public class BoxWorld extends UIComponent implements Animatible {
         world = createWorld();
         simulation.initialize(world, this, params);
         this.simulation = simulation;
-        startAnimation();
+        startAnimation(); 
     }
     
     public function startAnimating():void {
@@ -73,7 +73,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     
     public function startAnimation():void {
                           
-        this.removeChildren();
+        this.removeAllChildren();
         addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
         addEventListener(ResizeEvent.RESIZE, resized, false, 0, true);
                
@@ -85,6 +85,17 @@ public class BoxWorld extends UIComponent implements Animatible {
         simulation.addStaticElements(); 
         simulation.addDynamicElements();       
     }
+	
+	
+	/** 
+	 * Needed prior to flex 4 
+	 * After Flex 4, we can use removeChildren method.
+	 */ 
+    private function removeAllChildren():void {  
+    	for (var i:int = numChildren-1; i>=0; i--) {
+    		this.removeChildAt(i);
+    	}
+    } 
     
     private function resized(evt:ResizeEvent):void {
         var oldWidth:int = evt.oldWidth;

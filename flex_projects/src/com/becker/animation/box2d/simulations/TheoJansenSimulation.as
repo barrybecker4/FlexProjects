@@ -1,4 +1,5 @@
 package com.becker.animation.box2d.simulations {
+	
     import Box2D.Collision.Shapes.b2CircleDef;
     import Box2D.Collision.Shapes.b2PolygonDef;
     import Box2D.Common.Math.b2Math;
@@ -17,14 +18,12 @@ package com.becker.animation.box2d.simulations {
     import mx.core.UIComponent;
     
     public class TheoJansenSimulation extends AbstractSimulation {
+
         private static const T_SCALE:Number = 4.0;
         
-        
-        private var builder:BasicShapeBuilder;
-        
-        private var staticCircle:b2Body;
-        
-        private var chassis:b2Body;
+        private var builder:BasicShapeBuilder;       
+        private var staticCircle:b2Body;        
+        private var chassis:b2Body;		
         private var wheel:b2Body;
             
         
@@ -50,8 +49,7 @@ package com.becker.animation.box2d.simulations {
             var bodyDef:b2BodyDef = new b2BodyDef();
             
             
-            for (var j:int = 0; j < 40; ++j)
-            {
+            for (var j:int = 0; j < 40; ++j) {
                 bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
                 builder.buildBall(0.35, bodyDef, 1.0, params.friction, params.restitution);
             }
@@ -133,8 +131,7 @@ package com.becker.animation.box2d.simulations {
             var sd1Pts:Array = new Array();
             var sd2Pts:Array = new Array();
       
-            if (s > 0.0)
-            {
+            if (s > 0.0)  {
                 sd1Pts.push(p3);
                 sd1Pts.push(p2);
                 sd1Pts.push(p1);
@@ -143,8 +140,7 @@ package com.becker.animation.box2d.simulations {
                 sd2Pts.push(b2Math.SubtractVV(p5, p4));
                 sd2Pts.push(new b2Vec2());
             }
-            else
-            {
+            else {
                 sd1Pts.push(p2);
                 sd1Pts.push(p3);
                 sd1Pts.push(p1);
