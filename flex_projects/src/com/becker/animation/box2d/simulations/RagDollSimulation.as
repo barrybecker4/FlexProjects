@@ -54,8 +54,7 @@ package com.becker.animation.box2d.simulations {
             var body:b2Body = world.CreateBody(bodyDef);
             body.CreateShape(boxDef);
             canvas.addChild(bodyDef.userData);
-                       
-              
+                          
             body.SetMassFromShapes();
         }
         

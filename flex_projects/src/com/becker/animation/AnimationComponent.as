@@ -2,7 +2,7 @@ package com.becker.animation {
     
     import com.becker.animation.box2d.BoxWorld;
     import com.becker.animation.walking.*;
-	import com.becker.animation.demos.*;
+    import com.becker.animation.demos.*;
     
     import flash.utils.getDefinitionByName;
     

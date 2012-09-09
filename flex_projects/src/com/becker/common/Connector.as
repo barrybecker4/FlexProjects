@@ -143,14 +143,14 @@ package com.becker.common
             var pt:Point = getPosition()        
             dragConnectingSegments(connector.owner, pt);                                          
         }   
-		
-		/**
-		 * Drag the connector, and everything attached to it, to the specified point.
-		 * @param pos point to move to.
-		 */
-		public function dragConnector(pos:Point):void {
-			dragConnectingSegments(null, pos);
-		}
+        
+        /**
+         * Drag the connector, and everything attached to it, to the specified point.
+         * @param pos point to move to.
+         */
+        public function dragConnector(pos:Point):void {
+            dragConnectingSegments(null, pos);
+        }
             
         /**
          * Recursively drag all child semgents.

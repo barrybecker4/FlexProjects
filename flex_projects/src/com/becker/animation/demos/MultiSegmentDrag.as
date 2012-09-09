@@ -1,6 +1,6 @@
 package  com.becker.animation.demos {
-	
-	import com.becker.animation.Animatible;
+    
+    import com.becker.animation.Animatible;
     import com.becker.common.Connector;
     import com.becker.common.SegmentSet;
     import com.becker.common.Vector2d;
@@ -18,7 +18,7 @@ package  com.becker.animation.demos {
      * connector proportional to the distance to the mouse position.
      */
     public class MultiSegmentDrag extends UIComponent implements Animatible  {
-		
+        
         private static const DEFAULT_SEGMENT_LENGTH:Number = 60;
         // effectively the spring constant used when dragging in simulation mode.
         private static const DRAG_SCALE:Number = 0.02;
@@ -29,7 +29,7 @@ package  com.becker.animation.demos {
         
         [Bindable]
         public var gravity:Number = 0.9;
-		
+        
         [Bindable]
         public var gravityEnabled:Boolean = false;
         
@@ -48,7 +48,7 @@ package  com.becker.animation.demos {
         public function MultiSegmentDrag() {}
         
         public function startAnimating():void {
-			
+            
             segments = new SegmentSet();
             segments.initializeSegmentString(numSegments, DEFAULT_SEGMENT_LENGTH);
             addChild(segments);
@@ -86,7 +86,7 @@ package  com.becker.animation.demos {
         
         
         private function onEnterFrame(event:Event):void  {            
-			
+            
             if (lastDraggedConnector == null && draggedConnector == null) return;
             
             var pos:Point;
@@ -106,7 +106,7 @@ package  com.becker.animation.demos {
                 if (draggedConnector != null) {                
                     pos = draggedConnector.getPosition();
                     draggedConnector.force = 
-					    new Vector2d((mouseX - pos.x)*DRAG_SCALE, (mouseY - pos.y)*DRAG_SCALE);
+                        new Vector2d((mouseX - pos.x)*DRAG_SCALE, (mouseY - pos.y)*DRAG_SCALE);
                 }
                 
                 // keep going at the last drag velocity

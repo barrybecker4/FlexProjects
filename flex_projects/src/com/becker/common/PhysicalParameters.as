@@ -1,6 +1,6 @@
 package com.becker.common 
 {
-	/**
+    /**
      * Collection of parameters for physical objects
      * @author Barry Becker
      */
