@@ -17,7 +17,7 @@
 */
 
 
-package TestBed{
+package TestBed {
      
     import Box2D.Dynamics.*;
     import Box2D.Collision.*;
@@ -28,8 +28,7 @@ package TestBed{
     import Box2D.Common.Math.*;
     // Input
     import General.Input;
-    
-    
+       
     
     public class TestTheoJansen extends Test{
         

@@ -1,6 +1,6 @@
 package com.becker.animation.demos 
 {
-	import com.becker.animation.Animatible;
+    import com.becker.animation.Animatible;
     import com.becker.animation.threed.Ball3D;
     
     import flash.events.Event;

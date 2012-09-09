@@ -71,8 +71,7 @@
         private function toggleAnimation():void {      
                         
             app.enableSimulation = !app.enableSimulation; 
-            app.showForces = forcesCheckbox.selected && app.enableSimulation;
-            app.showVelocities = velocitiesCheckbox.selected && app.enableSimulation;
+            app.showVectors = debugCheckbox.selected && app.enableSimulation;
             animateButton.label = app.enableSimulation ? PAUSE_LABEL : RESUME_LABEL;        
         }      
         
@@ -90,8 +89,7 @@
     ]]></mx:Script>
     
     <mx:Binding source="gravityStepper.value" destination="app.gravity" />
-    <mx:Binding source="forcesCheckbox.selected" destination="app.showForces" />
-    <mx:Binding source="velocitiesCheckbox.selected" destination="app.showVelocities" />
+    <mx:Binding source="debugCheckbox.selected" destination="app.showVectors" />
     
     <mx:Panel title="Physics Simulation" width="100%" height="100%" 
               titleStyleName="actionShadedLargeFont"  styleName="{selectedFont}" >
@@ -129,8 +127,7 @@
                   </mx:HBox>
                   <mx:Spacer width="40" />
                   <mx:HBox>
-                      <mx:CheckBox id="forcesCheckbox" label="Show force vectors" selected="false" />
-                      <mx:CheckBox id="velocitiesCheckbox" label="Show velocity vectors" selected="false"/>
+                      <mx:CheckBox id="debugCheckbox" label="Show vectors" selected="false" />
                   </mx:HBox>
              </mx:HBox>
              

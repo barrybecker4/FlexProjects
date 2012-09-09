@@ -21,11 +21,11 @@ import flash.geom.Point;
  */
 public class MouseInteractor {
      
-	private var owner:Sprite;
-	private var world:b2World;
+    private var owner:Sprite;
+    private var world:b2World;
     private var mouseJoint:b2MouseJoint;
     private var mousePVec:b2Vec2 = new b2Vec2();
-	   
+       
     /** world mouse position. */
     private static var mouseWorldPhys:Point;
     
@@ -37,21 +37,21 @@ public class MouseInteractor {
  
     /**
      * Constructor
-	 * @param owner the owning sprite for which we will handle mouse interation.
-	 * @param world the physical world instance.
+     * @param owner the owning sprite for which we will handle mouse interation.
+     * @param world the physical world instance.
      */
     public function MouseInteractor(owner:Sprite, world:b2World) {
-		this.owner = owner;
-		this.world = world;
-			
-		input = new Input(owner);
+        this.owner = owner;
+        this.world = world;
+            
+        input = new Input(owner);
     }
       
-	/**
-	 * Respond to user dragging of shapes.
-	 * @param timeStep time increment in simulation
-	 * @param scale scale factor of the physical objects in the world. 
-	 */
+    /**
+     * Respond to user dragging of shapes.
+     * @param timeStep time increment in simulation
+     * @param scale scale factor of the physical objects in the world. 
+     */
     public function handleMouseInteraction(timeStep:Number, scale:Number):void{
                  
         // Update mouse joint
@@ -121,11 +121,11 @@ public class MouseInteractor {
         mouseJoint.SetTarget(p2);
         
         //var v:b2Vec2 = .GetLocalCenter();
-		var shape:AbstractShape = AbstractShape(draggedBody.GetUserData());
+        var shape:AbstractShape = AbstractShape(draggedBody.GetUserData());
         var start:Point = new Point(shape.x, shape.y);
         var end:Point = new Point(Input.mouseX, Input.mouseY - 200); 
         
-		var g:Graphics = owner.graphics;
+        var g:Graphics = owner.graphics;
         g.clear();
         g.lineStyle(2, 0xff8888);
         g.moveTo(start.x, start.y);

@@ -1,6 +1,6 @@
 package  com.becker.animation.demos
 {
-	import com.becker.animation.Animatible;
+    import com.becker.animation.Animatible;
     import com.becker.common.Ball;
     
     import flash.display.StageAlign;

@@ -85,16 +85,16 @@ public class BoxWorld extends UIComponent implements Animatible {
         simulation.addStaticElements(); 
         simulation.addDynamicElements();       
     }
-	
-	
-	/** 
-	 * Needed prior to flex 4 
-	 * After Flex 4, we can use removeChildren method.
-	 */ 
+    
+    
+    /** 
+     * Needed prior to flex 4 
+     * After Flex 4, we can use removeChildren method.
+     */ 
     private function removeAllChildren():void {  
-    	for (var i:int = numChildren-1; i>=0; i--) {
-    		this.removeChildAt(i);
-    	}
+        for (var i:int = numChildren-1; i>=0; i--) {
+            this.removeChildAt(i);
+        }
     } 
     
     private function resized(evt:ResizeEvent):void {
@@ -155,7 +155,7 @@ public class BoxWorld extends UIComponent implements Animatible {
         return new b2World(worldAABB, gravityVec, doSleep);
     }
       
-    public function set showForces(show:Boolean):void {
+    public function set showVectors(show:Boolean):void {
         if (show) {
             addDebugDrawing();
         }
@@ -163,10 +163,7 @@ public class BoxWorld extends UIComponent implements Animatible {
             removeDebugDrawing();
         }
     }
-    
-    public function set showVelocities(show:Boolean):void {
-        showForces = show;
-    }
+  
     
     private function addDebugDrawing():void {
         // if already showing debug, dont do it again.

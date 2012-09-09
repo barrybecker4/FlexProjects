@@ -1,12 +1,12 @@
 package com.becker.animation.demos
 {
-	import com.becker.animation.Animatible;
+    import com.becker.animation.Animatible;
     import flash.events.MouseEvent;
     
     import mx.core.UIComponent;
     
     public class DrawingApp extends UIComponent implements Animatible {
-		
+        
         public function DrawingApp() {}
         
         public function startAnimating():void {

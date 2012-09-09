@@ -30,7 +30,7 @@ public class AvailableSimulations {
     
     /**
      * @param the name of a class that implements Simulation
-	 * @return the simulation instance corresponding to the name.
+     * @return the simulation instance corresponding to the name.
      */
     public function getSimulation(simulationName:String):Simulation {
     

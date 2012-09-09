@@ -1,124 +1,66 @@
 package com.becker.animation.box2d.simulations {
-	
-    import Box2D.Collision.Shapes.b2CircleDef;
-    import Box2D.Collision.Shapes.b2PolygonDef;
-    import Box2D.Common.Math.b2Math;
-    import Box2D.Common.Math.b2Vec2;
-    import Box2D.Dynamics.Joints.b2DistanceJointDef;
-    import Box2D.Dynamics.Joints.b2RevoluteJoint;
-    import Box2D.Dynamics.Joints.b2RevoluteJointDef;
-    import Box2D.Dynamics.b2Body;
+    
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
-    import com.becker.common.PhysicalParameters;
-    
-    import com.becker.animation.box2d.builders.AbstractBuilder;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
-    
+    import com.becker.animation.box2d.builders.TheoJansenSpiderBuilder;
+    import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
+     
     
+    /**
+     * Simulates a spider moving with a bunch of balls and crap.
+     */
     public class TheoJansenSimulation extends AbstractSimulation {
-
-        private static const T_SCALE:Number = 4.0;
-		private static const MOTOR_SPEED:Number = -2.0;
-		private static const MOTOR_TORQUE:Number = 400.0;
         
-        private var builder:BasicShapeBuilder;       
-        private var staticCircle:b2Body;        
-        private var chassis:b2Body;		
-        private var wheel:b2Body;
-            
+        private var builder:BasicShapeBuilder;   
+        private var spiderBuilder:TheoJansenSpiderBuilder;  
+                  
         
         override public function initialize(world:b2World, canvas:UIComponent,
-                            params:PhysicalParameters):void {
+                                            params:PhysicalParameters):void {
             super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);
+            spiderBuilder = new TheoJansenSpiderBuilder(world, canvas, scale);    
         }
         
         override public function addStaticElements():void {
             
             // Add ground body
             var bodyDef:b2BodyDef = new b2BodyDef();
-			
-            // bodyDef.position.Set(20, 20);
-            // bodyDef.angle = 0.1;
-            // var groundBlock:b2Body = builder.buildBlock(20, 2, bodyDef, 0, friction, restitution);
             
-            bodyDef.position.Set(20, 46);
-            staticCircle = 
-			    builder.buildBlock(100, 4, bodyDef, 0, params.friction, params.restitution);
+            bodyDef.position.Set(30, 30);
+            bodyDef.angle = -0.05;
+            builder.buildBlock(35, 2, bodyDef, 0, params.friction, params.restitution);
+            
+            bodyDef.position.Set(61, 26);
+            builder.buildBlock(1.0, 0.4, bodyDef, 0, params.friction, params.restitution);
         }
         
         override public function addDynamicElements():void {
-			
-            var bodyDef:b2BodyDef = new b2BodyDef();
-              
-			addRandomCrap(bodyDef);
-			            
-            var offset:b2Vec2 = new b2Vec2();
-            var motorJoint:b2RevoluteJoint;
-            var motorOn:Boolean = true;
             
-            var pd:b2PolygonDef;
-            var cd:b2CircleDef;
-            var body:b2Body;
-            var tscale:Number = T_SCALE;
-                       
-            // Set position in world space
-            offset.Set(35.0, 25);
-            var pivot:b2Vec2 = new b2Vec2(0.0, -2.4/tscale);
-            
-            bodyDef.position = b2Math.AddVV(pivot, offset);
-            chassis = builder.buildBlock(7.5/tscale, 3.0/tscale, bodyDef, 1.0, params.friction, params.restitution, -1);
-              
-            bodyDef.position = b2Math.AddVV(pivot, offset);
-            wheel = builder.buildBall(4.8/tscale, bodyDef, 1.0, params.friction, params.restitution, -1);
-        
-            var jd:b2RevoluteJointDef = new b2RevoluteJointDef();
-            var po:b2Vec2 = pivot.Copy();
-            po.Add(offset);
-            jd.Initialize(wheel, chassis, po);
-            jd.collideConnected = false;
-            jd.motorSpeed = MOTOR_SPEED;
-            jd.maxMotorTorque = MOTOR_TORQUE;
-            jd.enableMotor = motorOn;
-            motorJoint = world.CreateJoint(jd) as b2RevoluteJoint;            
-            
-            var wheelAnchor:b2Vec2;
-            
-            wheelAnchor = new b2Vec2(0.0, 2.4/tscale);
-            wheelAnchor.Add(pivot);
-            
-            CreateLeg(-1.0, wheelAnchor, offset);
-            CreateLeg(1.0, wheelAnchor, offset);
-            
-            wheel.SetXForm(wheel.GetPosition(), AbstractBuilder.degreesToRadians(120.0));
-            CreateLeg(-1.0, wheelAnchor, offset);
-            CreateLeg(1.0, wheelAnchor, offset);
-            
-            wheel.SetXForm(wheel.GetPosition(), AbstractBuilder.degreesToRadians(-120.0));
-            CreateLeg(-1.0, wheelAnchor, offset);
-            CreateLeg(1.0, wheelAnchor, offset);
+            addRandomCrap();            
+            spiderBuilder.buildInstance(25, 5, params);
         }
            
-		private function addRandomCrap(bodyDef:b2BodyDef):void {
-			addSmallBalls(40, bodyDef);                       
-			addBallsAndBlocks(6, bodyDef);
-		}
-        
-				
-		private function addSmallBalls(n:int, bodyDef:b2BodyDef):void {
-			for (var j:int = 0; j < n; ++j) {
+        private function addRandomCrap():void {
+            var bodyDef:b2BodyDef = new b2BodyDef();
+            addSmallBalls(40, bodyDef);                       
+            addBallsAndBlocks(6, bodyDef);
+        } 
+                
+        private function addSmallBalls(n:int, bodyDef:b2BodyDef):void {
+            for (var j:int = 0; j < n; ++j) {
                 bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
                 builder.buildBall(0.35, bodyDef, 1.0, params.friction, params.restitution);
-            }			
-		}
-		
-		/** Some random balls and blocks */
-		private function addBallsAndBlocks(n:int, bodyDef:b2BodyDef):void {
-			
-			for (var i:int = 1; i < n; i++) {
-                bodyDef.position.Set(Math.random() * 15 + 20, Math.random() * 10);
+            }            
+        }
+        
+        /** Some random balls and blocks */
+        private function addBallsAndBlocks(n:int, bodyDef:b2BodyDef):void {
+            
+            for (var i:int = 1; i < n; i++) {
+                bodyDef.position.Set(Math.random() * 15 + 10, Math.random() * 5);
 
                 var rX:Number = Math.random() + 0.5;
                 var rY:Number = Math.random() + 0.5;
@@ -130,72 +72,8 @@ package com.becker.animation.box2d.simulations {
                     builder.buildBall(rX, bodyDef, params.density, params.friction, params.restitution);
                 }  
             }
-		}
-		
-        private function CreateLeg(s:Number, wheelAnchor:b2Vec2, offset:b2Vec2):void {
-            
-            var tScale:Number = T_SCALE;
-            var p1:b2Vec2 = new b2Vec2(16.2 * s/tScale, 18.3/tScale);
-            var p2:b2Vec2 = new b2Vec2(21.6 * s/tScale, 3.6 /tScale);
-            var p3:b2Vec2 = new b2Vec2(12.9 * s/tScale, 5.7 /tScale);
-            var p4:b2Vec2 = new b2Vec2( 9.3 * s/tScale, -2.4 /tScale);
-            var p5:b2Vec2 = new b2Vec2(18.0 * s/tScale, -4.5 /tScale);
-            var p6:b2Vec2 = new b2Vec2( 7.5 * s/tScale, -11.1 /tScale);
-
-            
-            var sd1Pts:Array = new Array();
-            var sd2Pts:Array = new Array();
-      
-            if (s > 0.0)  {
-                sd1Pts.push(p3);
-                sd1Pts.push(p2);
-                sd1Pts.push(p1);
-                
-                sd2Pts.push(b2Math.SubtractVV(p6, p4));
-                sd2Pts.push(b2Math.SubtractVV(p5, p4));
-                sd2Pts.push(new b2Vec2());
-            }
-            else {
-                sd1Pts.push(p2);
-                sd1Pts.push(p3);
-                sd1Pts.push(p1);
-                
-                sd2Pts.push(b2Math.SubtractVV(p5, p4));
-                sd2Pts.push(b2Math.SubtractVV(p6, p4));
-                sd2Pts.push(new b2Vec2());
-            }
-
-            var bodyDef1:b2BodyDef = new b2BodyDef(); 
-			var bodyDef2:b2BodyDef = new b2BodyDef(); 
-            
-            bodyDef1.position.SetV(offset);
-			bodyDef2.position = b2Math.AddVV(p4, offset);
-			
-			bodyDef1.angularDamping = 10.0;
-			bodyDef2.angularDamping = 10.0;
-			
-            var body1:b2Body = builder.buildPolygon(sd1Pts, bodyDef1, params.density, params.friction, params.restitution, -1);
-            var body2:b2Body = builder.buildPolygon(sd2Pts, bodyDef2, params.density, params.friction, params.restitution, -1);
-            
-            var djd:b2DistanceJointDef = new b2DistanceJointDef();
-            
-            djd.Initialize(body1, body2, b2Math.AddVV(p2, offset), b2Math.AddVV(p5, offset));
-            world.CreateJoint(djd);
-            
-            djd.Initialize(body1, body2, b2Math.AddVV(p3, offset), b2Math.AddVV(p4, offset));
-            world.CreateJoint(djd);
-            
-            djd.Initialize(body1, wheel, b2Math.AddVV(p3, offset), b2Math.AddVV(wheelAnchor, offset));
-            world.CreateJoint(djd);
-            
-            djd.Initialize(body2, wheel, b2Math.AddVV(p6, offset), b2Math.AddVV(wheelAnchor, offset));
-            world.CreateJoint(djd);
-            
-            var rjd:b2RevoluteJointDef = new b2RevoluteJointDef();
-            
-            rjd.Initialize(body2, chassis, b2Math.AddVV(p4, offset));
-            world.CreateJoint(rjd);                        
         }
+     
     }
 }
 

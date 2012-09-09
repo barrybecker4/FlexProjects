@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="bin-debug\PhysicsSim.swf" />
     <movie fps="30" />
-    <movie width="900" />
-    <movie height="700" />
+    <movie width="1400" />
+    <movie height="1000" />
     <movie version="11" />
     <movie minorVersion="1" />
     <movie platform="Flash Player" />
