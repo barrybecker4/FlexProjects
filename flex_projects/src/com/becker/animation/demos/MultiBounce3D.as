@@ -24,7 +24,7 @@ package  com.becker.animation.demos {
         }
         
         public function startAnimating():void  {
-            clip = new ClippingPlane(250, this.width / 2, this.height / 2);
+            clip = new ClippingPlane(450, this.width / 2, this.height / 2);
             
             balls = new Array();
             for (var i:uint = 0; i < numBalls; i++)  {
@@ -41,7 +41,7 @@ package  com.becker.animation.demos {
         /** called for every frame refresh */
         private function onEnterFrame(event:Event):void {
             
-            for(var i:uint = 0; i < numBalls; i++) {
+            for (var i:uint = 0; i < numBalls; i++) {
                 var ball:Ball3D = balls[i];
                 ball.bounce(BOUNCE, GRAVITY, room, clip);
             }

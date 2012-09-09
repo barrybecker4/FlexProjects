@@ -142,12 +142,20 @@ package com.becker.common
             connector.connections.push(this);  
             var pt:Point = getPosition()        
             dragConnectingSegments(connector.owner, pt);                                          
-        }     
+        }   
+		
+		/**
+		 * Drag the connector, and everything attached to it, to the specified point.
+		 * @param pos point to move to.
+		 */
+		public function dragConnector(pos:Point):void {
+			dragConnectingSegments(null, pos);
+		}
             
         /**
          * Recursively drag all child semgents.
          */
-        public function dragConnectingSegments(parentSegment:Segment, pos:Point):void {
+        private function dragConnectingSegments(parentSegment:Segment, pos:Point):void {
              drag(pos, parentSegment);
              
              var pin:Point = getPosition();
@@ -177,7 +185,7 @@ package com.becker.common
         }
         
         /**
-         *  move the connector toward xpos, ypos
+         * move the connector toward the specified pos.
          */
         public function drag(pos:Point, adjacent:Segment):void {     
             var oldPos:Point = getPosition();    

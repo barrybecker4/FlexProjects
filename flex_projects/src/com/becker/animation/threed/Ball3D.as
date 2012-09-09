@@ -3,7 +3,7 @@ package  com.becker.animation.threed {
     import flash.display.Sprite;
     
     /**
-     * Represents a 3D space and common operations on it.
+     * Represents a 3D ball and common operations on it.
      */
     public class Ball3D extends AbstractShape {
         
@@ -30,8 +30,7 @@ package  com.becker.animation.threed {
         }
             
         /**
-         * @param room dimensions of 3d room
-         * @param fl
+         * Check to see if the ball is bouncing off that walls.
          */
         public function bounce(elasticity:Number,
                                gravity:Number, room:Room, 
@@ -63,7 +62,7 @@ package  com.becker.animation.threed {
                 zpos = room.front - radius;
                 vz *= -elasticity;
             }
-            else if(zpos - radius < room.back) {
+            else if (zpos - radius < room.back) {
                 zpos = room.back + radius;
                 vz *= -elasticity;
             }
