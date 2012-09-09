@@ -9,7 +9,6 @@ These demos make use of Box2DAS for physically based behavior.
     Create a directory somewhere where you want the flex projects to live.
     right click on that directory and select "SVN checkout"
 	Enter this as the URL of the repository:  https://free1.projectlocker.com/Tesujisoft/Flex/svn
-        Use the omit externals checkbox option to exclude the branches, trunk, tags directories (don't need them).
 	Keep everything else as default and click ok.
 	Here it should prompt you for authentication. Enter your projectLocker credentials.
         
