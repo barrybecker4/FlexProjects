@@ -20,6 +20,8 @@ package com.becker.animation.box2d.simulations {
     public class TheoJansenSimulation extends AbstractSimulation {
 
         private static const T_SCALE:Number = 4.0;
+		private static const MOTOR_SPEED:Number = -2.0;
+		private static const MOTOR_TORQUE:Number = 400.0;
         
         private var builder:BasicShapeBuilder;       
         private var staticCircle:b2Body;        
@@ -37,42 +39,25 @@ package com.becker.animation.box2d.simulations {
             
             // Add ground body
             var bodyDef:b2BodyDef = new b2BodyDef();
+			
             // bodyDef.position.Set(20, 20);
             // bodyDef.angle = 0.1;
             // var groundBlock:b2Body = builder.buildBlock(20, 2, bodyDef, 0, friction, restitution);
             
             bodyDef.position.Set(20, 46);
-            staticCircle = builder.buildBlock(100, 4, bodyDef, 0, params.friction, params.restitution);
+            staticCircle = 
+			    builder.buildBlock(100, 4, bodyDef, 0, params.friction, params.restitution);
         }
         
         override public function addDynamicElements():void {
+			
             var bodyDef:b2BodyDef = new b2BodyDef();
-            
-            
-            for (var j:int = 0; j < 40; ++j) {
-                bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
-                builder.buildBall(0.35, bodyDef, 1.0, params.friction, params.restitution);
-            }
-                       
-            // Add some objects
-            for (var i:int = 1; i < 6; i++){
-                bodyDef.position.Set(Math.random() * 15 + 20, Math.random() * 10);
-
-                var rX:Number = Math.random() + 0.5;
-                var rY:Number = Math.random() + 0.5;
-          
-                if (Math.random() < 0.5) {
-                    builder.buildBlock(rX, rY, bodyDef, params.density, params.friction, params.restitution);
-                } 
-                else {
-                    builder.buildBall(rX, bodyDef, params.density, params.friction, params.restitution);
-                }  
-            }
-            
+              
+			addRandomCrap(bodyDef);
+			            
             var offset:b2Vec2 = new b2Vec2();
             var motorJoint:b2RevoluteJoint;
             var motorOn:Boolean = true;
-            var motorSpeed:Number = -2;
             
             var pd:b2PolygonDef;
             var cd:b2CircleDef;
@@ -81,7 +66,7 @@ package com.becker.animation.box2d.simulations {
                        
             // Set position in world space
             offset.Set(35.0, 25);
-            var pivot:b2Vec2 = new b2Vec2(0.0, -24.0/tscale);
+            var pivot:b2Vec2 = new b2Vec2(0.0, -2.4/tscale);
             
             bodyDef.position = b2Math.AddVV(pivot, offset);
             chassis = builder.buildBlock(7.5/tscale, 3.0/tscale, bodyDef, 1.0, params.friction, params.restitution, -1);
@@ -94,14 +79,14 @@ package com.becker.animation.box2d.simulations {
             po.Add(offset);
             jd.Initialize(wheel, chassis, po);
             jd.collideConnected = false;
-            jd.motorSpeed = motorSpeed;
-            jd.maxMotorTorque = 400.0;
+            jd.motorSpeed = MOTOR_SPEED;
+            jd.maxMotorTorque = MOTOR_TORQUE;
             jd.enableMotor = motorOn;
             motorJoint = world.CreateJoint(jd) as b2RevoluteJoint;            
             
             var wheelAnchor:b2Vec2;
             
-            wheelAnchor = new b2Vec2(0.0, 24/tscale);
+            wheelAnchor = new b2Vec2(0.0, 2.4/tscale);
             wheelAnchor.Add(pivot);
             
             CreateLeg(-1.0, wheelAnchor, offset);
@@ -115,8 +100,38 @@ package com.becker.animation.box2d.simulations {
             CreateLeg(-1.0, wheelAnchor, offset);
             CreateLeg(1.0, wheelAnchor, offset);
         }
-               
+           
+		private function addRandomCrap(bodyDef:b2BodyDef):void {
+			addSmallBalls(40, bodyDef);                       
+			addBallsAndBlocks(6, bodyDef);
+		}
         
+				
+		private function addSmallBalls(n:int, bodyDef:b2BodyDef):void {
+			for (var j:int = 0; j < n; ++j) {
+                bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
+                builder.buildBall(0.35, bodyDef, 1.0, params.friction, params.restitution);
+            }			
+		}
+		
+		/** Some random balls and blocks */
+		private function addBallsAndBlocks(n:int, bodyDef:b2BodyDef):void {
+			
+			for (var i:int = 1; i < n; i++) {
+                bodyDef.position.Set(Math.random() * 15 + 20, Math.random() * 10);
+
+                var rX:Number = Math.random() + 0.5;
+                var rY:Number = Math.random() + 0.5;
+          
+                if (Math.random() < 0.5) {
+                    builder.buildBlock(rX, rY, bodyDef, params.density, params.friction, params.restitution);
+                } 
+                else {
+                    builder.buildBall(rX, bodyDef, params.density, params.friction, params.restitution);
+                }  
+            }
+		}
+		
         private function CreateLeg(s:Number, wheelAnchor:b2Vec2, offset:b2Vec2):void {
             
             var tScale:Number = T_SCALE;
@@ -150,13 +165,17 @@ package com.becker.animation.box2d.simulations {
                 sd2Pts.push(new b2Vec2());
             }
 
-            var bodyDef:b2BodyDef = new b2BodyDef(); 
-            bodyDef.angularDamping = 10.0;
-            bodyDef.position.SetV(offset);
-            var body1:b2Body = builder.buildPolygon(sd1Pts, bodyDef, params.density, params.friction, params.restitution, -1);
+            var bodyDef1:b2BodyDef = new b2BodyDef(); 
+			var bodyDef2:b2BodyDef = new b2BodyDef(); 
             
-            bodyDef.position = b2Math.AddVV(p4, offset); 
-            var body2:b2Body = builder.buildPolygon(sd2Pts, bodyDef, params.density, params.friction, params.restitution, -1);
+            bodyDef1.position.SetV(offset);
+			bodyDef2.position = b2Math.AddVV(p4, offset);
+			
+			bodyDef1.angularDamping = 10.0;
+			bodyDef2.angularDamping = 10.0;
+			
+            var body1:b2Body = builder.buildPolygon(sd1Pts, bodyDef1, params.density, params.friction, params.restitution, -1);
+            var body2:b2Body = builder.buildPolygon(sd2Pts, bodyDef2, params.density, params.friction, params.restitution, -1);
             
             var djd:b2DistanceJointDef = new b2DistanceJointDef();
             
