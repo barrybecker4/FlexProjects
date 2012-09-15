@@ -1,15 +1,15 @@
 package  com.becker.common {
+    
 import flash.geom.Point;
 
     public class Util  {    
-        // convert from radians to degrees
+        /** convert from radians to degrees */
         public static const RAD_TO_DEG:Number = 180.0 / Math.PI;  
            
-        // convert from degrees to radians 
+        /** convert from degrees to radians */
         public static const DEG_TO_RAD:Number = Math.PI / 180.0;      
         
-        public function Util()
-        {}
+        public function Util() {}
         
         
         /**
@@ -62,6 +62,6 @@ import flash.geom.Point;
             var dy:Number = pt1.y - pt2.y;
             return Math.sqrt(dx * dx + dy * dy);
         }
-                  
+             
     }
 }

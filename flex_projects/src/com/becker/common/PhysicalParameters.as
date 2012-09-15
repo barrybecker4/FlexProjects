@@ -1,7 +1,7 @@
 package com.becker.common 
 {
     /**
-     * Collection of parameters for physical objects
+     * Collection of parameters for physical objects. Immutable.
      * @author Barry Becker
      */
     public class PhysicalParameters  {
@@ -11,7 +11,7 @@ package com.becker.common
         private var _restitution:Number;
         
         /**
-         * Constructor
+         * Constructor.
          * @param density mass divided by volume
          * @param friction coeeficient of friction
          * @param restitution ability to bounce back
@@ -33,6 +33,7 @@ package com.becker.common
         public function get restitution():Number {
             return _restitution;
         }
+       
         
     }
 

@@ -24,6 +24,7 @@ package com.becker.animation.box2d.builders {
         
         private var shapeBuilder:BasicShapeBuilder;
         private var params:PhysicalParameters;
+        private var offset:b2Vec2;
         
     
         /** Constructor */
@@ -37,7 +38,7 @@ package com.becker.animation.box2d.builders {
                                       params:PhysicalParameters):TheoJansenSpider {           
 
             var bodyDef:b2BodyDef = new b2BodyDef();
-            var offset:b2Vec2 = new b2Vec2();
+            this.offset = new b2Vec2();
             this.params = params;
             
             // Set position in world space
@@ -55,24 +56,29 @@ package com.becker.animation.box2d.builders {
             
             var spider:TheoJansenSpider = new TheoJansenSpider(chassis, wheel, wheelAnchor);
         
-            createMotorJoint(spider, pivot, offset);
+            createMotorJoint(spider, pivot);
             wheelAnchor.Add(pivot);
             
-            CreateLeg(spider, -1.0, offset);
-            CreateLeg(spider, 1.0, offset);
-            
-            wheel.SetXForm(wheel.GetPosition(), AbstractBuilder.degreesToRadians(120.0));
-            CreateLeg(spider, -1.0, offset);
-            CreateLeg(spider, 1.0, offset);
-            
-            wheel.SetXForm(wheel.GetPosition(), AbstractBuilder.degreesToRadians(-120.0));
-            CreateLeg(spider, -1.0, offset);
-            CreateLeg(spider, 1.0, offset);
-            
+            createLegs(spider);
+
             return spider;   
         }
         
-        private function createMotorJoint(spider:TheoJansenSpider, pivot:b2Vec2, offset:b2Vec2):void { 
+        private function createLegs(spider:TheoJansenSpider):void {
+            CreateLeg(spider, -1.0);
+            CreateLeg(spider, 1.0);
+            
+            spider.wheel.SetXForm(spider.wheel.GetPosition(), AbstractBuilder.degreesToRadians(120.0));
+            CreateLeg(spider, -1.0);
+            CreateLeg(spider, 1.0);
+            
+            spider.wheel.SetXForm(spider.wheel.GetPosition(), AbstractBuilder.degreesToRadians(-120.0));
+            CreateLeg(spider, -1.0);
+            CreateLeg(spider, 1.0);
+        }
+        
+        
+        private function createMotorJoint(spider:TheoJansenSpider, pivot:b2Vec2):void { 
             var motorJoint:b2RevoluteJoint;
             
             var jd:b2RevoluteJointDef = new b2RevoluteJointDef();
@@ -86,8 +92,7 @@ package com.becker.animation.box2d.builders {
             motorJoint = world.CreateJoint(jd) as b2RevoluteJoint;            
         }
         
-        private function CreateLeg(spider:TheoJansenSpider, 
-                       sign:Number, offset:b2Vec2):void {
+        private function CreateLeg(spider:TheoJansenSpider, sign:Number):void {
             
             var points:Array = createLegPoints(sign, T_SCALE);
             
@@ -118,11 +123,14 @@ package com.becker.animation.box2d.builders {
             bodyDef.position.SetV(offset);
             bodyDef.angularDamping = 10.0;
             
-            var segment1:b2Body = shapeBuilder.buildPolygon(sd1Pts, bodyDef, params.density, params.friction, params.restitution, -1);
+            var segment1:b2Body = 
+                shapeBuilder.buildPolygon(sd1Pts, bodyDef, params.density, params.friction, params.restitution, -1);
+                
             bodyDef.position = b2Math.AddVV(points[3], offset);
-            var segment2:b2Body = shapeBuilder.buildPolygon(sd2Pts, bodyDef, params.density, params.friction, params.restitution, -1);
+            var segment2:b2Body =
+                shapeBuilder.buildPolygon(sd2Pts, bodyDef, params.density, params.friction, params.restitution, -1);
             
-            createLegJoints(spider, segment1, segment2, offset, points);
+            createLegJoints(spider, segment1, segment2, points);
         }
         
         private function createLegPoints(sign:Number, tScale:Number):Array {
@@ -136,41 +144,31 @@ package com.becker.animation.box2d.builders {
             return points;
         }
         
-        private function createLegJoints(spider:TheoJansenSpider, body1:b2Body, body2:b2Body, 
-                                         offset:b2Vec2, points:Array):void {
+        private function createLegJoints(spider:TheoJansenSpider, segment1:b2Body, segment2:b2Body, points:Array):void {
                                              
             var djd:b2DistanceJointDef = new b2DistanceJointDef();
-            djd.collideConnected = false;
-            
             var bodyDef:b2BodyDef = new b2BodyDef();
             
-            djd.userData = shapeBuilder.buildLine(b2Math.AddVV(points[1], offset), b2Math.AddVV(points[4], offset), bodyDef, params);
-            djd.Initialize(body1, body2, b2Math.AddVV(points[1], offset), b2Math.AddVV(points[4], offset));
-            
+            djd.userData = shapeBuilder.buildLine(points[1], points[4], bodyDef, params);
+            djd.Initialize(segment1, segment2, b2Math.AddVV(points[1], offset), b2Math.AddVV(points[4], offset));
             world.CreateJoint(djd);
             
-            bodyDef = new b2BodyDef();
-            djd.userData = shapeBuilder.buildLine(b2Math.AddVV(points[2], offset), b2Math.AddVV(points[3], offset), bodyDef, params);
-            djd.Initialize(body1, body2, b2Math.AddVV(points[2], offset), b2Math.AddVV(points[3], offset));
+            djd.userData = shapeBuilder.buildLine(points[2], points[3], bodyDef, params);
+            djd.Initialize(segment1, segment2, b2Math.AddVV(points[2], offset), b2Math.AddVV(points[3], offset));
             world.CreateJoint(djd);
             
-            bodyDef = new b2BodyDef();
-            var p1:b2Vec2 = b2Math.AddVV(points[2], offset);
-            var p2:b2Vec2 = b2Math.AddVV(spider.wheel.GetLocalCenter(), offset);
-            //djd.userData = shapeBuilder.buildLine(p1, p2, bodyDef, params);
-            djd.Initialize(body1, spider.wheel, p1, p2);
+            djd.userData = shapeBuilder.buildLine(points[2], spider.wheelAnchor, bodyDef, params);
+            djd.Initialize(segment1, spider.wheel, b2Math.AddVV(points[2], offset), b2Math.AddVV(spider.wheelAnchor, offset));
             world.CreateJoint(djd);
-            
-            //trace("pt2=" + p1.x  + " " + p1.y + "  wheel=" + p2.x + " " + p2.y);
-            
-            //djd.userData = shapeBuilder.buildLine(b2Math.AddVV(points[5], offset), b2Math.AddVV(spider.wheelAnchor, offset), bodyDef, params);
-            djd.Initialize(body2, spider.wheel, b2Math.AddVV(points[5], offset), b2Math.AddVV(spider.wheelAnchor, offset));
+                    
+            djd.userData = shapeBuilder.buildLine(points[5], spider.wheelAnchor, bodyDef, params);
+            djd.Initialize(segment2, spider.wheel, b2Math.AddVV(points[5], offset), b2Math.AddVV(spider.wheelAnchor, offset));
             world.CreateJoint(djd);
             
             var rjd:b2RevoluteJointDef = new b2RevoluteJointDef();
             
-            //djd.userData = shapeBuilder.buildLine(spider.chassis.GetLocalCenter(), b2Math.AddVV(points[3], offset), bodyDef, params);
-            rjd.Initialize(body2, spider.chassis, b2Math.AddVV(points[3], offset));
+            rjd.userData = shapeBuilder.buildLine(spider.chassis.GetLocalCenter(), points[3], bodyDef, params);
+            rjd.Initialize(segment2, spider.chassis, b2Math.AddVV(points[3], offset));
             world.CreateJoint(rjd);   
         }
 

@@ -17,6 +17,13 @@ package com.becker.animation.box2d.simulations {
         private static const NUM_SHAPES:Number = 50;
         private static const NUM_PLANKS:int = 10;
         
+        /** the length of one of the bridge planks */
+        private static const PLANK_LENGTH:Number = 44;
+        private static const HALF_PLANK_LENGTH:Number = PLANK_LENGTH / 2.0;
+        
+        private static const BRIDGE_HEIGHT:Number = 250;
+        private static const BRIDGE_STARTX:Number = 100;
+        
         private var builder:BasicShapeBuilder;
         
         private var ground:b2Body;
@@ -60,17 +67,17 @@ package com.becker.animation.box2d.simulations {
             var prevBody:b2Body = ground;
             
             for (var i:int = 0; i < NUM_PLANKS; ++i) {
-                bodyDef.position.Set((100 + 22 + 44 * i) / scale, 250 / scale);
+                bodyDef.position.Set((BRIDGE_STARTX + HALF_PLANK_LENGTH + PLANK_LENGTH * i) / scale, BRIDGE_HEIGHT/ scale);
                 body = builder.buildBlock(24/scale, 5/scale, bodyDef, 20.0, 0.2, 0.1);  
                 
-                anchor.Set((100 + 44 * i) / scale, 250 / scale);
+                anchor.Set((BRIDGE_STARTX + PLANK_LENGTH * i) / scale, BRIDGE_HEIGHT / scale);
                 jd.Initialize(prevBody, body, anchor);
                 world.CreateJoint(jd);
                 
                 prevBody = body;
             }
             
-            anchor.Set((100 + 44 * NUM_PLANKS) / scale, 250 / scale);
+            anchor.Set((BRIDGE_STARTX + PLANK_LENGTH * NUM_PLANKS) / scale, BRIDGE_HEIGHT / scale);
             jd.Initialize(prevBody, ground, anchor);
             world.CreateJoint(jd);
         }
