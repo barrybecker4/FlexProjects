@@ -21,7 +21,7 @@ package com.becker.animation.box2d.builders
         }
                       
         protected function addShape(shapeDef:b2ShapeDef, bodyDef:b2BodyDef):b2Body {           
-            //bodyDef.userData.scale = initialScale;
+          
             canvas.addChild(bodyDef.userData);
             
             var body:b2Body = world.CreateBody(bodyDef);

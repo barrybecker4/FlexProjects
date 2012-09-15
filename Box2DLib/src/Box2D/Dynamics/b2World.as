@@ -919,7 +919,6 @@ public class b2World
         }
         
         //m_stackAllocator.Free(stack);
-        
     }
     
     static private var s_jointColor:b2Color = new b2Color(0.5, 0.8, 0.8);

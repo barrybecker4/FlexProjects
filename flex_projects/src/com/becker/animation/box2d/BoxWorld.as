@@ -14,6 +14,7 @@ import com.becker.animation.box2d.simulations.HelloWorldSimulation;
 import com.becker.animation.box2d.simulations.RagDollSimulation;
 import com.becker.animation.box2d.simulations.TheoJansenSimulation;
 import com.becker.animation.sprites.AbstractShape;
+import com.becker.common.Util;
 
 import flash.display.Sprite;
 import flash.events.Event;
@@ -132,82 +133,48 @@ public class BoxWorld extends UIComponent implements Animatible {
             firstTime = false;
         }
         
-        world.Step(TIME_STEP, NUM_ITERATIONS);
+        world.Step(TIME_STEP, NUM_ITERATIONS);       
         
-        // Go through body list and update sprite positions/rotations
+        drawAllBodies();
+        drawAllJoints();
         
+        mouseInteractor.handleMouseInteraction(TIME_STEP, simulation.scale); 
+    }
+    
+    /** Go through body list and update sprite positions/rotations */
+    private function drawAllBodies():void {
         for (var bb:b2Body = world.m_bodyList; bb; bb = bb.m_next) {
             
             if (bb.m_userData is AbstractShape) {
                 bb.m_userData.x = bb.GetPosition().x * simulation.scale;
                 bb.m_userData.y = bb.GetPosition().y * simulation.scale;
-                bb.m_userData.rotation = bb.GetAngle() * (180 / Math.PI);
+                bb.m_userData.rotation = bb.GetAngle() * Util.RAD_TO_DEG;
             }
         } 
-
+    }
+    
+    /** Go through joint list and update geometry */
+    private function drawAllJoints():void {
+        
         for (var joint:b2Joint = world.m_jointList; joint; joint = joint.m_next) {
             
             if (joint.m_userData && joint.m_userData.m_userData is Line) {
                 var line:Line = joint.m_userData.m_userData as Line;
                 if (line) {
-                    //line.x = joint.GetBody1().GetPosition().x * simulation.scale;
-                    //line.y = joint.GetBody1().GetPosition().y * simulation.scale;
-                    //line.rotation = joint.GetBody1().GetAngle() * (180 / Math.PI);
                     
-                    var startPt:Point = new Point(joint.GetAnchor1().x * simulation.scale, joint.GetAnchor1().y * simulation.scale);;
-                    var endPt:Point = new Point(joint.GetAnchor2().x * simulation.scale, joint.GetAnchor2().y * simulation.scale);
-                    line.x = startPt.x;
-                    line.y = startPt.y;
-                    line.width = endPt.x - startPt.x;
-                    line.height = endPt.y - startPt.y;
+                    //var endPt:Point = new Point(joint.GetAnchor2().x * simulation.scale, joint.GetAnchor2().y * simulation.scale);
+                    line.x = joint.GetAnchor1().x * simulation.scale;
+                    line.y = joint.GetAnchor1().y * simulation.scale;
+                    
+                    var angle:Number = Math.atan2((joint.GetAnchor2().y - joint.GetAnchor1().y), (joint.GetAnchor2().x - joint.GetAnchor1().x));
+                    //var angle:Number = Math.atan2((joint.GetAnchor2().y - joint.GetAnchor1().y), (joint.GetAnchor2().x - joint.GetAnchor1().x));
+                    line.rotation = angle * Util.RAD_TO_DEG;
+                    //trace(" rot=" + line.rotation);
                 }
             }
         }
-        
-        mouseInteractor.handleMouseInteraction(TIME_STEP, simulation.scale); 
     }
-    
-    /*
-    public function DrawJoint(joint:b2Joint):void {
-        
-        var b1:b2Body = joint.m_body1;
-        var b2:b2Body = joint.m_body2;
-        var xf1:b2XForm = b1.m_xf;
-        var xf2:b2XForm = b2.m_xf;
-        var x1:b2Vec2 = xf1.position;
-        var x2:b2Vec2 = xf2.position;
-        var p1:b2Vec2 = joint.GetAnchor1();
-        var p2:b2Vec2 = joint.GetAnchor2();
-        
-        //b2Color color(0.5f, 0.8f, 0.8f);
-        var color:b2Color = s_jointColor;
-        
-        switch (joint.m_type) {
-            case b2Joint.e_distanceJoint:
-                m_debugDraw.DrawSegment(p1, p2, color);
-                break;
-            
-            case b2Joint.e_pulleyJoint:
-                var pulley:b2PulleyJoint = (joint as b2PulleyJoint);
-                var s1:b2Vec2 = pulley.GetGroundAnchor1();
-                var s2:b2Vec2 = pulley.GetGroundAnchor2();
-                m_debugDraw.DrawSegment(s1, p1, color);
-                m_debugDraw.DrawSegment(s2, p2, color);
-                m_debugDraw.DrawSegment(s1, s2, color);
-                break;
-            
-            case b2Joint.e_mouseJoint:
-                m_debugDraw.DrawSegment(p1, p2, color);
-                break;
-            
-            default:
-                if (b1 != m_groundBody)
-                    m_debugDraw.DrawSegment(x1, p1, color);
-                m_debugDraw.DrawSegment(p1, p2, color);
-                if (b2 != m_groundBody)
-                    m_debugDraw.DrawSegment(x2, p2, color);
-        }
-    } */
+   
    
     private function createWorld():b2World {
         // Create world AABB

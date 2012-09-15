@@ -25,18 +25,15 @@ package com.becker.animation.box2d.builders
         }
        
         public function buildLine(start:b2Vec2, stop:b2Vec2, bodyDef:b2BodyDef, 
-                                     params:PhysicalParameters,
-                                     groupIndex:int = int.MAX_VALUE):b2Body {
+                                  params:PhysicalParameters,
+                                  groupIndex:int = int.MAX_VALUE):b2Body {
    
             var lineDef:b2PolygonDef = new b2PolygonDef();
             lineDef.vertexCount = 2;
-            
-            var vpoints:Array = new Array();
                  
             lineDef.vertices[0].Set(start.x, start.y);
-                vpoints.push(new Point(start.x, start.y));
             lineDef.vertices[1].Set(stop.x, stop.y);
-                vpoints.push(new Point(stop.x, stop.y));
+            var diff:Point = new Point(stop.x - start.x, stop.y - start.y);
 
             lineDef.density = params.density;
             lineDef.friction = params.friction;
@@ -44,8 +41,8 @@ package com.becker.animation.box2d.builders
             if (groupIndex != int.MAX_VALUE) {
                 lineDef.filter.groupIndex = groupIndex;
             }
+            bodyDef.userData = new Line(diff.x * scale, diff.y * scale);
             
-            bodyDef.userData = new Line(vpoints[1].x , vpoints[1].y);
             return addShape(lineDef, bodyDef); 
         }
        
