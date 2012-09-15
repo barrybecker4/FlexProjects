@@ -122,7 +122,7 @@ public class MouseInteractor {
         
         //var v:b2Vec2 = .GetLocalCenter();
         var shape:AbstractShape = AbstractShape(draggedBody.GetUserData());
-        var start:Point = new Point(shape.x, shape.y);
+        var start:Point = new Point(shape.x, shape.y); 
         var end:Point = new Point(Input.mouseX, Input.mouseY - 200); 
         
         var g:Graphics = owner.graphics;

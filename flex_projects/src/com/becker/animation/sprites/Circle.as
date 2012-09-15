@@ -21,12 +21,11 @@ package  com.becker.animation.sprites {
             super(color);
             this.radius = radius;
             circle = new Shape(); 
-            addChild( circle ); 
+            addChild( circle );
             
             init();
         }
-    
-        
+         
         protected function init():void {
             
             var img:DisplayObject = new Images.GRUNGE;

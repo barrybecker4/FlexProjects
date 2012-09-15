@@ -35,8 +35,7 @@ package  com.becker.animation.sprites {
             init();
         }
    
-        private function init():void
-        {         
+        private function init():void {         
             img.x = x - width/2.0;
             img.y = y - height/2.0;
             img.width = width;
@@ -50,8 +49,6 @@ package  com.becker.animation.sprites {
             graphics.drawRect(x - width/2.0, y - height/2.0, width, height);
             //graphics.drawEllipse(xpos - width/3.0, ypos - height/3.0, width/4.0, height/4.0);
             //graphics.endFill();   
-            
-            
         }
      }
 }

@@ -9,6 +9,7 @@ import com.becker.animation.box2d.simulations.BridgeSimulation;
 import com.becker.animation.box2d.simulations.HelloWorldSimulation;
 import com.becker.animation.box2d.simulations.RagDollSimulation;
 import com.becker.animation.box2d.simulations.TheoJansenSimulation;
+import com.becker.animation.box2d.simulations.CarSimulation;
 
 import mx.core.UIComponent;
 
@@ -23,6 +24,7 @@ public class AvailableSimulations {
     /** some different demos to select from */
      public static const AVAILABLE_SIMULATIONS:Array = [
            "Hello World", 
+           "Car",
            "Rag Doll", 
            "Bridge", 
            "Theo Jansen Spider" 
@@ -40,10 +42,12 @@ public class AvailableSimulations {
             case AVAILABLE_SIMULATIONS[0]: 
                 simulation = new HelloWorldSimulation(); break;
             case AVAILABLE_SIMULATIONS[1]: 
-                simulation = new RagDollSimulation(); break;
+                simulation = new CarSimulation(); break;
             case AVAILABLE_SIMULATIONS[2]: 
-                simulation = new BridgeSimulation(); break;
+                simulation = new RagDollSimulation(); break;
             case AVAILABLE_SIMULATIONS[3]: 
+                simulation = new BridgeSimulation(); break;
+            case AVAILABLE_SIMULATIONS[4]: 
                 simulation = new TheoJansenSimulation(); break;
             default: throw new Error("Unexpected sim :" + simulationName);
         }
