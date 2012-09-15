@@ -79,56 +79,87 @@ package com.becker.animation.box2d.simulations {
          * Spawn in a bunch of crap to fall on the bridge.
          */
         private function createBridgeCrap():void {
-                       
-            var body:b2Body;
-            var bodyDef:b2BodyDef = new b2BodyDef();
 
-            // some blocks.
-            for (var i:int = 0; i < 5; i++){
+            addBlocks(6);
+            addBalls(5);
+            createPolygons(15);
+        }       
+        
+        private function addBlocks(num:int):void  {
+            
+            var bodyDef:b2BodyDef = new b2BodyDef();
+            for (var i:int = 0; i < num; i++){
                 
                 bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
                 bodyDef.angle = Math.random() * Math.PI;
                 builder.buildBlock((Math.random() * 5 + 10) / scale, (Math.random() * 5 + 10) / scale, bodyDef, 1.0, 0.3, 0.1);  
             }
+        }
+        
+        private function addBalls(num:int):void  {
             
-            // some balls
-            for (i = 0; i < 5; i++){
+            var bodyDef:b2BodyDef = new b2BodyDef();
+            for (var i:int = 0; i < num; i++) {
                 bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
                 bodyDef.angle = Math.random() * Math.PI;           
                 builder.buildBall((Math.random() * 5 + 10) / scale, bodyDef, 1.0, 0.3, 0.1);  
             }
+        }
+        
+        private function createPolygons(num:int):void {
             
-            for (i = 0; i < 15; i++){
-
-                bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
-                bodyDef.angle = Math.random() * Math.PI;
-                
-                var pts:Array = new Array();
-                if (Math.random() > 0.66) {
-                    pts.push(new Point((-10 - Math.random()*10) / scale, ( 10 + Math.random()*10) / scale));
-                    pts.push(new Point(( -5 - Math.random()*10) / scale, (-10 - Math.random()*10) / scale));
-                    pts.push(new Point((  5 + Math.random()*10) / scale, (-10 - Math.random()*10) / scale));
-                    pts.push(new Point(( 10 + Math.random()*10) / scale, ( 10 + Math.random()*10) / scale));
-                }
-                else if (Math.random() > 0.5) {
-                    
-                    var pt0:Point = new Point(0, (10 +Math.random()*10) / scale);
-                    var pt2:Point = new Point((-5 - Math.random()*10) / scale, (-10 -Math.random()*10) / scale);
-                    var pt3:Point = new Point(( 5 + Math.random()*10) / scale, (-10 -Math.random()*10) / scale);
-                    var s:Number = Math.random()/2 + 0.8;
-                    var pt1:Point = new Point(s*(pt0.x + pt2.x), s*(pt0.y + pt2.y));
-                    s = Math.random()/2 + 0.8;
-                    var pt4:Point = new Point(s*(pt3.x + pt0.x), s*(pt3.y + pt0.y));
-                    pts = [ pt0, pt1, pt2, pt3, pt4];
-                }
-                else {
-                    pts.push(new Point(0, (10 +Math.random()*10) / scale));
-                    pts.push(new Point((-5 - Math.random()*10) / scale, (-10 -Math.random()*10) / scale));
-                    pts.push(new Point(( 5 + Math.random()*10) / scale, (-10 -Math.random()*10) / scale));
-                }
-    
-                body = builder.buildPolygon(pts, bodyDef, 1.0, 0.3, 0.1); 
+            var bodyDef:b2BodyDef = new b2BodyDef();
+            for (var i:int = 0; i < num; i++){
+                createRandomPolygon(bodyDef);
             }
-        }       
+        }
+        
+        private function createRandomPolygon(bodyDef:b2BodyDef):void {
+            
+            bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
+            bodyDef.angle = Math.random() * Math.PI;
+            var pts:Array;
+            
+            if (Math.random() > 0.66) {
+                pts = createQuadrilateralPoints()
+            }
+            else if (Math.random() > 0.5) { 
+                pts = createPentagonPoints();
+            }
+            else {
+                pts = createTrianglePoints();
+            }
+    
+            builder.buildPolygon(pts, bodyDef, 1.0, 0.3, 0.1);
+        }
+        
+        private function createQuadrilateralPoints():Array {
+            var pts:Array = new Array();
+            pts.push(new Point((-10 - Math.random()*10) / scale, ( 10 + Math.random()*10) / scale));
+            pts.push(new Point(( -5 - Math.random()*10) / scale, (-10 - Math.random()*10) / scale));
+            pts.push(new Point((  5 + Math.random()*10) / scale, (-10 - Math.random()*10) / scale));
+            pts.push(new Point(( 10 + Math.random() * 10) / scale, ( 10 + Math.random() * 10) / scale));
+            return pts;
+        }
+        
+        private function createPentagonPoints():Array {
+            var pt0:Point = new Point(0, (10 +Math.random()*10) / scale);
+            var pt2:Point = new Point((-5 - Math.random()*10) / scale, (-10 -Math.random()*10) / scale);
+            var pt3:Point = new Point(( 5 + Math.random()*10) / scale, (-10 -Math.random()*10) / scale);
+            var s:Number = Math.random()/2 + 0.8;
+            var pt1:Point = new Point(s*(pt0.x + pt2.x), s*(pt0.y + pt2.y));
+            s = Math.random()/2 + 0.8;
+            var pt4:Point = new Point(s*(pt3.x + pt0.x), s*(pt3.y + pt0.y));
+            return [pt0, pt1, pt2, pt3, pt4]; 
+        }
+        
+        private function createTrianglePoints():Array {
+            var pts:Array = new Array();
+            pts.push(new Point(0, (10 +Math.random()*10) / scale));
+            pts.push(new Point((-5 - Math.random()*10) / scale, (-10 -Math.random()*10) / scale));
+            pts.push(new Point(( 5 + Math.random() * 10) / scale, ( -10 -Math.random() * 10) / scale));
+            return pts;
+        }
+        
     }
 }

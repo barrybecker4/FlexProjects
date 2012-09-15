@@ -7,11 +7,11 @@ package  com.becker.animation.sprites {
      */
     public class AbstractShape extends UIComponent {
         
-        protected var color:uint;
+         protected var color:uint;
         
-        public function AbstractShape(color:uint = 0x9988cc) {
-          
-            this.color = color;     
-        }                 
+         public function AbstractShape(color:uint = 0x9988cc) {
+
+             this.color = color;     
+         }                 
      }
 }

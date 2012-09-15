@@ -2,10 +2,12 @@ package com.becker.animation.box2d.builders
 {
     import Box2D.Collision.Shapes.b2CircleDef;
     import Box2D.Collision.Shapes.b2PolygonDef;
+    import Box2D.Collision.Shapes.b2ShapeDef;
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.animation.sprites.Line;
     import com.becker.common.PhysicalParameters;
     
     import com.becker.animation.sprites.Circle;
@@ -20,6 +22,31 @@ package com.becker.animation.box2d.builders
 
         public function BasicShapeBuilder(world:b2World, canvas:UIComponent, scale:Number) {
             super(world, canvas, scale);
+        }
+       
+        public function buildLine(start:b2Vec2, stop:b2Vec2, bodyDef:b2BodyDef, 
+                                     params:PhysicalParameters,
+                                     groupIndex:int = int.MAX_VALUE):b2Body {
+   
+            var lineDef:b2PolygonDef = new b2PolygonDef();
+            lineDef.vertexCount = 2;
+            
+            var vpoints:Array = new Array();
+                 
+            lineDef.vertices[0].Set(start.x, start.y);
+                vpoints.push(new Point(start.x, start.y));
+            lineDef.vertices[1].Set(stop.x, stop.y);
+                vpoints.push(new Point(stop.x, stop.y));
+
+            lineDef.density = params.density;
+            lineDef.friction = params.friction;
+            lineDef.restitution = params.restitution;
+            if (groupIndex != int.MAX_VALUE) {
+                lineDef.filter.groupIndex = groupIndex;
+            }
+            
+            bodyDef.userData = new Line(vpoints[1].x , vpoints[1].y);
+            return addShape(lineDef, bodyDef); 
         }
        
     
@@ -58,12 +85,14 @@ package com.becker.animation.box2d.builders
         }
         
         public function buildPolygon(pts:Array, bodyDef:b2BodyDef, 
-                                     density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+                                     density:Number = 1.0, 
+                                     friction:Number = 0.5, 
+                                     restitution:Number = 0.2, 
                                      groupIndex:int = int.MAX_VALUE):b2Body {
    
             var polyDef:b2PolygonDef = new b2PolygonDef();
             var numPts:int = pts.length;
-            polyDef.vertexCount = numPts
+            polyDef.vertexCount = numPts;
             var vpoints:Array;
             var i:int;
             if (pts[0] is Point) {
