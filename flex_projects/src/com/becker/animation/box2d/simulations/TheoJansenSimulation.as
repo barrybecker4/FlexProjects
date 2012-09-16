@@ -40,7 +40,7 @@ package com.becker.animation.box2d.simulations {
         override public function addDynamicElements():void {
             
             addRandomCrap();            
-            spiderBuilder.buildInstance(25, 5, params);
+            spiderBuilder.buildInstance(25, 15, params);
         }
            
         private function addRandomCrap():void {

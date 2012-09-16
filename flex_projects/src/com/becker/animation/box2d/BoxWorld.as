@@ -6,6 +6,7 @@ import Box2D.Dynamics.*;
 import Box2D.Dynamics.Joints.b2Joint;
 import com.becker.animation.sprites.Line;
 import com.becker.common.PhysicalParameters;
+import flash.display.Shape;
 import flash.geom.Point;
 
 import com.becker.animation.Animatible;
@@ -105,7 +106,6 @@ public class BoxWorld extends UIComponent implements Animatible {
         var oldWidth:int = evt.oldWidth;
         
         //var scale:Number = Number(this.width) / ORIG_WIDTH;
-        //trace("w="+this.width +" s="+scale);
         //this.stage.scaleX = scale;
         //this.stage.scaleY = scale;
         //this.stage.stageWidth = this.width;
@@ -144,11 +144,13 @@ public class BoxWorld extends UIComponent implements Animatible {
     /** Go through body list and update sprite positions/rotations */
     private function drawAllBodies():void {
         for (var bb:b2Body = world.m_bodyList; bb; bb = bb.m_next) {
-            
-            if (bb.m_userData is AbstractShape) {
-                bb.m_userData.x = bb.GetPosition().x * simulation.scale;
-                bb.m_userData.y = bb.GetPosition().y * simulation.scale;
-                bb.m_userData.rotation = bb.GetAngle() * Util.RAD_TO_DEG;
+           
+            for  each(var shape:AbstractShape in bb.m_userData)
+            {
+                shape.x = bb.GetPosition().x * simulation.scale;
+                shape.y = bb.GetPosition().y * simulation.scale;
+                var xf:b2XForm = bb.GetXForm();
+                shape.rotation = bb.GetAngle() * Util.RAD_TO_DEG;
             }
         } 
     }
@@ -158,17 +160,15 @@ public class BoxWorld extends UIComponent implements Animatible {
         
         for (var joint:b2Joint = world.m_jointList; joint; joint = joint.m_next) {
             
-            if (joint.m_userData && joint.m_userData.m_userData is Line) {
-                var line:Line = joint.m_userData.m_userData as Line;
-                if (line) {
-                    
+            if (joint.m_userData) {
+                for each (var line:Line in joint.m_userData.m_userData ) {
+       
                     line.x = joint.GetAnchor1().x * simulation.scale;
                     line.y = joint.GetAnchor1().y * simulation.scale;
                     
                     var numer:Number = joint.GetAnchor2().y - joint.GetAnchor1().y;
                     var denom:Number = joint.GetAnchor2().x - joint.GetAnchor1().x;
                     var angle:Number = Math.atan2(numer, denom);
-                    //trace("angle=" + angle + " numer=" + numer +" denom=" + denom);
                     line.rotation = angle * Util.RAD_TO_DEG;
                 }
             }

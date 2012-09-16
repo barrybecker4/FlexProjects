@@ -4,6 +4,7 @@ package com.becker.animation.box2d.builders
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.animation.sprites.AbstractShape;
     
     import mx.core.UIComponent;
     
@@ -20,12 +21,15 @@ package com.becker.animation.box2d.builders
             this.scale = scale;
         }
                       
-        protected function addShape(shapeDef:b2ShapeDef, bodyDef:b2BodyDef):b2Body {           
+        protected function addShapes(shapeDef:b2ShapeDef, bodyDef:b2BodyDef):b2Body {           
           
-            canvas.addChild(bodyDef.userData);
-            
             var body:b2Body = world.CreateBody(bodyDef);
-            body.CreateShape(shapeDef);
+            
+            for each (var shape:AbstractShape in bodyDef.userData) {
+                canvas.addChild(shape);
+                body.CreateShape(shapeDef);
+            }
+            
             body.SetMassFromShapes();    
             return body;
         }

@@ -107,7 +107,6 @@ public class MouseInteractor {
     
     private function stopMouseDrag():void {
         if (mouseJoint) {
-            //this.removeChild(mouseJoint.GetUserData());
             draggedBody = null;
             world.DestroyJoint(mouseJoint);
             
@@ -120,8 +119,7 @@ public class MouseInteractor {
         var p2:b2Vec2 = new b2Vec2(mouseWorldPhys.x, mouseWorldPhys.y);
         mouseJoint.SetTarget(p2);
         
-        //var v:b2Vec2 = .GetLocalCenter();
-        var shape:AbstractShape = AbstractShape(draggedBody.GetUserData());
+        var shape:AbstractShape = AbstractShape(draggedBody.GetUserData()[0]);
         var start:Point = new Point(shape.x, shape.y); 
         var end:Point = new Point(Input.mouseX, Input.mouseY - 200); 
         

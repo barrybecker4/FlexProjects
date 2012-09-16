@@ -8,6 +8,8 @@ package com.becker.animation.box2d.builders {
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
     import Box2D.Dynamics.Joints.b2DistanceJointDef;
+    import Box2D.Dynamics.Joints.b2PrismaticJoint;
+    import Box2D.Dynamics.Joints.b2PrismaticJointDef;
     import Box2D.Dynamics.Joints.b2RevoluteJoint;
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
     import com.becker.animation.sprites.Line;
@@ -15,7 +17,9 @@ package com.becker.animation.box2d.builders {
     import flash.geom.Point;
     import mx.core.UIComponent;
     
-    
+    /**
+     * Build a car with manipulable parmeters
+     */
     public class CarBuilder extends AbstractBuilder {
         
         private static const T_SCALE:Number = 4.0;
@@ -24,6 +28,14 @@ package com.becker.animation.box2d.builders {
         
         private var shapeBuilder:BasicShapeBuilder;
         private var params:PhysicalParameters;
+        
+        
+        // temporary variables for adding new bodies 
+        private var boxDef: b2PolygonDef;
+        private var circleDef: b2CircleDef;
+        private var revoluteJointDef: b2RevoluteJointDef;
+        private var prismaticJointDef: b2PrismaticJointDef;
+        private var car:Car;
         
     
         /** Constructor */
@@ -35,137 +47,114 @@ package com.becker.animation.box2d.builders {
         
         public function buildInstance(startX:Number, startY:Number, 
                                       params:PhysicalParameters):Car {           
-
+            
+            car = new Car();
+                  
+            // add cart //
             var bodyDef:b2BodyDef = new b2BodyDef();
-            var offset:b2Vec2 = new b2Vec2();
-            this.params = params;
+            bodyDef.position.Set(startX, startY);
             
-            // Set position in world space
-            offset.Set(startX, startY);
-            
-            var pivot:b2Vec2 = new b2Vec2(0.0, -2.4/T_SCALE);
-            bodyDef.position = b2Math.AddVV(pivot, offset);
-            var chassis:b2Body = shapeBuilder.buildBlock(7.5/T_SCALE, 3.0/T_SCALE, bodyDef, 1.0, params.friction, params.restitution, -1);
-              
-            bodyDef.position = b2Math.AddVV(pivot, offset);
-            var wheel:b2Body = shapeBuilder.buildBall(4.8 / T_SCALE, bodyDef, 1.0, params.friction, params.restitution, -1);
-            
-            var wheelAnchor:b2Vec2 = new b2Vec2(0.0, 2.4 / T_SCALE);
-            
-            var car:Car = new Car(chassis, wheel, wheelAnchor);
-        
-            createMotorJoint(car, pivot, offset);
-            wheelAnchor.Add(pivot);
-            
-            CreateLeg(car, -1.0, offset);
-            CreateLeg(car, 1.0, offset);
-            
-            wheel.SetXForm(wheel.GetPosition(), AbstractBuilder.degreesToRadians(120.0));
-            CreateLeg(car, -1.0, offset);
-            CreateLeg(car, 1.0, offset);
-            
-            wheel.SetXForm(wheel.GetPosition(), AbstractBuilder.degreesToRadians(-120.0));
-            CreateLeg(car, -1.0, offset);
-            CreateLeg(car, 1.0, offset);
-            
-            return car;   
-        }
-        
-        private function createMotorJoint(car:Car, pivot:b2Vec2, offset:b2Vec2):void { //b2RevoluteJoint 
-            var motorJoint:b2RevoluteJoint;
-            
-            var jd:b2RevoluteJointDef = new b2RevoluteJointDef();
-            var po:b2Vec2 = pivot.Copy();
-            po.Add(offset);
-            jd.Initialize(car.wheel, car.chassis, po);
-            jd.collideConnected = false;
-            jd.motorSpeed = MOTOR_SPEED;
-            jd.maxMotorTorque = MOTOR_TORQUE;
-            jd.enableMotor = true;
-            motorJoint = world.CreateJoint(jd) as b2RevoluteJoint;            
-        }
-        
-        private function CreateLeg(spider:Car, 
-                       sign:Number, offset:b2Vec2):void {
-            
-            var points:Array = createLegPoints(sign, T_SCALE);
-            
-            var sd1Pts:Array = new Array();
-            var sd2Pts:Array = new Array();
-      
-            if (sign > 0.0)  {
-                sd1Pts.push(points[2]);
-                sd1Pts.push(points[1]);
-                sd1Pts.push(points[0]);
-                
-                sd2Pts.push(b2Math.SubtractVV(points[5], points[3]));
-                sd2Pts.push(b2Math.SubtractVV(points[4], points[3]));
-                sd2Pts.push(new b2Vec2());
-            }
-            else {
-                sd1Pts.push(points[1]);
-                sd1Pts.push(points[2]);
-                sd1Pts.push(points[0]);
-                
-                sd2Pts.push(b2Math.SubtractVV(points[4], points[3]));
-                sd2Pts.push(b2Math.SubtractVV(points[5], points[3]));
-                sd2Pts.push(new b2Vec2());
-            }
+            createCarBody(bodyDef);
+            createAxles(bodyDef);
+            createWheels(bodyDef);
+            createJoints(bodyDef);
 
-            var bodyDef:b2BodyDef = new b2BodyDef(); 
+            return car;
+        }
+    
+        private function createCarBody(bodyDef:b2BodyDef):void {
+            var blocks:Array = [
+                new OrientedBox(1.5, 0.3, new b2Vec2(0, 0), 0),
+                new OrientedBox(0.4, 0.15, new b2Vec2( -1, -0.3), Math.PI / 3),
+                new OrientedBox(0.4, 0.15, new b2Vec2( 1, -0.3), -Math.PI / 3)
+            ];
             
-            bodyDef.position.SetV(offset);
-            bodyDef.angularDamping = 10.0;
-            
-            var segment1:b2Body = shapeBuilder.buildPolygon(sd1Pts, bodyDef, params.density, params.friction, params.restitution, -1);
-            bodyDef.position = b2Math.AddVV(points[3], offset);
-            var segment2:b2Body = shapeBuilder.buildPolygon(sd2Pts, bodyDef, params.density, params.friction, params.restitution, -1);
-            
-            createLegJoints(spider, segment1, segment2, offset, points);
+            car.carBody = shapeBuilder.buildCompoundBlock(blocks, bodyDef, 2, 0.5, 0.2, -1); //world.CreateBody(bodyDef);
         }
         
-        private function createLegPoints(sign:Number, tScale:Number):Array {
-            var points:Array = [];
-            points.push(new b2Vec2(16.2 * sign/tScale, 18.3/tScale));
-            points.push(new b2Vec2(21.6 * sign/tScale, 3.6 /tScale));
-            points.push(new b2Vec2(12.9 * sign/tScale, 5.7 /tScale));
-            points.push(new b2Vec2( 9.3 * sign/tScale, -2.4 /tScale));
-            points.push(new b2Vec2(18.0 * sign/tScale, -4.5 /tScale));
-            points.push(new b2Vec2( 7.5 * sign/tScale, -11.1 /tScale));
-            return points;
+        private function createAxles(bodyDef:b2BodyDef):void {
+            boxDef = new b2PolygonDef();
+            boxDef.density = 1;
+            
+            car.axles[0] = world.CreateBody(bodyDef);
+     
+            boxDef.SetAsOrientedBox(0.4, 0.1, new b2Vec2(-1 - 0.6*Math.cos(Math.PI/3), -0.3 - 0.6*Math.sin(Math.PI/3)), Math.PI/3);
+            car.axles[0].CreateShape(boxDef);
+            car.axles[0].SetMassFromShapes();
+     
+            prismaticJointDef = new b2PrismaticJointDef();
+            prismaticJointDef.Initialize(car.carBody, car.axles[0], car.axles[0].GetWorldCenter(), new b2Vec2(Math.cos(Math.PI/3), Math.sin(Math.PI/3)));
+            prismaticJointDef.lowerTranslation = -0.3;
+            prismaticJointDef.upperTranslation = 0.5;
+            prismaticJointDef.enableLimit = true;
+            prismaticJointDef.enableMotor = true;
+     
+            car.springs[0] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint;
+     
+     
+            car.axles[1] = world.CreateBody(bodyDef);
+     
+            boxDef.SetAsOrientedBox(0.4, 0.1, new b2Vec2(1 + 0.6*Math.cos(-Math.PI/3), -0.3 + 0.6*Math.sin(-Math.PI/3)), -Math.PI/3);
+            car.axles[1].CreateShape(boxDef);
+            car.axles[1].SetMassFromShapes();
+     
+            prismaticJointDef.Initialize(car.carBody, car.axles[1], car.axles[1].GetWorldCenter(), new b2Vec2(-Math.cos(Math.PI/3), Math.sin(Math.PI/3)));
+     
+            car.springs[1] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint;
         }
         
-        private function createLegJoints(spider:Car, body1:b2Body, body2:b2Body, 
-                                         offset:b2Vec2, points:Array):void {
-            var djd:b2DistanceJointDef = new b2DistanceJointDef();
-            
-            var bodyDef:b2BodyDef = new b2BodyDef();
-            
-            djd.userData = shapeBuilder.buildLine(b2Math.AddVV(points[1], offset), b2Math.AddVV(points[4], offset), bodyDef, params);
-            djd.Initialize(body1, body2, b2Math.AddVV(points[1], offset), b2Math.AddVV(points[4], offset));
-            world.CreateJoint(djd);
-            
-            //djd.userData = shapeBuilder.buildLine(b2Math.AddVV(points[2], offset), b2Math.AddVV(points[3], offset), bodyDef, params);
-            djd.Initialize(body1, body2, b2Math.AddVV(points[2], offset), b2Math.AddVV(points[3], offset));
-            world.CreateJoint(djd);
-            
-            //djd.userData = shapeBuilder.buildLine(b2Math.AddVV(points[2], offset), b2Math.AddVV(spider.wheelAnchor, offset), bodyDef, params);
-            djd.Initialize(body1, spider.wheel, b2Math.AddVV(points[2], offset), b2Math.AddVV(spider.wheelAnchor, offset));
-            world.CreateJoint(djd);
-            
-            //djd.userData = shapeBuilder.buildLine(b2Math.AddVV(points[5], offset), b2Math.AddVV(spider.wheelAnchor, offset), bodyDef, params);
-            djd.Initialize(body2, spider.wheel, b2Math.AddVV(points[5], offset), b2Math.AddVV(spider.wheelAnchor, offset));
-            world.CreateJoint(djd);
-            
-            var rjd:b2RevoluteJointDef = new b2RevoluteJointDef();
-            
-            //djd.userData = shapeBuilder.buildLine(spider.chassis, b2Math.AddVV(points[3], offset), bodyDef, params);
-            rjd.Initialize(body2, spider.chassis, b2Math.AddVV(points[3], offset));
-            world.CreateJoint(rjd);   
-        }
+        private function createWheels(bodyDef:b2BodyDef):void {
 
-        private function vec2Point(pt:b2Vec2):Point {
-            return new Point(scale * pt.x, scale * pt.y);
+            circleDef = new b2CircleDef();
+            circleDef.radius = 0.7;
+            circleDef.density = 0.1;
+            circleDef.friction = 5;
+            circleDef.restitution = 0.2;
+            circleDef.filter.groupIndex = -1;
+     
+            for (var i:int = 0; i < 2; i++) {
+     
+                bodyDef = new b2BodyDef();
+                if (i == 0) {
+                    bodyDef.position.Set(car.axles[0].GetWorldCenter().x - 0.3 * Math.cos(Math.PI / 3), car.axles[0].GetWorldCenter().y - 0.3 * Math.sin(Math.PI / 3));
+                }
+                else {
+                    bodyDef.position.Set(car.axles[1].GetWorldCenter().x + 0.3 * Math.cos( -Math.PI / 3), car.axles[1].GetWorldCenter().y + 0.3 * Math.sin( -Math.PI / 3));
+                }
+                bodyDef.allowSleep = false;
+     
+                car.wheels[i] = world.CreateBody(bodyDef);
+                car.wheels[i].CreateShape(circleDef);
+                car.wheels[i].SetMassFromShapes();
+            }
+        }
+        
+        private function createJoints(bodyDef:b2BodyDef):void {
+            
+            revoluteJointDef = new b2RevoluteJointDef();
+            revoluteJointDef.enableMotor = true;
+     
+            revoluteJointDef.Initialize(car.axles[0], car.wheels[0], car.wheels[0].GetWorldCenter());
+            car.motors[0] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
+     
+            revoluteJointDef.Initialize(car.axles[1], car.wheels[1], car.wheels[1].GetWorldCenter());
+            car.motors[1] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
+             
+            // Set motor speeds. belongs in update
+            car.motors[0].SetMotorSpeed(10 * Math.PI * 0.5); // (input.isPressed(40) ? 1 : input.isPressed(38) ? -1 : 0));
+            car.motors[0].SetMaxMotorTorque(12);// input.isPressed(40) || input.isPressed(38) ? 17 : 0.5);
+     
+            car.motors[1].SetMotorSpeed(10 * Math.PI * 0.5); // (input.isPressed(40) ? 1 : input.isPressed(38) ? -1 : 0));
+            car.motors[1].SetMaxMotorTorque(12); // input.isPressed(40) || input.isPressed(38) ? 12 : 0.5);
+     
+            car.springs[0].SetMaxMotorForce(30 + Math.abs(800*Math.pow(car.springs[0].GetJointTranslation(), 2)));
+            //car.spring1.SetMotorSpeed(-4*Math.pow(spring1.GetJointTranslation(), 1));
+            car.springs[0].SetMotorSpeed((car.springs[0].GetMotorSpeed() - 10*car.springs[0].GetJointTranslation())*0.4);         
+     
+            car.springs[1].SetMaxMotorForce(20+Math.abs(800*Math.pow(car.springs[1].GetJointTranslation(), 2)));
+            car.springs[1].SetMotorSpeed(-4*Math.pow(car.springs[1].GetJointTranslation(), 1));
+     
+            car.carBody.ApplyTorque(30); // 30 * (input.isPressed(37) ? 1: input.isPressed(39) ? -1 : 0));
         }
     }
 }

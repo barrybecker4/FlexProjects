@@ -7,6 +7,7 @@ package com.becker.animation.box2d.builders
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.animation.sprites.AbstractShape;
     import com.becker.animation.sprites.Line;
     import com.becker.common.PhysicalParameters;
     
@@ -29,16 +30,44 @@ package com.becker.animation.box2d.builders
                 groupIndex:int = int.MAX_VALUE):b2Body {
             
             var boxDef:b2PolygonDef = new b2PolygonDef();
-            boxDef.SetAsBox(width, height);
             boxDef.density = density;
             boxDef.friction = friction;
             boxDef.restitution = restitution;
             if (groupIndex != int.MAX_VALUE) {
                 boxDef.filter.groupIndex = groupIndex;
             }
-            bodyDef.userData = new Rectangle(width * 2 * scale, height * 2 * scale);  
+            boxDef.SetAsBox(width, height);
+            bodyDef.userData = [new Rectangle(width * 2 * scale, height * 2 * scale)];  
             
-            return addShape(boxDef, bodyDef);  
+            return addShapes(boxDef, bodyDef);  
+        }
+        
+        public function buildCompoundBlock(orientedBlocks:Array, bodyDef:b2BodyDef, 
+                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+                groupIndex:int = int.MAX_VALUE):b2Body {
+                
+            var boxDef:b2PolygonDef = new b2PolygonDef();
+            boxDef.density = density;
+            boxDef.friction = friction;
+            boxDef.restitution = restitution;
+            if (groupIndex != int.MAX_VALUE) {
+                boxDef.filter.groupIndex = groupIndex;
+            }
+            
+            bodyDef.userData = [];
+            var body:b2Body = world.CreateBody(bodyDef);
+            
+            for each (var block:OrientedBox in orientedBlocks) {
+                boxDef.SetAsOrientedBox(block.width, block.height, block.center, block.rotation);
+                var shape:AbstractShape = new Rectangle(block.width * 2 * scale, block.height * 2 * scale);
+                canvas.addChild(shape);
+                bodyDef.userData.push(shape); 
+                body.CreateShape(boxDef);
+            }
+
+            body.SetMassFromShapes();    
+            
+            return body;  
         }
         
         public function buildBall(radius:Number, bodyDef:b2BodyDef, 
@@ -53,9 +82,9 @@ package com.becker.animation.box2d.builders
             if (groupIndex != int.MAX_VALUE) {
                 circleDef.filter.groupIndex = groupIndex;
             }
-            bodyDef.userData = new Circle(radius * scale);
+            bodyDef.userData = [new Circle(radius * scale)];
             
-            return addShape(circleDef, bodyDef);
+            return addShapes(circleDef, bodyDef);
         }
         
         public function buildPolygon(points:Array, bodyDef:b2BodyDef, 
@@ -80,9 +109,8 @@ package com.becker.animation.box2d.builders
                 polyDef.filter.groupIndex = groupIndex;
             }
             
-            
-            bodyDef.userData = new Polygon(vpoints, scale);
-            return addShape(polyDef, bodyDef); 
+            bodyDef.userData = [new Polygon(vpoints, scale)];
+            return addShapes(polyDef, bodyDef); 
         }
         
         public function buildLine(start:b2Vec2, stop:b2Vec2, bodyDef:b2BodyDef, 
@@ -102,9 +130,9 @@ package com.becker.animation.box2d.builders
             if (groupIndex != int.MAX_VALUE) {
                 lineDef.filter.groupIndex = groupIndex;
             }
-            bodyDef.userData = new Line(diff, scale);
+            bodyDef.userData = [new Line(diff, scale)];
             
-            return addShape(lineDef, bodyDef); 
+            return addShapes(lineDef, bodyDef); 
         }
         
         /** Different depending on whether we are passed b2Vec2 or Points */
