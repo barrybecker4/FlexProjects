@@ -65,21 +65,26 @@
             var params:PhysicalParameters = 
             new PhysicalParameters(densityStepper.value, frictionStepper.value, restitutionStepper.value);
             
-            app.setSimulation(sim,  params);  
+            app.setSimulation(sim, params);  
+            app.showDebugDrawing = debugCheckbox.selected;
         }   
         
         private function toggleAnimation():void {      
                         
             app.enableSimulation = !app.enableSimulation; 
-            app.showVectors = debugCheckbox.selected && app.enableSimulation;
             animateButton.label = app.enableSimulation ? PAUSE_LABEL : RESUME_LABEL;        
-        }      
+        }     
+        
+        private function toggleDebug():void {
+            app.showDebugDrawing = debugCheckbox.selected;
+        }
         
         private function restartAnimation():void {
              
             simulationSelected();
-            app.enableSimulation = true;     
-            animateButton.label = PAUSE_LABEL; 
+            if (!app.enableSimulation) {
+                toggleAnimation()
+            }
         }   
         
         private function fontSelected():void {
@@ -87,9 +92,8 @@
         }   
         
     ]]></mx:Script>
-    
+
     <mx:Binding source="gravityStepper.value" destination="app.gravity" />
-    <mx:Binding source="debugCheckbox.selected" destination="app.showVectors" />
     
     <mx:Panel title="Physics Simulation" width="100%" height="100%" 
               titleStyleName="actionShadedLargeFont"  styleName="{selectedFont}" >
@@ -127,7 +131,7 @@
                   </mx:HBox>
                   <mx:Spacer width="40" />
                   <mx:HBox>
-                      <mx:CheckBox id="debugCheckbox" label="Show vectors" selected="false" />
+                      <mx:CheckBox id="debugCheckbox" label="Show vectors" selected="false" click="toggleDebug()" />
                   </mx:HBox>
              </mx:HBox>
              
