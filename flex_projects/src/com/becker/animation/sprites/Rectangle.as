@@ -40,7 +40,7 @@ package  com.becker.animation.sprites {
             img.y = y - height/2.0;
             img.width = width;
             img.height = height;
-
+    
             graphics.lineStyle(0);
             //graphics.beginFill(color, 0.5);
             //var bitMap:BitMap = new Bitmap(new BitmapData(

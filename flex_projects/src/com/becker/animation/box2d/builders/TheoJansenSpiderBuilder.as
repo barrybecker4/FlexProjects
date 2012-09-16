@@ -47,7 +47,6 @@ package com.becker.animation.box2d.builders {
             
             // Set position in world space
             offset.Set(startX, startY);
-            //trace("initial position " + startX + " " + startY);
             
             var pivot:b2Vec2 = new b2Vec2(0.0, -WHEEL_RADIUS/T_SCALE);
             bodyDef.position = b2Math.AddVV(pivot, offset);
@@ -175,7 +174,7 @@ package com.becker.animation.box2d.builders {
             var rjd:b2RevoluteJointDef = new b2RevoluteJointDef();
             
             // don't show this because chassis and points[3] are on top of each other 
-            //trace("pider.chassis.GetLocalCenter()=" + spider.chassis.GetLocalCenter() + " points[3]=" + points[3]);
+            trace("spider.chassis.GetLocalCenter()=" + spider.chassis.GetLocalCenter() + " points[3]=" + points[3]);
             //rjd.userData = shapeBuilder.buildLine(spider.chassis.GetLocalCenter(), points[3], bodyDef, params);
             rjd.Initialize(segment2, spider.chassis, b2Math.AddVV(points[3], offset));
             world.CreateJoint(rjd);   

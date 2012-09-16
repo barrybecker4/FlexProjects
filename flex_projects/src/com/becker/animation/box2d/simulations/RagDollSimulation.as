@@ -20,6 +20,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.animation.box2d.builders.BasicShapeBuilder;
     import com.becker.common.PhysicalParameters;
     
     import com.becker.animation.box2d.builders.RagDollBuilder;
@@ -31,31 +32,21 @@ package com.becker.animation.box2d.simulations {
         private static const NUM_DOLLS:Number = 10;
         
         private var ragDollBuilder:RagDollBuilder;
+        private var shapeBuilder:BasicShapeBuilder;
         
         override public function initialize(world:b2World, canvas:UIComponent,
                                      params:PhysicalParameters):void {
             super.initialize(world, canvas, params);
+            shapeBuilder = new BasicShapeBuilder(world, canvas, scale);
             ragDollBuilder = new RagDollBuilder(world, canvas, scale);    
         }
         
         override public function addStaticElements():void {
-            // Add ground body
+            
             var bodyDef:b2BodyDef = new b2BodyDef();
             bodyDef.position.Set(20, 20);
             bodyDef.angle = 0.1;
-            var boxDef:b2PolygonDef = new b2PolygonDef();
-            boxDef.SetAsBox(20, 2);
-            boxDef.friction = params.friction;
-            boxDef.density = 0; // static bodies require zero density
-            
-            // Add sprite to body userData. The ground.
-            bodyDef.userData = new Rectangle(scale * 2 * 20, scale * 2 * 2); 
-            
-            var body:b2Body = world.CreateBody(bodyDef);
-            body.CreateShape(boxDef);
-            canvas.addChild(bodyDef.userData);
-                          
-            body.SetMassFromShapes();
+            shapeBuilder.buildBlock(20, 2, bodyDef, 0, params.friction, params.restitution);
         }
         
         override public function addDynamicElements():void {
