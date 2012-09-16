@@ -14,10 +14,10 @@ package com.becker.animation.sprites
         /**
          * assume 0 is the starting position
          */ 
-        public function Line(endX:Number, endY:Number, thickness:Number = 1.0, color:uint = 0xaa4400) {
+        public function Line(endPoint:Point, scale:Number, thickness:Number = 1.0, color:uint = 0xaa4400) {
             super(color)
-            this.width = endX;
-            this.height = endY;
+            this.width = endPoint.x * scale;
+            this.height = endPoint.y * scale;
             this.thickness = thickness;
            
             init();
@@ -28,8 +28,8 @@ package com.becker.animation.sprites
             graphics.lineStyle(thickness, color);
            
             graphics.moveTo(x, y);
-            var endX:int = x + width;
-            var endY:int = y + width;
+            var endX:int = x + Math.sqrt(width * width + height * height);
+            var endY:int = y;
             graphics.lineTo(endX, endY); 
             //graphics.drawCircle(endX, endY, 2);  
         }

@@ -22,6 +22,10 @@ package com.becker.animation.box2d.builders {
         private static const MOTOR_SPEED:Number = -2.0;
         private static const MOTOR_TORQUE:Number = 400.0;
         
+        private static const WHEEL_RADIUS:Number = 4.8;
+        private static const CHASSIS_WIDTH:Number = 7.5;
+        private static const CHASSIS_HEIGHT:Number = 3.0;
+        
         private var shapeBuilder:BasicShapeBuilder;
         private var params:PhysicalParameters;
         private var offset:b2Vec2;
@@ -43,16 +47,19 @@ package com.becker.animation.box2d.builders {
             
             // Set position in world space
             offset.Set(startX, startY);
-            trace("initial position " + startX + " " + startY);
+            //trace("initial position " + startX + " " + startY);
             
-            var pivot:b2Vec2 = new b2Vec2(0.0, -2.4/T_SCALE);
+            var pivot:b2Vec2 = new b2Vec2(0.0, -WHEEL_RADIUS/T_SCALE);
             bodyDef.position = b2Math.AddVV(pivot, offset);
-            var chassis:b2Body = shapeBuilder.buildBlock(7.5/T_SCALE, 3.0/T_SCALE, bodyDef, 1.0, params.friction, params.restitution, -1);
+            var chassis:b2Body = 
+                shapeBuilder.buildBlock(CHASSIS_WIDTH / T_SCALE, CHASSIS_HEIGHT / T_SCALE, 
+                                       bodyDef, 1.0, params.friction, params.restitution, -1);
               
             bodyDef.position = b2Math.AddVV(pivot, offset);
-            var wheel:b2Body = shapeBuilder.buildBall(4.8 / T_SCALE, bodyDef, 1.0, params.friction, params.restitution, -1);
+            var wheel:b2Body = 
+                shapeBuilder.buildBall(WHEEL_RADIUS / T_SCALE, bodyDef, 1.0, params.friction, params.restitution, -1);
             
-            var wheelAnchor:b2Vec2 = new b2Vec2(0.0, 2.4 / T_SCALE);
+            var wheelAnchor:b2Vec2 = new b2Vec2(0.0, 0.5 * WHEEL_RADIUS / T_SCALE);
             
             var spider:TheoJansenSpider = new TheoJansenSpider(chassis, wheel, wheelAnchor);
         
@@ -167,7 +174,9 @@ package com.becker.animation.box2d.builders {
             
             var rjd:b2RevoluteJointDef = new b2RevoluteJointDef();
             
-            rjd.userData = shapeBuilder.buildLine(spider.chassis.GetLocalCenter(), points[3], bodyDef, params);
+            // don't show this because chassis and points[3] are on top of each other 
+            //trace("pider.chassis.GetLocalCenter()=" + spider.chassis.GetLocalCenter() + " points[3]=" + points[3]);
+            //rjd.userData = shapeBuilder.buildLine(spider.chassis.GetLocalCenter(), points[3], bodyDef, params);
             rjd.Initialize(segment2, spider.chassis, b2Math.AddVV(points[3], offset));
             world.CreateJoint(rjd);   
         }

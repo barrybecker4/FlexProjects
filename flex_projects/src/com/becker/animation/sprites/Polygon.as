@@ -1,4 +1,5 @@
 package  com.becker.animation.sprites {
+    import Box2D.Common.Math.b2Vec2;
     import com.becker.common.Images;
     
     import flash.display.BitmapData;
@@ -38,7 +39,7 @@ package  com.becker.animation.sprites {
         private function initBounds(pts:Array):void {
             min = new Point(Number.MAX_VALUE, Number.MAX_VALUE);
             max = new Point(-Number.MAX_VALUE, -Number.MAX_VALUE);
-            for each (var pt:Point in pts) {
+            for each (var pt:Object in pts) {
                 
                 // @@ side effect : scale the points
                 pt.x *= scale;
@@ -73,8 +74,8 @@ package  com.becker.animation.sprites {
             poly.graphics.beginBitmapFill(bmd, matrix, true, true);              
             poly.graphics.moveTo(points[0].x, points[0].y);  
            
-            for (var i:int = 0; i < points.length; i++){  
-                 poly.graphics.lineTo(points[i].x, points[i].y);  
+            for (var i:int = 1; i < points.length; i++) {
+                poly.graphics.lineTo(points[i].x, points[i].y);  
             }  
 
             poly.graphics.endFill();                                          

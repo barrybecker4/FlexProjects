@@ -82,9 +82,9 @@ public class BoxWorld extends UIComponent implements Animatible {
         addEventListener(ResizeEvent.RESIZE, resized, false, 0, true);
                
         world.SetContactListener(new ContactListener());    
-        if (showDebug) {    
-            addDebugDrawing();
-        }
+        //if (showDebug) {    
+        //    addDebugDrawing();
+        //}
         
         simulation.addStaticElements(); 
         simulation.addDynamicElements();       
@@ -153,7 +153,7 @@ public class BoxWorld extends UIComponent implements Animatible {
         } 
     }
     
-    /** Go through joint list and update geometry */
+    /** Go through joint list and render corresponding geometry */
     private function drawAllJoints():void {
         
         for (var joint:b2Joint = world.m_jointList; joint; joint = joint.m_next) {
@@ -162,14 +162,14 @@ public class BoxWorld extends UIComponent implements Animatible {
                 var line:Line = joint.m_userData.m_userData as Line;
                 if (line) {
                     
-                    //var endPt:Point = new Point(joint.GetAnchor2().x * simulation.scale, joint.GetAnchor2().y * simulation.scale);
                     line.x = joint.GetAnchor1().x * simulation.scale;
                     line.y = joint.GetAnchor1().y * simulation.scale;
                     
-                    var angle:Number = Math.atan2((joint.GetAnchor2().y - joint.GetAnchor1().y), (joint.GetAnchor2().x - joint.GetAnchor1().x));
-                    //var angle:Number = Math.atan2((joint.GetAnchor2().y - joint.GetAnchor1().y), (joint.GetAnchor2().x - joint.GetAnchor1().x));
+                    var numer:Number = joint.GetAnchor2().y - joint.GetAnchor1().y;
+                    var denom:Number = joint.GetAnchor2().x - joint.GetAnchor1().x;
+                    var angle:Number = Math.atan2(numer, denom);
+                    //trace("angle=" + angle + " numer=" + numer +" denom=" + denom);
                     line.rotation = angle * Util.RAD_TO_DEG;
-                    //trace(" rot=" + line.rotation);
                 }
             }
         }
@@ -187,7 +187,7 @@ public class BoxWorld extends UIComponent implements Animatible {
         return new b2World(worldAABB, gravityVec, doSleep);
     }
       
-    public function set showVectors(show:Boolean):void {
+    public function set showDebugDrawing(show:Boolean):void {
         if (show) {
             addDebugDrawing();
         }
