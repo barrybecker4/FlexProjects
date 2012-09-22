@@ -149,7 +149,6 @@ public class BoxWorld extends UIComponent implements Animatible {
             {
                 shape.x = bb.GetPosition().x * simulation.scale;
                 shape.y = bb.GetPosition().y * simulation.scale;
-                var xf:b2XForm = bb.GetXForm();
                 shape.rotation = bb.GetAngle() * Util.RAD_TO_DEG;
             }
         } 

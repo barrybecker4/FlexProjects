@@ -59,7 +59,7 @@ package com.becker.animation.box2d.builders
             
             for each (var block:OrientedBox in orientedBlocks) {
                 boxDef.SetAsOrientedBox(block.width, block.height, block.center, block.rotation);
-                var shape:AbstractShape = new Rectangle(block.width * 2 * scale, block.height * 2 * scale);
+                var shape:Rectangle = new Rectangle(block.width * 2 * scale, block.height * 2 * scale);
                 canvas.addChild(shape);
                 bodyDef.userData.push(shape); 
                 body.CreateShape(boxDef);

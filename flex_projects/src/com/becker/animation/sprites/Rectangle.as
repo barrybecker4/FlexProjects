@@ -1,4 +1,5 @@
 package  com.becker.animation.sprites {
+    import Box2D.Common.Math.b2Vec2;
     import com.becker.common.Images;
     
     import flash.display.DisplayObject;
@@ -13,6 +14,7 @@ package  com.becker.animation.sprites {
     public class Rectangle extends AbstractShape {
         
         private var img:DisplayObject;
+        
         
         public function Rectangle(width:Number, height:Number, color:uint = 0xaa77ff) {
             super(color)
@@ -37,15 +39,15 @@ package  com.becker.animation.sprites {
    
         private function init():void {         
             img.x = x - width/2.0;
-            img.y = y - height/2.0;
+            img.y = y - height / 2.0;
             img.width = width;
             img.height = height;
+            img.alpha = 0.8;
     
             graphics.lineStyle(0);
             //graphics.beginFill(color, 0.5);
             //var bitMap:BitMap = new Bitmap(new BitmapData(
             //graphics.beginBitmapFill(bitMap); 
-            // trace("scale" + scale + " width="+ width + " unscaledWidth="+ unscaledWidth);
             graphics.drawRect(x - width/2.0, y - height/2.0, width, height);
             //graphics.drawEllipse(xpos - width/3.0, ypos - height/3.0, width/4.0, height/4.0);
             //graphics.endFill();   
