@@ -24,10 +24,10 @@ public class AvailableSimulations {
     /** some different demos to select from */
      public static const AVAILABLE_SIMULATIONS:Array = [
            "Hello World", 
-           "Car",
            "Rag Doll", 
            "Bridge", 
-           "Theo Jansen Spider" 
+           "Theo Jansen Spider",
+           "Car",
      ]; 
     
     /**
@@ -42,13 +42,13 @@ public class AvailableSimulations {
             case AVAILABLE_SIMULATIONS[0]: 
                 simulation = new HelloWorldSimulation(); break;
             case AVAILABLE_SIMULATIONS[1]: 
-                simulation = new CarSimulation(); break;
-            case AVAILABLE_SIMULATIONS[2]: 
                 simulation = new RagDollSimulation(); break;
-            case AVAILABLE_SIMULATIONS[3]: 
+            case AVAILABLE_SIMULATIONS[2]: 
                 simulation = new BridgeSimulation(); break;
-            case AVAILABLE_SIMULATIONS[4]: 
+            case AVAILABLE_SIMULATIONS[3]: 
                 simulation = new TheoJansenSimulation(); break;
+            case AVAILABLE_SIMULATIONS[4]: 
+                simulation = new CarSimulation(); break;
             default: throw new Error("Unexpected sim :" + simulationName);
         }
         
