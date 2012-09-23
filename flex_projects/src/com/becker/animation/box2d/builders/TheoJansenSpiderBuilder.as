@@ -1,9 +1,11 @@
 package com.becker.animation.box2d.builders {
     
-    import Box2D.Collision.Shapes.b2CircleDef;
-    import Box2D.Collision.Shapes.b2PolygonDef;
+    import Box2D.Collision.Shapes.b2CircleShape;
+    import Box2D.Collision.Shapes.b2PolygonShape;
     import Box2D.Common.Math.b2Math;
+    import Box2D.Common.Math.b2Transform;
     import Box2D.Common.Math.b2Vec2;
+    import Box2D.Common.Math.b2Mat22;
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
@@ -42,6 +44,8 @@ package com.becker.animation.box2d.builders {
                                       params:PhysicalParameters):TheoJansenSpider {           
 
             var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_dynamicBody;
+                        
             this.offset = new b2Vec2();
             this.params = params;
             
@@ -74,11 +78,13 @@ package com.becker.animation.box2d.builders {
             CreateLeg(spider, -1.0);
             CreateLeg(spider, 1.0);
             
-            spider.wheel.SetXForm(spider.wheel.GetPosition(), AbstractBuilder.degreesToRadians(120.0));
+            spider.wheel.SetTransform(
+                new b2Transform(spider.wheel.GetPosition(), b2Mat22.FromAngle(AbstractBuilder.degreesToRadians(120.0))));
             CreateLeg(spider, -1.0);
             CreateLeg(spider, 1.0);
             
-            spider.wheel.SetXForm(spider.wheel.GetPosition(), AbstractBuilder.degreesToRadians(-120.0));
+            spider.wheel.SetTransform(
+                new b2Transform(spider.wheel.GetPosition(), b2Mat22.FromAngle(AbstractBuilder.degreesToRadians(-120.0))));
             CreateLeg(spider, -1.0);
             CreateLeg(spider, 1.0);
         }
@@ -125,6 +131,7 @@ package com.becker.animation.box2d.builders {
             }
 
             var bodyDef:b2BodyDef = new b2BodyDef(); 
+            bodyDef.type = b2Body.b2_dynamicBody;
             
             bodyDef.position.SetV(offset);
             bodyDef.angularDamping = 10.0;
@@ -154,6 +161,7 @@ package com.becker.animation.box2d.builders {
                                              
             var djd:b2DistanceJointDef = new b2DistanceJointDef();
             var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_dynamicBody;
             
             djd.userData = shapeBuilder.buildLine(points[1], points[4], bodyDef, params);
             djd.Initialize(segment1, segment2, b2Math.AddVV(points[1], offset), b2Math.AddVV(points[4], offset));

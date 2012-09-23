@@ -44,7 +44,8 @@ package com.becker.animation.box2d.simulations {
         
         override public function addStaticElements():void {
                         
-            var bodyDef:b2BodyDef = new b2BodyDef();         
+            var bodyDef:b2BodyDef = new b2BodyDef();   
+            bodyDef.type = b2Body.b2_staticBody;
             bodyDef.position.Set(28, 23);
             // a pivot point for the see-saw plank
             staticCircle = builder.buildBall(1, bodyDef, 0, params.friction, params.restitution);
@@ -54,6 +55,7 @@ package com.becker.animation.box2d.simulations {
             
             // add a big see-saw attached to the static circle for the shapes to land on.
             var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_dynamicBody;
             bodyDef.position.Set(28, 20);
             bodyDef.angle = -0.1;
             var groundBlock:b2Body = builder.buildBlock(24, 2, bodyDef, params.density, params.friction, params.restitution);

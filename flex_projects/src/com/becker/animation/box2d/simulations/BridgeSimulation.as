@@ -45,17 +45,19 @@ package com.becker.animation.box2d.simulations {
     
         override public function addDynamicElements():void {
             
-            addBridge();
-            createBridgeCrap();
+            var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_dynamicBody;
+            
+            addBridge(bodyDef);
+            createBridgeCrap(bodyDef);
         }
         
         
         /**
          * Bridge
          */
-        private function addBridge():void {
+        private function addBridge(bodyDef:b2BodyDef):void {
             
-            var bodyDef:b2BodyDef = new b2BodyDef();
             var body:b2Body;
             //var body:b2Body = builder.buildBlock(24/scale, 5/scale, bodyDef, 20.0, 0.2, 0.1);  
             
@@ -85,16 +87,15 @@ package com.becker.animation.box2d.simulations {
         /**
          * Spawn in a bunch of crap to fall on the bridge.
          */
-        private function createBridgeCrap():void {
+        private function createBridgeCrap(bodyDef:b2BodyDef):void {
 
-            addBlocks(6);
-            addBalls(5);
-            createPolygons(15);
+            addBlocks(6, bodyDef);
+            addBalls(5, bodyDef);
+            createPolygons(15, bodyDef);
         }       
         
-        private function addBlocks(num:int):void  {
+        private function addBlocks(num:int, bodyDef:b2BodyDef):void  {
             
-            var bodyDef:b2BodyDef = new b2BodyDef();
             for (var i:int = 0; i < num; i++){
                 
                 bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
@@ -103,9 +104,8 @@ package com.becker.animation.box2d.simulations {
             }
         }
         
-        private function addBalls(num:int):void  {
+        private function addBalls(num:int, bodyDef:b2BodyDef):void  {
             
-            var bodyDef:b2BodyDef = new b2BodyDef();
             for (var i:int = 0; i < num; i++) {
                 bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
                 bodyDef.angle = Math.random() * Math.PI;           
@@ -113,9 +113,8 @@ package com.becker.animation.box2d.simulations {
             }
         }
         
-        private function createPolygons(num:int):void {
+        private function createPolygons(num:int, bodyDef:b2BodyDef):void {
             
-            var bodyDef:b2BodyDef = new b2BodyDef();
             for (var i:int = 0; i < num; i++){
                 createRandomPolygon(bodyDef);
             }

@@ -37,7 +37,8 @@ public class BoxWorld extends UIComponent implements Animatible {
     
     private var simulation:Simulation;
     
-    private static const NUM_ITERATIONS:int = 10;
+    private static const VELOCITY_ITERATIONS:int = 10;
+    private static const STEP_ITERATIONS:int = 5;
     private static const TIME_STEP:Number = 1.0/20.0;
     private static const ORIG_WIDTH:int = 1200;
     
@@ -133,7 +134,8 @@ public class BoxWorld extends UIComponent implements Animatible {
             firstTime = false;
         }
         
-        world.Step(TIME_STEP, NUM_ITERATIONS);       
+        world.Step(TIME_STEP, VELOCITY_ITERATIONS, STEP_ITERATIONS); 
+        world.ClearForces();
         
         drawAllBodies();
         drawAllJoints();
@@ -143,9 +145,9 @@ public class BoxWorld extends UIComponent implements Animatible {
     
     /** Go through body list and update sprite positions/rotations */
     private function drawAllBodies():void {
-        for (var bb:b2Body = world.m_bodyList; bb; bb = bb.m_next) {
+        for (var bb:b2Body = world.GetBodyList(); bb; bb = bb.GetNext()) {
            
-            for  each(var shape:AbstractShape in bb.m_userData)
+            for  each(var shape:AbstractShape in bb.GetUserData())
             {
                 shape.x = bb.GetPosition().x * simulation.scale;
                 shape.y = bb.GetPosition().y * simulation.scale;
@@ -157,16 +159,16 @@ public class BoxWorld extends UIComponent implements Animatible {
     /** Go through joint list and render corresponding geometry */
     private function drawAllJoints():void {
         
-        for (var joint:b2Joint = world.m_jointList; joint; joint = joint.m_next) {
+        for (var joint:b2Joint = world.GetJointList(); joint; joint = joint.GetNext()) {
             
-            if (joint.m_userData) {
-                for each (var line:Line in joint.m_userData.m_userData ) {
+            if (joint.GetUserData()) {
+                for each (var line:Line in joint.GetUserData().GetUserData() ) {
        
-                    line.x = joint.GetAnchor1().x * simulation.scale;
-                    line.y = joint.GetAnchor1().y * simulation.scale;
+                    line.x = joint.GetAnchorA().x * simulation.scale;
+                    line.y = joint.GetAnchorB().y * simulation.scale;
                     
-                    var numer:Number = joint.GetAnchor2().y - joint.GetAnchor1().y;
-                    var denom:Number = joint.GetAnchor2().x - joint.GetAnchor1().x;
+                    var numer:Number = joint.GetAnchorB().y - joint.GetAnchorA().y;
+                    var denom:Number = joint.GetAnchorB().x - joint.GetAnchorB().x;
                     var angle:Number = Math.atan2(numer, denom);
                     line.rotation = angle * Util.RAD_TO_DEG;
                 }
@@ -176,14 +178,10 @@ public class BoxWorld extends UIComponent implements Animatible {
    
    
     private function createWorld():b2World {
-        // Create world AABB
-        var worldAABB:b2AABB = new b2AABB();
-        worldAABB.lowerBound.Set(-100.0, -100.0);
-        worldAABB.upperBound.Set(100.0, 100.0);
         
         var gravityVec:b2Vec2 = new b2Vec2(0.0, gravity);
         var doSleep:Boolean = true;
-        return new b2World(worldAABB, gravityVec, doSleep);
+        return new b2World(gravityVec, doSleep);
     }
       
     public function set showDebugDrawing(show:Boolean):void {
@@ -202,11 +200,11 @@ public class BoxWorld extends UIComponent implements Animatible {
             var dbgDraw:b2DebugDraw = new b2DebugDraw();
             debugSprite = new Sprite();
             addChild(debugSprite);
-            dbgDraw.m_sprite = debugSprite;
-            dbgDraw.m_drawScale = simulation.scale;
-            dbgDraw.m_fillAlpha = 0.4;
-            dbgDraw.m_lineThickness = 2.0;
-            dbgDraw.m_drawFlags = b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit; //0xFFFFFFFF;
+            dbgDraw.SetSprite(debugSprite);
+            dbgDraw.SetDrawScale(simulation.scale);
+            dbgDraw.SetFillAlpha(0.4);
+            dbgDraw.SetLineThickness(2.0);
+            dbgDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit); //0xFFFFFFFF;
             world.SetDebugDraw(dbgDraw);
             world.DrawDebugData();
             showDebug = true;

@@ -1,12 +1,13 @@
 package com.becker.animation.box2d.builders {
     
-    import Box2D.Collision.Shapes.b2CircleDef;
-    import Box2D.Collision.Shapes.b2PolygonDef;
+    import Box2D.Collision.Shapes.b2CircleShape;
+    import Box2D.Collision.Shapes.b2PolygonShape;
     import Box2D.Common.Math.b2Math;
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.Joints.b2DistanceJointDef;
     import Box2D.Dynamics.Joints.b2PrismaticJoint;
     import Box2D.Dynamics.Joints.b2PrismaticJointDef;
@@ -27,12 +28,11 @@ package com.becker.animation.box2d.builders {
         private static const MOTOR_TORQUE:Number = 400.0;
         
         private var shapeBuilder:BasicShapeBuilder;
-        private var params:PhysicalParameters;
-        
+        private var params:PhysicalParameters;    
         
         // temporary variables for adding new bodies 
-        private var boxDef: b2PolygonDef;
-        private var circleDef: b2CircleDef;
+        private var boxDef: b2FixtureDef;
+        private var circleDef: b2FixtureDef;
         private var revoluteJointDef: b2RevoluteJointDef;
         private var prismaticJointDef: b2PrismaticJointDef;
         private var car:Car;
@@ -52,6 +52,8 @@ package com.becker.animation.box2d.builders {
                   
             // add cart //
             var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_dynamicBody;
+            
             bodyDef.position.Set(startX, startY);
             
             createCarBody(bodyDef);
@@ -73,14 +75,17 @@ package com.becker.animation.box2d.builders {
         }
         
         private function createAxles(bodyDef:b2BodyDef):void {
-            boxDef = new b2PolygonDef();
+            boxDef = new b2FixtureDef();
             boxDef.density = 1;
             
             car.axles[0] = world.CreateBody(bodyDef);
      
-            boxDef.SetAsOrientedBox(0.4, 0.1, new b2Vec2(-1 - 0.6*Math.cos(Math.PI/3), -0.3 - 0.6*Math.sin(Math.PI/3)), Math.PI/3);
-            car.axles[0].CreateShape(boxDef);
-            car.axles[0].SetMassFromShapes();
+            var poly:b2PolygonShape = new b2PolygonShape();
+            poly.SetAsOrientedBox(0.4, 0.1, new b2Vec2(-1 - 0.6*Math.cos(Math.PI/3), -0.3 - 0.6*Math.sin(Math.PI/3)), Math.PI/3);
+            boxDef.shape = poly;
+            
+            car.axles[0].CreateFixture(boxDef);
+            car.axles[0].ResetMassData();
      
             prismaticJointDef = new b2PrismaticJointDef();
             prismaticJointDef.Initialize(car.carBody, car.axles[0], car.axles[0].GetWorldCenter(), new b2Vec2(Math.cos(Math.PI/3), Math.sin(Math.PI/3)));
@@ -93,10 +98,13 @@ package com.becker.animation.box2d.builders {
      
      
             car.axles[1] = world.CreateBody(bodyDef);
-     
-            boxDef.SetAsOrientedBox(0.4, 0.1, new b2Vec2(1 + 0.6*Math.cos(-Math.PI/3), -0.3 + 0.6*Math.sin(-Math.PI/3)), -Math.PI/3);
-            car.axles[1].CreateShape(boxDef);
-            car.axles[1].SetMassFromShapes();
+            
+            poly = new b2PolygonShape();
+            poly.SetAsOrientedBox(0.4, 0.1, new b2Vec2(1 + 0.6 * Math.cos( -Math.PI / 3), -0.3 + 0.6 * Math.sin( -Math.PI / 3)), -Math.PI / 3);
+            boxDef.shape = poly;
+            
+            car.axles[1].CreateFixture(boxDef);
+            car.axles[1].ResetMassData();
      
             prismaticJointDef.Initialize(car.carBody, car.axles[1], car.axles[1].GetWorldCenter(), new b2Vec2(-Math.cos(Math.PI/3), Math.sin(Math.PI/3)));
      
@@ -105,16 +113,15 @@ package com.becker.animation.box2d.builders {
         
         private function createWheels(bodyDef:b2BodyDef):void {
 
-            circleDef = new b2CircleDef();
-            circleDef.radius = 0.7;
+            circleDef = new b2FixtureDef();
             circleDef.density = 0.1;
             circleDef.friction = 5;
             circleDef.restitution = 0.2;
             circleDef.filter.groupIndex = -1;
+            circleDef.shape = new b2CircleShape(0.7);
      
             for (var i:int = 0; i < 2; i++) {
      
-                bodyDef = new b2BodyDef();
                 if (i == 0) {
                     bodyDef.position.Set(car.axles[0].GetWorldCenter().x - 0.3 * Math.cos(Math.PI / 3), car.axles[0].GetWorldCenter().y - 0.3 * Math.sin(Math.PI / 3));
                 }
@@ -124,8 +131,8 @@ package com.becker.animation.box2d.builders {
                 bodyDef.allowSleep = false;
      
                 car.wheels[i] = world.CreateBody(bodyDef);
-                car.wheels[i].CreateShape(circleDef);
-                car.wheels[i].SetMassFromShapes();
+                car.wheels[i].CreateFixture(circleDef);
+                car.wheels[i].ResetMassData();
             }
         }
         

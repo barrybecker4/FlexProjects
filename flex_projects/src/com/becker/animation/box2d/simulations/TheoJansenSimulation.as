@@ -1,5 +1,6 @@
 package com.becker.animation.box2d.simulations {
     
+    import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
@@ -28,6 +29,7 @@ package com.becker.animation.box2d.simulations {
             
             // Add ground body
             var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_staticBody;
             
             bodyDef.position.Set(30, 30);
             bodyDef.angle = -0.05;
@@ -38,13 +40,15 @@ package com.becker.animation.box2d.simulations {
         }
         
         override public function addDynamicElements():void {
-            
+              
             addRandomCrap();            
             spiderBuilder.buildInstance(25, 15, params);
         }
            
         private function addRandomCrap():void {
             var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_dynamicBody;
+            
             addSmallBalls(40, bodyDef);                       
             addBallsAndBlocks(6, bodyDef);
         } 
