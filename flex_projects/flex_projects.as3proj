@@ -17,7 +17,7 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
-    <class path="..\Box2DLib\bin" />
+    <class path="..\Box2DLib\Build\FlashDevelop\bin" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -52,7 +52,7 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="..\Box2DLib\bin\Box2DLib.swc" />
+    <element path="..\Box2DLib\Build\FlashDevelop\bin\Box2DFlashAS3.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

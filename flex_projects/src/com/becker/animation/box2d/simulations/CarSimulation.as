@@ -1,5 +1,6 @@
 package com.becker.animation.box2d.simulations {
     
+    import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
@@ -31,10 +32,11 @@ package com.becker.animation.box2d.simulations {
             
             bodyDef.position.Set(30, 30);
             bodyDef.angle = -0.05;
-            builder.buildBlock(35, 2, bodyDef, 0, params.friction, params.restitution);
+            bodyDef.type =  b2Body.b2_staticBody;
+            builder.buildBlock(35, 2, bodyDef, 0.5, params.friction, params.restitution);
             
             bodyDef.position.Set(61, 26);
-            builder.buildBlock(1.0, 0.4, bodyDef, 0, params.friction, params.restitution);
+            builder.buildBlock(1.0, 0.4, bodyDef, 0.5, params.friction, params.restitution);
         }
         
         override public function addDynamicElements():void {

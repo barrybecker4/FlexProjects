@@ -86,21 +86,24 @@ public class MouseInteractor {
     }
     
     private function startMouseDrag(timeStep:Number):void {
-        var body:b2Body = GetBodyAtMouse();
-        if (body)
+        GetBodyAtMouse(mouseDragCallback);
+    }
+    
+    private function mouseDragCallback(fixture:b2Fixture):void {
+        if (fixture)
         {
-            draggedBody = body;
+            draggedBody = getBodyFromFixture(fixture);
             if (!mouseJoint) {
                 var md:b2MouseJointDef = new b2MouseJointDef();
                 
-                md.body1 = world.GetGroundBody();
-                md.body2 = draggedBody;
+                md.bodyA = world.GetGroundBody();
+                md.bodyB = draggedBody;
                 md.target.Set(mouseWorldPhys.x, mouseWorldPhys.y);
                 md.maxForce = 300.0 * draggedBody.GetMass();
-                md.timeStep = timeStep;
+                //md.timeStep = timeStep;
                 mouseJoint = world.CreateJoint(md) as b2MouseJoint;
                 
-                draggedBody.WakeUp(); 
+                draggedBody.SetAwake(true); // WakeUp(); 
             }     
         }
     }
@@ -130,23 +133,25 @@ public class MouseInteractor {
         g.lineTo(end.x, end.y);
         g.drawCircle(end.x, end.y, 4);
     }
-            
+          
+    /** on mouse press */
     public function MouseDestroy():void{
-        // mouse press
+
         if (!Input.mouseDown && Input.isKeyPressed(68/*D*/)){
-            
-            var body:b2Body = GetBodyAtMouse(true);
-            
-            if (body)
-            {
-                owner.removeChild(body.GetUserData());
-                world.DestroyBody(body);
-                return;
-            }
+            GetBodyAtMouse(destroyCallback);
         }
     }   
     
-    public function GetBodyAtMouse(includeStatic:Boolean=false):b2Body {
+    private function destroyCallback(fixture:b2Fixture):void {
+        var body:b2Body = getBodyFromFixture(fixture);
+        if (body)
+        {
+            owner.removeChild(body.GetUserData());
+            world.DestroyBody(body);
+        }
+    }
+    
+    private function GetBodyAtMouse(queryCallback:Function):void {
         // Make a small box.
         mousePVec.Set(mouseWorldPhys.x, mouseWorldPhys.y);
         var aabb:b2AABB = new b2AABB();
@@ -156,22 +161,19 @@ public class MouseInteractor {
         // Query the world for overlapping shapes.
         var k_maxCount:int = 10;
         var shapes:Array = new Array();
-        var count:int = world.Query(aabb, shapes, k_maxCount);
+        world.QueryAABB(queryCallback, aabb);
+    } 
+    
+    public function getBodyFromFixture(fixture:b2Fixture):b2Body {
         var body:b2Body = null;
-        for (var i:int = 0; i < count; ++i) {
+        if (fixture) {
             
-            if (b2Body(shapes[i].GetBody()).IsStatic() == false || includeStatic) {
+            if (b2Body(fixture.GetBody()).GetType() != b2Body.b2_staticBody) {
                 
-                var tShape:b2Shape = shapes[i] as b2Shape;
-                var inside:Boolean = tShape.TestPoint(tShape.GetBody().GetXForm(), mousePVec);
-                if (inside)
-                {
-                    body = tShape.GetBody();
-                    break;
-                }
+                body = fixture.GetBody();
             }
         }
         return body;
-    } 
+    }
 }
 }

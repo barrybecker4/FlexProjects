@@ -31,7 +31,10 @@ These demos make use of Box2DAS for physically based behavior.
       - Right click on Games.mxml (or whichever you set as the Main app) and run.
 	  	  
    FlashDevelop -
-      - Need to have a java 1.6 jre installed and configure jvm.config to use it.
+      - To build the SWC library you will need to get the ExportSWC plugin 
+        (http://flashdevelop.org/community/viewtopic.php?f=4&t=2987)
+      - Need to have a java 1.6 jre installed and configure jvm.config to use it. 
+        (see http://flashdevelop.org/wikidocs/index.php?title=AS3&oldid=2357#Troubleshooting_problems_using_the_Flex_SDK)
 	  - May need to Download msvcr71.dll and place in Windows/System32
 	  - Run FlashDevelop and open flex_projects/flex_projects.as3proj
       - Press F5 (Project | Test Project) to build and run the Games.mxml

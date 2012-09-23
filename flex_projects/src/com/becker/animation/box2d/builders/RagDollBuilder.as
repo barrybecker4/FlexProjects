@@ -1,6 +1,6 @@
 package com.becker.animation.box2d.builders {
     
-    import Box2D.Collision.Shapes.b2PolygonDef;
+    import Box2D.Collision.Shapes.b2PolygonShape;
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
     import Box2D.Dynamics.b2Body;
@@ -24,11 +24,12 @@ package com.becker.animation.box2d.builders {
        
         public function buildInstance(startX:Number, startY:Number, 
                             params:PhysicalParameters):RagDoll  {           
-            var bodyDef:b2BodyDef;    
-            var box:b2PolygonDef = new b2PolygonDef();      
+            var bodyDef:b2BodyDef;        
             
             // Head
             bodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_dynamicBody;
+            
             bodyDef.position.Set(startX / scale, startY / scale);
             var head:b2Body = shapeBuilder.buildBall(12.5 / scale, bodyDef, 1.0, 0.4, 0.3);
             head.ApplyImpulse(new b2Vec2(Math.random() * 10 - 5, Math.random() * 10 - 5), head.GetWorldCenter());

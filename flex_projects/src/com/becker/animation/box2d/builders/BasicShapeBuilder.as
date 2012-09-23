@@ -1,12 +1,14 @@
 package com.becker.animation.box2d.builders
 {
-    import Box2D.Collision.Shapes.b2CircleDef;
-    import Box2D.Collision.Shapes.b2PolygonDef;
-    import Box2D.Collision.Shapes.b2ShapeDef;
+    import Box2D.Collision.b2AABB;
+    import Box2D.Collision.Shapes.b2CircleShape;
+    import Box2D.Collision.Shapes.b2PolygonShape;
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
+    import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
+    import Box2D.Dynamics.b2FixtureDef;
     import com.becker.animation.sprites.AbstractShape;
     import com.becker.animation.sprites.Line;
     import com.becker.common.PhysicalParameters;
@@ -29,14 +31,16 @@ package com.becker.animation.box2d.builders
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
                 groupIndex:int = int.MAX_VALUE):b2Body {
             
-            var boxDef:b2PolygonDef = new b2PolygonDef();
+            var boxDef:b2FixtureDef = new b2FixtureDef();
             boxDef.density = density;
             boxDef.friction = friction;
             boxDef.restitution = restitution;
             if (groupIndex != int.MAX_VALUE) {
                 boxDef.filter.groupIndex = groupIndex;
             }
-            boxDef.SetAsBox(width, height);
+            var shape:b2PolygonShape = new b2PolygonShape();
+            shape.SetAsBox(width, height);
+            boxDef.shape = shape;
             bodyDef.userData = [new Rectangle(width * 2 * scale, height * 2 * scale)];  
             
             return addShapes(boxDef, bodyDef);  
@@ -46,7 +50,7 @@ package com.becker.animation.box2d.builders
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
                 groupIndex:int = int.MAX_VALUE):b2Body {
                 
-            var boxDef:b2PolygonDef = new b2PolygonDef();
+            var boxDef:b2FixtureDef = new b2FixtureDef();
             boxDef.density = density;
             boxDef.friction = friction;
             boxDef.restitution = restitution;
@@ -58,14 +62,16 @@ package com.becker.animation.box2d.builders
             var body:b2Body = world.CreateBody(bodyDef);
             
             for each (var block:OrientedBox in orientedBlocks) {
-                boxDef.SetAsOrientedBox(block.width, block.height, block.center, block.rotation);
+                var blockShape:b2PolygonShape = new b2PolygonShape();
+                blockShape.SetAsOrientedBox(block.width, block.height, block.center, block.rotation);
                 var shape:Rectangle = new Rectangle(block.width * 2 * scale, block.height * 2 * scale);
                 canvas.addChild(shape);
                 bodyDef.userData.push(shape); 
-                body.CreateShape(boxDef);
+                boxDef.shape = blockShape;
+                body.CreateFixture(boxDef);
             }
 
-            body.SetMassFromShapes();    
+            body.ResetMassData();    
             
             return body;  
         }
@@ -74,14 +80,15 @@ package com.becker.animation.box2d.builders
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
                 groupIndex:int = int.MAX_VALUE):b2Body { 
             
-            var circleDef:b2CircleDef = new b2CircleDef();
-            circleDef.radius = radius;
+            var circleDef:b2FixtureDef = new b2FixtureDef();
+            //circleDef.radius = radius;
             circleDef.density = density;
             circleDef.friction = friction;
             circleDef.restitution = restitution;
             if (groupIndex != int.MAX_VALUE) {
                 circleDef.filter.groupIndex = groupIndex;
             }
+            circleDef.shape = new b2CircleShape(radius);
             bodyDef.userData = [new Circle(radius * scale)];
             
             return addShapes(circleDef, bodyDef);
@@ -95,13 +102,7 @@ package com.becker.animation.box2d.builders
                                          
             var vpoints:Array = getPointsFromArray(points);
             
-            var polyDef:b2PolygonDef = new b2PolygonDef();
-            polyDef.vertexCount = vpoints.length;
-            
-            for (var i:int = 0; i < points.length; i++) {
-                polyDef.vertices[i].Set(vpoints[i].x, vpoints[i].y);
-            }
-
+            var polyDef:b2FixtureDef = new b2FixtureDef();
             polyDef.density = density;
             polyDef.friction = friction;
             polyDef.restitution = restitution;
@@ -109,6 +110,15 @@ package com.becker.animation.box2d.builders
                 polyDef.filter.groupIndex = groupIndex;
             }
             
+            var poly:b2PolygonShape = new b2PolygonShape();
+            var verts:Array = []
+            
+            for (var i:int = 0; i < points.length; i++) {
+                verts.push(new b2Vec2(vpoints[i].x, vpoints[i].y));
+            }
+            poly.SetAsArray(verts, vpoints.length);
+            polyDef.shape = poly;
+           
             bodyDef.userData = [new Polygon(vpoints, scale)];
             return addShapes(polyDef, bodyDef); 
         }
@@ -117,20 +127,23 @@ package com.becker.animation.box2d.builders
                                   params:PhysicalParameters,
                                   groupIndex:int = int.MAX_VALUE):b2Body {
    
-            var lineDef:b2PolygonDef = new b2PolygonDef();
-            lineDef.vertexCount = 2;
-                 
-            lineDef.vertices[0].Set(start.x, start.y);
-            lineDef.vertices[1].Set(stop.x, stop.y);
-            var diff:Point = new Point(stop.x - start.x, stop.y - start.y);
-
+            var lineDef:b2FixtureDef = new b2FixtureDef();
+            
             lineDef.density = params.density;
             lineDef.friction = params.friction;
             lineDef.restitution = params.restitution;
             if (groupIndex != int.MAX_VALUE) {
                 lineDef.filter.groupIndex = groupIndex;
             }
+            
+            var lineShape:b2PolygonShape = new b2PolygonShape();
+            var verts:Array = [new b2Vec2(start.x, start.y), new b2Vec2(stop.x, stop.y)]; 
+            lineShape.SetAsArray(verts, 2);
+            var diff:Point = new Point(stop.x - start.x, stop.y - start.y);
+            lineDef.shape = lineShape;
+            
             bodyDef.userData = [new Line(diff, scale)];
+            bodyDef.type = b2Body.b2_dynamicBody;
             
             return addShapes(lineDef, bodyDef); 
         }

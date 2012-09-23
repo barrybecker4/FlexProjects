@@ -16,7 +16,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 package com.becker.animation.box2d.simulations {
-    import Box2D.Collision.Shapes.b2PolygonDef;
+    import Box2D.Collision.Shapes.b2PolygonShape;
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
