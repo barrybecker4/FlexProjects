@@ -165,10 +165,10 @@ public class BoxWorld extends UIComponent implements Animatible {
                 for each (var line:Line in joint.GetUserData().GetUserData() ) {
        
                     line.x = joint.GetAnchorA().x * simulation.scale;
-                    line.y = joint.GetAnchorB().y * simulation.scale;
+                    line.y = joint.GetAnchorA().y * simulation.scale;
                     
                     var numer:Number = joint.GetAnchorB().y - joint.GetAnchorA().y;
-                    var denom:Number = joint.GetAnchorB().x - joint.GetAnchorB().x;
+                    var denom:Number = joint.GetAnchorB().x - joint.GetAnchorA().x;
                     var angle:Number = Math.atan2(numer, denom);
                     line.rotation = angle * Util.RAD_TO_DEG;
                 }

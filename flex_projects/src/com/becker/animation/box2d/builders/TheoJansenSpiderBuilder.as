@@ -143,7 +143,7 @@ package com.becker.animation.box2d.builders {
             var segment2:b2Body =
                 shapeBuilder.buildPolygon(sd2Pts, bodyDef, params.density, params.friction, params.restitution, -1);
             
-            createLegJoints(spider, segment1, segment2, points);
+            createLegJoints(spider, bodyDef, segment1, segment2, points);
         }
         
         private function createLegPoints(sign:Number, tScale:Number):Array {
@@ -157,11 +157,9 @@ package com.becker.animation.box2d.builders {
             return points;
         }
         
-        private function createLegJoints(spider:TheoJansenSpider, segment1:b2Body, segment2:b2Body, points:Array):void {
+        private function createLegJoints(spider:TheoJansenSpider, bodyDef:b2BodyDef, segment1:b2Body, segment2:b2Body, points:Array):void {
                                              
             var djd:b2DistanceJointDef = new b2DistanceJointDef();
-            var bodyDef:b2BodyDef = new b2BodyDef();
-            bodyDef.type = b2Body.b2_dynamicBody;
             
             djd.userData = shapeBuilder.buildLine(points[1], points[4], bodyDef, params);
             djd.Initialize(segment1, segment2, b2Math.AddVV(points[1], offset), b2Math.AddVV(points[4], offset));

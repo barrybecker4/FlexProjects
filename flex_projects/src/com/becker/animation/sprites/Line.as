@@ -31,7 +31,7 @@ package com.becker.animation.sprites
             var endX:int = x + Math.sqrt(width * width + height * height);
             var endY:int = y;
             graphics.lineTo(endX, endY); 
-            //graphics.drawCircle(endX, endY, 2);  
+            graphics.drawCircle(endX, endY, 2);  
         }
     }
 }
