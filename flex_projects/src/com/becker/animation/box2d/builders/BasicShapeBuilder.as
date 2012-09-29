@@ -128,7 +128,6 @@ package com.becker.animation.box2d.builders
                                   groupIndex:int = int.MAX_VALUE):b2Body {
    
             var lineDef:b2FixtureDef = new b2FixtureDef();
-            
             lineDef.density = params.density;
             lineDef.friction = params.friction;
             lineDef.restitution = params.restitution;
@@ -143,8 +142,6 @@ package com.becker.animation.box2d.builders
             lineDef.shape = lineShape;
             
             bodyDef.userData = [new Line(diff, scale)];
-            bodyDef.type = b2Body.b2_dynamicBody;
-            
             return addShapes(lineDef, bodyDef); 
         }
         
