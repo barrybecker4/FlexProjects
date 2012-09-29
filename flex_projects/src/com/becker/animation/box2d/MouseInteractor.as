@@ -100,10 +100,9 @@ public class MouseInteractor {
                 md.bodyB = draggedBody;
                 md.target.Set(mouseWorldPhys.x, mouseWorldPhys.y);
                 md.maxForce = 300.0 * draggedBody.GetMass();
-                //md.timeStep = timeStep;
                 mouseJoint = world.CreateJoint(md) as b2MouseJoint;
                 
-                draggedBody.SetAwake(true); // WakeUp(); 
+                draggedBody.SetAwake(true);
             }     
         }
     }
@@ -122,7 +121,7 @@ public class MouseInteractor {
         var p2:b2Vec2 = new b2Vec2(mouseWorldPhys.x, mouseWorldPhys.y);
         mouseJoint.SetTarget(p2);
         
-        var shape:AbstractShape = AbstractShape(draggedBody.GetUserData()[0]);
+        var shape:AbstractShape = AbstractShape(draggedBody.GetUserData());
         var start:Point = new Point(shape.x, shape.y); 
         var end:Point = new Point(Input.mouseX, Input.mouseY - 200); 
         

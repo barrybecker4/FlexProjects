@@ -22,16 +22,14 @@ package com.becker.animation.box2d.builders
             this.scale = scale;
         }
                       
-        protected function addShapes(fixtureDef:b2FixtureDef, bodyDef:b2BodyDef):b2Body {           
+        protected function addShape(fixtureDef:b2FixtureDef, bodyDef:b2BodyDef):b2Body {           
           
             var body:b2Body = world.CreateBody(bodyDef);
             
-            for each (var shape:AbstractShape in bodyDef.userData) {
-                canvas.addChild(shape);
-                body.CreateFixture(fixtureDef);
-            }
-            
+            body.CreateFixture(fixtureDef);
             body.ResetMassData();
+            canvas.addChild(bodyDef.userData);
+
             return body;
         }
         
