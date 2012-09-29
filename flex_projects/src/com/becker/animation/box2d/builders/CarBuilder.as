@@ -63,8 +63,8 @@ package com.becker.animation.box2d.builders {
         private function createCarBody(bodyDef:b2BodyDef):void {
             var blocks:Array = [
                 new OrientedBox(SIZE * 1.5, SIZE * 0.3, new b2Vec2(0, 0), 0),
-                new OrientedBox(SIZE * 0.4, SIZE * 0.15, new b2Vec2( -1 * SIZE, -0.3 * SIZE), AXLE_ANGLE),
-                new OrientedBox(SIZE * 0.4, SIZE * 0.15, new b2Vec2( 1 * SIZE, -0.3 * SIZE), -AXLE_ANGLE)
+                new OrientedBox(SIZE * 0.4, SIZE * 0.15, new b2Vec2( -1 * SIZE, 0.3 * SIZE), -AXLE_ANGLE),
+                new OrientedBox(SIZE * 0.4, SIZE * 0.15, new b2Vec2( 1 * SIZE, 0.3 * SIZE),  AXLE_ANGLE)
             ];
             
             car.carBody = shapeBuilder.buildCompoundBlock(blocks, bodyDef, 2, 0.5, 0.2, -1); //world.CreateBody(bodyDef);
@@ -72,37 +72,37 @@ package com.becker.animation.box2d.builders {
         
         private function createAxles(bodyDef:b2BodyDef):void {
             boxDef = new b2FixtureDef();
-            boxDef.density = 1;
+            boxDef.density = 1.0;
+            var prismaticJointDef:b2PrismaticJointDef = createPrismaticJoint();
             
             car.axles[0] = world.CreateBody(bodyDef);
      
+            
             var poly:b2PolygonShape = new b2PolygonShape();
             poly.SetAsOrientedBox(SIZE * 0.4, SIZE * 0.1, 
-                new b2Vec2(SIZE * ( -1 - 0.6 * Math.cos(AXLE_ANGLE)), SIZE * ( -0.3 - 0.6 * Math.sin(AXLE_ANGLE))), 
-                AXLE_ANGLE);
+                new b2Vec2(SIZE * ( -1 - 0.6 * Math.cos(AXLE_ANGLE)), SIZE * ( 0.3 + 0.6 * Math.sin(AXLE_ANGLE))), 
+                -AXLE_ANGLE);
             boxDef.shape = poly;
             
             car.axles[0].CreateFixture(boxDef);
             car.axles[0].ResetMassData();
-     
-            var prismaticJointDef:b2PrismaticJointDef = createPrismaticJoint();
             prismaticJointDef.Initialize(car.carBody, car.axles[0], car.axles[0].GetWorldCenter(), 
-                                         new b2Vec2(Math.cos(AXLE_ANGLE), Math.sin(AXLE_ANGLE)));
+                                         new b2Vec2(Math.cos(-AXLE_ANGLE), Math.sin(-AXLE_ANGLE)));
      
             car.springs[0] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint;   
             car.axles[1] = world.CreateBody(bodyDef);
             
+            
             poly = new b2PolygonShape();
             poly.SetAsOrientedBox(SIZE * 0.4, SIZE * 0.1, 
-                new b2Vec2(SIZE * (1 + 0.6 * Math.cos( -AXLE_ANGLE)), SIZE * (-0.3 + 0.6 * Math.sin( -AXLE_ANGLE))), 
-                -AXLE_ANGLE);
+                new b2Vec2(SIZE * (1 + 0.6 * Math.cos( -AXLE_ANGLE)), SIZE * (0.3 - 0.6 * Math.sin( -AXLE_ANGLE))), 
+                AXLE_ANGLE);
             boxDef.shape = poly;
             
             car.axles[1].CreateFixture(boxDef);
             car.axles[1].ResetMassData();
-     
             prismaticJointDef.Initialize(car.carBody, car.axles[1], car.axles[1].GetWorldCenter(), 
-                                         new b2Vec2(-Math.cos(AXLE_ANGLE), Math.sin(AXLE_ANGLE)));
+                                         new b2Vec2(-Math.cos(-AXLE_ANGLE), Math.sin(-AXLE_ANGLE)));
      
             car.springs[1] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint;
         }
@@ -119,7 +119,7 @@ package com.becker.animation.box2d.builders {
         
         private function createWheels(bodyDef:b2BodyDef):void {
 
-            var circleDef = new b2FixtureDef();
+            var circleDef:b2FixtureDef = new b2FixtureDef();
             circleDef.density = 0.1;
             circleDef.friction = 5;
             circleDef.restitution = 0.2;
@@ -130,11 +130,11 @@ package com.becker.animation.box2d.builders {
      
                 if (i == 0) {
                     bodyDef.position.Set(car.axles[0].GetWorldCenter().x - SIZE * 0.3 * Math.cos(AXLE_ANGLE), 
-                                         car.axles[0].GetWorldCenter().y - SIZE * 0.3 * Math.sin(AXLE_ANGLE));
+                                         car.axles[0].GetWorldCenter().y + SIZE * 0.3 * Math.sin(AXLE_ANGLE));
                 }
                 else {
                     bodyDef.position.Set(car.axles[1].GetWorldCenter().x + SIZE * 0.3 * Math.cos( -AXLE_ANGLE), 
-                                         car.axles[1].GetWorldCenter().y + SIZE * 0.3 * Math.sin( -AXLE_ANGLE));
+                                         car.axles[1].GetWorldCenter().y - SIZE * 0.3 * Math.sin( -AXLE_ANGLE));
                 }
                 bodyDef.allowSleep = false;
      

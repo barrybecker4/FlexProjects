@@ -45,7 +45,7 @@ package com.becker.animation.box2d.simulations {
         override public function addDynamicElements():void {
             
             addRandomCrap(); 
-            carBuilder.buildInstance(24, 20, params);
+            carBuilder.buildInstance(14, 20, params);
         }
           
         private function addRandomCrap():void {

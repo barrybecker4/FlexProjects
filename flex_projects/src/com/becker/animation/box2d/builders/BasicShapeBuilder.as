@@ -16,6 +16,7 @@ package com.becker.animation.box2d.builders
     import com.becker.animation.sprites.Circle;
     import com.becker.animation.sprites.Polygon;
     import com.becker.animation.sprites.Rectangle;
+    import com.becker.common.Util;
     
     import flash.geom.Point;
     
@@ -41,9 +42,9 @@ package com.becker.animation.box2d.builders
             var shape:b2PolygonShape = new b2PolygonShape();
             shape.SetAsBox(width, height);
             boxDef.shape = shape;
-            bodyDef.userData = [new Rectangle(width * 2 * scale, height * 2 * scale)];  
+            bodyDef.userData = new Rectangle(width * 2 * scale, height * 2 * scale);
             
-            return addShapes(boxDef, bodyDef);  
+            return addShape(boxDef, bodyDef); 
         }
         
         public function buildCompoundBlock(orientedBlocks:Array, bodyDef:b2BodyDef, 
@@ -58,17 +59,27 @@ package com.becker.animation.box2d.builders
                 boxDef.filter.groupIndex = groupIndex;
             }
             
-            bodyDef.userData = [];
             var body:b2Body = world.CreateBody(bodyDef);
             
-            for each (var block:OrientedBox in orientedBlocks) {
+            var masterBlock:OrientedBox = orientedBlocks[0];
+            bodyDef.userData = new Rectangle(masterBlock.width * 2 * scale, masterBlock.height * 2 * scale);
+            
+            
+            for (var i:int = 1; i < orientedBlocks.length; i++) {
+                var block:OrientedBox = orientedBlocks[i];
                 var blockShape:b2PolygonShape = new b2PolygonShape();
                 blockShape.SetAsOrientedBox(block.width, block.height, block.center, block.rotation);
-                var shape:Rectangle = new Rectangle(block.width * 2 * scale, block.height * 2 * scale);
-                canvas.addChild(shape);
-                bodyDef.userData.push(shape); 
+                
                 boxDef.shape = blockShape;
-                body.CreateFixture(boxDef);
+                
+                var rect:Rectangle = new Rectangle(block.width * 2 * scale, block.height * 2 * scale);
+                rect.x = block.center.x * scale;
+                rect.y = block.center.y * scale;
+                rect.rotation = Util.RAD_TO_DEG * block.rotation;
+                boxDef.userData = rect;
+                bodyDef.userData.addChild(rect);
+                
+                addShape(boxDef, bodyDef);
             }
 
             body.ResetMassData();    
@@ -81,7 +92,6 @@ package com.becker.animation.box2d.builders
                 groupIndex:int = int.MAX_VALUE):b2Body { 
             
             var circleDef:b2FixtureDef = new b2FixtureDef();
-            //circleDef.radius = radius;
             circleDef.density = density;
             circleDef.friction = friction;
             circleDef.restitution = restitution;
@@ -89,9 +99,9 @@ package com.becker.animation.box2d.builders
                 circleDef.filter.groupIndex = groupIndex;
             }
             circleDef.shape = new b2CircleShape(radius);
-            bodyDef.userData = [new Circle(radius * scale)];
+            bodyDef.userData = new Circle(radius * scale);
             
-            return addShapes(circleDef, bodyDef);
+            return addShape(circleDef, bodyDef);
         }
         
         public function buildPolygon(points:Array, bodyDef:b2BodyDef, 
@@ -119,8 +129,8 @@ package com.becker.animation.box2d.builders
             poly.SetAsArray(verts, vpoints.length);
             polyDef.shape = poly;
            
-            bodyDef.userData = [new Polygon(vpoints, scale)];
-            return addShapes(polyDef, bodyDef); 
+            bodyDef.userData = new Polygon(vpoints, scale);
+            return addShape(polyDef, bodyDef); 
         }
         
         public function buildLine(start:b2Vec2, stop:b2Vec2, bodyDef:b2BodyDef, 
@@ -141,8 +151,8 @@ package com.becker.animation.box2d.builders
             var diff:Point = new Point(stop.x - start.x, stop.y - start.y);
             lineDef.shape = lineShape;
             
-            bodyDef.userData = [new Line(diff, scale)];
-            return addShapes(lineDef, bodyDef); 
+            bodyDef.userData = new Line(diff, scale);
+            return addShape(lineDef, bodyDef); 
         }
         
         /** Different depending on whether we are passed b2Vec2 or Points */

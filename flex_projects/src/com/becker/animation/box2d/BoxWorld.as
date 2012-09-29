@@ -84,9 +84,6 @@ public class BoxWorld extends UIComponent implements Animatible {
         addEventListener(ResizeEvent.RESIZE, resized, false, 0, true);
                
         world.SetContactListener(new ContactListener());    
-        //if (showDebug) {    
-        //    addDebugDrawing();
-        //}
         
         simulation.addStaticElements(); 
         simulation.addDynamicElements();       
@@ -150,8 +147,9 @@ public class BoxWorld extends UIComponent implements Animatible {
     private function drawAllBodies():void {
         for (var bb:b2Body = world.GetBodyList(); bb; bb = bb.GetNext()) {
            
-            for  each(var shape:AbstractShape in bb.GetUserData())
-            {
+            //for (var fixture:b2Fixture = bb.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
+            var shape:AbstractShape = AbstractShape(bb.GetUserData()); 
+            if (shape) {
                 shape.x = bb.GetPosition().x * simulation.scale;
                 shape.y = bb.GetPosition().y * simulation.scale;
                 shape.rotation = bb.GetAngle() * Util.RAD_TO_DEG;
@@ -165,16 +163,16 @@ public class BoxWorld extends UIComponent implements Animatible {
         for (var joint:b2Joint = world.GetJointList(); joint; joint = joint.GetNext()) {
             
             if (joint.GetUserData()) {
-                for each (var line:Line in joint.GetUserData().GetUserData() ) {
-       
-                    line.x = joint.GetAnchorA().x * simulation.scale;
-                    line.y = joint.GetAnchorA().y * simulation.scale;
-                    
-                    var numer:Number = joint.GetAnchorB().y - joint.GetAnchorA().y;
-                    var denom:Number = joint.GetAnchorB().x - joint.GetAnchorA().x;
-                    var angle:Number = Math.atan2(numer, denom);
-                    line.rotation = angle * Util.RAD_TO_DEG;
-                }
+                var line:Line = Line(joint.GetUserData().GetUserData());
+             
+                line.x = joint.GetAnchorA().x * simulation.scale;
+                line.y = joint.GetAnchorA().y * simulation.scale;
+                
+                var numer:Number = joint.GetAnchorB().y - joint.GetAnchorA().y;
+                var denom:Number = joint.GetAnchorB().x - joint.GetAnchorA().x;
+                var angle:Number = Math.atan2(numer, denom);
+                
+                line.rotation = angle * Util.RAD_TO_DEG; 
             }
         }
     }
