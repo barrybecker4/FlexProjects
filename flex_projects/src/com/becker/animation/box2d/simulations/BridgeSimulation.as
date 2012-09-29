@@ -4,6 +4,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import com.becker.animation.box2d.builders.CrapBuilder;
     import com.becker.common.PhysicalParameters;
     
     import com.becker.animation.box2d.builders.AbstractBuilder;
@@ -24,7 +25,8 @@ package com.becker.animation.box2d.simulations {
         private static const BRIDGE_HEIGHT:Number = 250;
         private static const BRIDGE_STARTX:Number = 100;
         
-        private var builder:BasicShapeBuilder;
+        private var shapeBuilder:BasicShapeBuilder;
+        private var crapBuilder:CrapBuilder;
         
         private var ground:b2Body;
         private var anchor:b2Vec2;   
@@ -33,7 +35,8 @@ package com.becker.animation.box2d.simulations {
         override public function initialize(world:b2World, canvas:UIComponent,
                             params:PhysicalParameters):void {
             super.initialize(world, canvas, params);
-            builder = new BasicShapeBuilder(world, canvas, scale);
+            shapeBuilder = new BasicShapeBuilder(world, canvas, scale);
+            crapBuilder = new CrapBuilder(world, canvas, scale);
         }
         
         override public function addStaticElements():void {
@@ -49,9 +52,8 @@ package com.becker.animation.box2d.simulations {
             bodyDef.type = b2Body.b2_dynamicBody;
             
             addBridge(bodyDef);
-            createBridgeCrap(bodyDef);
+            crapBuilder.addCrap(bodyDef, 6, 5, 15);
         }
-        
         
         /**
          * Bridge
@@ -70,7 +72,7 @@ package com.becker.animation.box2d.simulations {
             
             for (var i:int = 0; i < NUM_PLANKS; ++i) {
                 bodyDef.position.Set((BRIDGE_STARTX + HALF_PLANK_LENGTH + PLANK_LENGTH * i) / scale, BRIDGE_HEIGHT/ scale);
-                body = builder.buildBlock(24/scale, 5/scale, bodyDef, 20.0, 0.2, 0.1);  
+                body = shapeBuilder.buildBlock(24/scale, 5/scale, bodyDef, 20.0, 0.2, 0.1);  
                 
                 anchor.Set((BRIDGE_STARTX + PLANK_LENGTH * i) / scale, BRIDGE_HEIGHT / scale);
                 jd.Initialize(prevBody, body, anchor);
@@ -83,89 +85,5 @@ package com.becker.animation.box2d.simulations {
             jd.Initialize(prevBody, ground, anchor);
             world.CreateJoint(jd);
         }
-        
-        /**
-         * Spawn in a bunch of crap to fall on the bridge.
-         */
-        private function createBridgeCrap(bodyDef:b2BodyDef):void {
-
-            addBlocks(6, bodyDef);
-            addBalls(5, bodyDef);
-            createPolygons(15, bodyDef);
-        }       
-        
-        private function addBlocks(num:int, bodyDef:b2BodyDef):void  {
-            
-            for (var i:int = 0; i < num; i++){
-                
-                bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
-                bodyDef.angle = Math.random() * Math.PI;
-                builder.buildBlock((Math.random() * 5 + 10) / scale, (Math.random() * 5 + 10) / scale, bodyDef, 1.0, 0.3, 0.1);  
-            }
-        }
-        
-        private function addBalls(num:int, bodyDef:b2BodyDef):void  {
-            
-            for (var i:int = 0; i < num; i++) {
-                bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
-                bodyDef.angle = Math.random() * Math.PI;           
-                builder.buildBall((Math.random() * 5 + 10) / scale, bodyDef, 1.0, 0.3, 0.1);  
-            }
-        }
-        
-        private function createPolygons(num:int, bodyDef:b2BodyDef):void {
-            
-            for (var i:int = 0; i < num; i++){
-                createRandomPolygon(bodyDef);
-            }
-        }
-        
-        private function createRandomPolygon(bodyDef:b2BodyDef):void {
-            
-            bodyDef.position.Set((Math.random() * 400 + 120) / scale, (Math.random() * 150 + 50) / scale);
-            bodyDef.angle = Math.random() * Math.PI;
-            var pts:Array;
-            
-            if (Math.random() > 0.66) {
-                pts = createQuadrilateralPoints()
-            }
-            else if (Math.random() > 0.5) { 
-                pts = createPentagonPoints();
-            }
-            else {
-                pts = createTrianglePoints();
-            }
-    
-            builder.buildPolygon(pts, bodyDef, 1.0, 0.3, 0.1);
-        }
-        
-        private function createQuadrilateralPoints():Array {
-            var pts:Array = new Array();
-            pts.push(new Point((-10 - Math.random()*10) / scale, ( 10 + Math.random()*10) / scale));
-            pts.push(new Point(( -5 - Math.random()*10) / scale, (-10 - Math.random()*10) / scale));
-            pts.push(new Point((  5 + Math.random()*10) / scale, (-10 - Math.random()*10) / scale));
-            pts.push(new Point(( 10 + Math.random() * 10) / scale, ( 10 + Math.random() * 10) / scale));
-            return pts;
-        }
-        
-        private function createPentagonPoints():Array {
-            var pt0:Point = new Point(0, (10 +Math.random()*10) / scale);
-            var pt2:Point = new Point((-5 - Math.random()*10) / scale, (-10 -Math.random()*10) / scale);
-            var pt3:Point = new Point(( 5 + Math.random()*10) / scale, (-10 -Math.random()*10) / scale);
-            var s:Number = Math.random()/2 + 0.8;
-            var pt1:Point = new Point(s*(pt0.x + pt2.x), s*(pt0.y + pt2.y));
-            s = Math.random()/2 + 0.8;
-            var pt4:Point = new Point(s*(pt3.x + pt0.x), s*(pt3.y + pt0.y));
-            return [pt0, pt1, pt2, pt3, pt4]; 
-        }
-        
-        private function createTrianglePoints():Array {
-            var pts:Array = new Array();
-            pts.push(new Point(0, (10 +Math.random()*10) / scale));
-            pts.push(new Point((-5 - Math.random()*10) / scale, (-10 -Math.random()*10) / scale));
-            pts.push(new Point(( 5 + Math.random() * 10) / scale, ( -10 -Math.random() * 10) / scale));
-            return pts;
-        }
-        
     }
 }
