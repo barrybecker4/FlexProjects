@@ -66,8 +66,8 @@ package com.becker.animation.box2d.simulations {
             // static point to seesaw plank
             jd.lowerAngle = AbstractBuilder.degreesToRadians(-1);
             jd.upperAngle = AbstractBuilder.degreesToRadians(1);
-            //jd.enableMotor = true;
-            //jd.maxMotorTorque = 100;
+            jd.enableMotor = true;
+            jd.maxMotorTorque = 110;
             jd.Initialize(staticCircle, groundBlock, staticCircle.GetWorldCenter());
             world.CreateJoint(jd);
             

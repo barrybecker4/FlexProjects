@@ -5,6 +5,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
     import com.becker.animation.box2d.builders.CarBuilder;
+    import com.becker.animation.box2d.builders.CrapBuilder;
     import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
      
@@ -15,14 +16,16 @@ package com.becker.animation.box2d.simulations {
     public class CarSimulation extends AbstractSimulation {
         
         private var builder:BasicShapeBuilder;   
-        private var carBuilder:CarBuilder;  
+        private var carBuilder:CarBuilder; 
+        private var crapBuilder:CrapBuilder;
                   
         
         override public function initialize(world:b2World, canvas:UIComponent,
                                             params:PhysicalParameters):void {
             super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);
-            carBuilder = new CarBuilder(world, canvas, scale);    
+            carBuilder = new CarBuilder(world, canvas, scale);  
+            crapBuilder = new CrapBuilder(world, canvas, scale);
         }
         
         override public function addStaticElements():void {
@@ -33,48 +36,28 @@ package com.becker.animation.box2d.simulations {
             bodyDef.position.Set(30, 30);
             bodyDef.angle = -0.05;
             bodyDef.type =  b2Body.b2_staticBody;
-            builder.buildBlock(35, 2, bodyDef, 0.5, params.friction, params.restitution);
+            builder.buildBlock(35, 2, bodyDef, 0.5, 1.0, 0.1);
             
             bodyDef.position.Set(61, 26);
-            builder.buildBlock(1.0, 0.4, bodyDef, 0.5, params.friction, params.restitution);
+            builder.buildBlock(1.0, 0.4, bodyDef, 0.5, 1.0, 0.1);
         }
         
         override public function addDynamicElements():void {
             
-            //addRandomCrap();            
-            carBuilder.buildInstance(20, 4, params);
+            addRandomCrap(); 
+            carBuilder.buildInstance(24, 20, params);
         }
-           
+          
         private function addRandomCrap():void {
             var bodyDef:b2BodyDef = new b2BodyDef();
-            addSmallBalls(40, bodyDef);                       
-            addBallsAndBlocks(6, bodyDef);
-        } 
-                
-        private function addSmallBalls(n:int, bodyDef:b2BodyDef):void {
-            for (var j:int = 0; j < n; ++j) {
-                bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
-                builder.buildBall(0.35, bodyDef, 1.0, params.friction, params.restitution);
-            }            
-        }
-        
-        /** Some random balls and blocks */
-        private function addBallsAndBlocks(n:int, bodyDef:b2BodyDef):void {
+            bodyDef.type = b2Body.b2_dynamicBody;
             
-            for (var i:int = 1; i < n; i++) {
-                bodyDef.position.Set(Math.random() * 15 + 10, Math.random() * 5);
-
-                var rX:Number = Math.random() + 0.5;
-                var rY:Number = Math.random() + 0.5;
-          
-                if (Math.random() < 0.5) {
-                    builder.buildBlock(rX, rY, bodyDef, params.density, params.friction, params.restitution);
-                } 
-                else {
-                    builder.buildBall(rX, bodyDef, params.density, params.friction, params.restitution);
-                }  
-            }
-        }
+            crapBuilder.setSpawnSpread(900, 80);
+            crapBuilder.setShapeSize(5.0);
+            crapBuilder.addCrap(bodyDef, 5, 5, 6);
+            crapBuilder.setSpawnSpread(900, 0);
+            crapBuilder.addBalls(10, 4, bodyDef);
+        } 
      
     }
 }

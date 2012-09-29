@@ -9,8 +9,8 @@ package com.becker.animation.box2d.builders {
         public var carBody    : b2Body;
         
         // @@ make WheellAssembly
-        public var wheels  : Array = [];     // b2Body
-        public var axles   : Array = [];     // b2Body
+        public var wheels  : Array = [];    // b2Body
+        public var axles   : Array = [];    // b2Body
         public var motors  : Array = [];    // b2RevoluteJoint;
         public var springs : Array = [];    // b2PrismaticJoint;
      

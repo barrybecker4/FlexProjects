@@ -4,6 +4,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
+    import com.becker.animation.box2d.builders.CrapBuilder;
     import com.becker.animation.box2d.builders.TheoJansenSpiderBuilder;
     import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
@@ -15,7 +16,8 @@ package com.becker.animation.box2d.simulations {
     public class TheoJansenSimulation extends AbstractSimulation {
         
         private var builder:BasicShapeBuilder;   
-        private var spiderBuilder:TheoJansenSpiderBuilder;  
+        private var spiderBuilder:TheoJansenSpiderBuilder; 
+        private var crapBuilder:CrapBuilder;
                   
         
         override public function initialize(world:b2World, canvas:UIComponent,
@@ -23,6 +25,7 @@ package com.becker.animation.box2d.simulations {
             super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);
             spiderBuilder = new TheoJansenSpiderBuilder(world, canvas, scale);    
+            crapBuilder = new CrapBuilder(world, canvas, scale);
         }
         
         override public function addStaticElements():void {
@@ -40,7 +43,7 @@ package com.becker.animation.box2d.simulations {
         }
         
         override public function addDynamicElements():void {
-              
+
             addRandomCrap();            
             spiderBuilder.buildInstance(25, 15, params);
         }
@@ -48,36 +51,10 @@ package com.becker.animation.box2d.simulations {
         private function addRandomCrap():void {
             var bodyDef:b2BodyDef = new b2BodyDef();
             bodyDef.type = b2Body.b2_dynamicBody;
-            
-            addSmallBalls(40, bodyDef);                       
-            addBallsAndBlocks(6, bodyDef);
+            crapBuilder.addCrap(bodyDef, 5, 5, 6);
+            crapBuilder.setSpawnSpread(800, 0);
+            crapBuilder.addBalls(20, 5, bodyDef);
         } 
-                
-        private function addSmallBalls(n:int, bodyDef:b2BodyDef):void {
-            for (var j:int = 0; j < n; ++j) {
-                bodyDef.position.Set(Math.random() * 62 + 1, Math.random());
-                builder.buildBall(0.35, bodyDef, 1.0, params.friction, params.restitution);
-            }            
-        }
-        
-        /** Some random balls and blocks */
-        private function addBallsAndBlocks(n:int, bodyDef:b2BodyDef):void {
-            
-            for (var i:int = 1; i < n; i++) {
-                bodyDef.position.Set(Math.random() * 15 + 10, Math.random() * 5);
-
-                var rX:Number = Math.random() + 0.5;
-                var rY:Number = Math.random() + 0.5;
-          
-                if (Math.random() < 0.5) {
-                    builder.buildBlock(rX, rY, bodyDef, params.density, params.friction, params.restitution);
-                } 
-                else {
-                    builder.buildBall(rX, bodyDef, params.density, params.friction, params.restitution);
-                }  
-            }
-        }
-     
     }
 }
 

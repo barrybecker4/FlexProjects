@@ -136,10 +136,13 @@ public class BoxWorld extends UIComponent implements Animatible {
         
         world.Step(TIME_STEP, VELOCITY_ITERATIONS, STEP_ITERATIONS); 
         world.ClearForces();
+        if (showDebug) {
+            world.DrawDebugData();
+        }
         
         drawAllBodies();
         drawAllJoints();
-        
+
         mouseInteractor.handleMouseInteraction(TIME_STEP, simulation.scale); 
     }
     
