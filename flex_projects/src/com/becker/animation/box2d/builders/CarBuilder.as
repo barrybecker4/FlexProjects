@@ -27,13 +27,12 @@ package com.becker.animation.box2d.builders {
         private static const SIZE:Number = 2.0;
         private static const AXLE_ANGLE:Number = Math.PI / 4;
         private static const MOTOR_SPEED:Number = -2.0;
-        private static const MOTOR_TORQUE:Number = SIZE * 400.0;
-        private static const TORQUE_INC:Number = 30.0;
+        private static const MOTOR_TORQUE:Number = SIZE * 200.0;
+        private static const TORQUE_INC:Number = 60.0;
         
         private var shapeBuilder:BasicShapeBuilder;
         private var params:PhysicalParameters;    
         
-        private var boxDef: b2FixtureDef;
         private var car:Car;
         
     
@@ -64,43 +63,36 @@ package com.becker.animation.box2d.builders {
             var blocks:Array = [
                 new OrientedBox(SIZE * 1.5, SIZE * 0.3, new b2Vec2(0, 0), 0),
                 new OrientedBox(SIZE * 0.4, SIZE * 0.15, new b2Vec2( -1 * SIZE, 0.3 * SIZE), -AXLE_ANGLE),
-                new OrientedBox(SIZE * 0.4, SIZE * 0.15, new b2Vec2( 1 * SIZE, 0.3 * SIZE),  AXLE_ANGLE)
+                new OrientedBox(SIZE * 0.4, SIZE * 0.15, new b2Vec2( 1 * SIZE, 0.3 * SIZE),  AXLE_ANGLE),
+                new OrientedBox(SIZE * 0.4, SIZE * 0.1,  new b2Vec2(SIZE * ( -1 - 0.6 * Math.cos(AXLE_ANGLE)), SIZE * ( 0.3 + 0.6 * Math.sin(AXLE_ANGLE)) ),  -AXLE_ANGLE),
+                new OrientedBox(SIZE * 0.4, SIZE * 0.1, new b2Vec2(SIZE * (1 + 0.6 * Math.cos( -AXLE_ANGLE)), SIZE * (0.3 - 0.6 * Math.sin( -AXLE_ANGLE))), AXLE_ANGLE)
             ];
             
-            car.carBody = shapeBuilder.buildCompoundBlock(blocks, bodyDef, 2, 0.5, 0.2, -1); //world.CreateBody(bodyDef);
+            car.carBody = shapeBuilder.buildCompoundBlock(blocks, bodyDef, 2, 0.5, 0.2, -1); 
         }
         
         private function createAxles(bodyDef:b2BodyDef):void {
-            boxDef = new b2FixtureDef();
+            var boxDef:b2FixtureDef = new b2FixtureDef();
             boxDef.density = 1.0;
             var prismaticJointDef:b2PrismaticJointDef = createPrismaticJoint();
             
-            car.axles[0] = world.CreateBody(bodyDef);
-     
-            
-            var poly:b2PolygonShape = new b2PolygonShape();
-            poly.SetAsOrientedBox(SIZE * 0.4, SIZE * 0.1, 
-                new b2Vec2(SIZE * ( -1 - 0.6 * Math.cos(AXLE_ANGLE)), SIZE * ( 0.3 + 0.6 * Math.sin(AXLE_ANGLE))), 
-                -AXLE_ANGLE);
-            boxDef.shape = poly;
-            
-            car.axles[0].CreateFixture(boxDef);
-            car.axles[0].ResetMassData();
+            var orientedBox:OrientedBox = 
+                new OrientedBox(SIZE * 0.4, SIZE * 0.1, 
+                    new b2Vec2(SIZE * ( -1 - 0.6 * Math.cos(AXLE_ANGLE)), SIZE * ( 0.3 + 0.6 * Math.sin(AXLE_ANGLE)) ), 
+                    -AXLE_ANGLE);
+            car.axles[0] = shapeBuilder.buildCompoundBlock([orientedBox], bodyDef, 1.0);
+
             prismaticJointDef.Initialize(car.carBody, car.axles[0], car.axles[0].GetWorldCenter(), 
                                          new b2Vec2(Math.cos(-AXLE_ANGLE), Math.sin(-AXLE_ANGLE)));
      
-            car.springs[0] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint;   
-            car.axles[1] = world.CreateBody(bodyDef);
+            car.springs[0] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint; 
             
-            
-            poly = new b2PolygonShape();
-            poly.SetAsOrientedBox(SIZE * 0.4, SIZE * 0.1, 
-                new b2Vec2(SIZE * (1 + 0.6 * Math.cos( -AXLE_ANGLE)), SIZE * (0.3 - 0.6 * Math.sin( -AXLE_ANGLE))), 
-                AXLE_ANGLE);
-            boxDef.shape = poly;
-            
-            car.axles[1].CreateFixture(boxDef);
-            car.axles[1].ResetMassData();
+            orientedBox = 
+                new OrientedBox(SIZE * 0.4, SIZE * 0.1, 
+                    new b2Vec2(SIZE * (1 + 0.6 * Math.cos( -AXLE_ANGLE)), SIZE * (0.3 - 0.6 * Math.sin( -AXLE_ANGLE))), 
+                    AXLE_ANGLE);
+            car.axles[1] = shapeBuilder.buildCompoundBlock([orientedBox], bodyDef, 1.0);
+
             prismaticJointDef.Initialize(car.carBody, car.axles[1], car.axles[1].GetWorldCenter(), 
                                          new b2Vec2(-Math.cos(-AXLE_ANGLE), Math.sin(-AXLE_ANGLE)));
      
@@ -116,15 +108,9 @@ package com.becker.animation.box2d.builders {
             return prismaticJointDef;
         }
         
-        
         private function createWheels(bodyDef:b2BodyDef):void {
 
-            var circleDef:b2FixtureDef = new b2FixtureDef();
-            circleDef.density = 0.1;
-            circleDef.friction = 5;
-            circleDef.restitution = 0.2;
-            circleDef.filter.groupIndex = -1;
-            circleDef.shape = new b2CircleShape(SIZE * 0.7);
+            bodyDef.allowSleep = false;
      
             for (var i:int = 0; i < 2; i++) {
      
@@ -136,11 +122,8 @@ package com.becker.animation.box2d.builders {
                     bodyDef.position.Set(car.axles[1].GetWorldCenter().x + SIZE * 0.3 * Math.cos( -AXLE_ANGLE), 
                                          car.axles[1].GetWorldCenter().y - SIZE * 0.3 * Math.sin( -AXLE_ANGLE));
                 }
-                bodyDef.allowSleep = false;
-     
-                car.wheels[i] = world.CreateBody(bodyDef);
-                car.wheels[i].CreateFixture(circleDef);
-                car.wheels[i].ResetMassData();
+               
+                car.wheels[i] = shapeBuilder.buildBall(SIZE * 0.7, bodyDef, 0.2, 0.9, 0.2, -1);
             }
         }
         
@@ -156,11 +139,15 @@ package com.becker.animation.box2d.builders {
             car.motors[1] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
              
             // Set motor speeds. belongs in update
-            car.motors[0].SetMotorSpeed(10 * Math.PI * 0.5); // (input.isPressed(40) ? 1 : input.isPressed(38) ? -1 : 0));
-            car.motors[0].SetMaxMotorTorque(TORQUE_INC);// input.isPressed(40) || input.isPressed(38) ? 17 : 0.5);
+            car.motors[0].SetMotorSpeed(10 * Math.PI * 0.5); 
+            // (input.isPressed(40) ? 1 : input.isPressed(38) ? -1 : 0));
+            car.motors[0].SetMaxMotorTorque(TORQUE_INC);
+            // input.isPressed(40) || input.isPressed(38) ? 17 : 0.5);
      
-            car.motors[1].SetMotorSpeed(10 * Math.PI * 0.5); // (input.isPressed(40) ? 1 : input.isPressed(38) ? -1 : 0));
-            car.motors[1].SetMaxMotorTorque(TORQUE_INC); // input.isPressed(40) || input.isPressed(38) ? 12 : 0.5);
+            car.motors[1].SetMotorSpeed(10 * Math.PI * 0.5); 
+            // (input.isPressed(40) ? 1 : input.isPressed(38) ? -1 : 0));
+            car.motors[1].SetMaxMotorTorque(TORQUE_INC); 
+            // input.isPressed(40) || input.isPressed(38) ? 12 : 0.5);
      
             car.springs[0].SetMaxMotorForce(30 + Math.abs(MOTOR_TORQUE*Math.pow(car.springs[0].GetJointTranslation(), 2)));
             //car.spring1.SetMotorSpeed(-4*Math.pow(spring1.GetJointTranslation(), 1));

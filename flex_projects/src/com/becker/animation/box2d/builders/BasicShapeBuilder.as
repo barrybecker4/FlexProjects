@@ -59,24 +59,25 @@ package com.becker.animation.box2d.builders
                 boxDef.filter.groupIndex = groupIndex;
             }
             
-            var body:b2Body = world.CreateBody(bodyDef);
-            
             var masterBlock:OrientedBox = orientedBlocks[0];
-            bodyDef.userData = new Rectangle(masterBlock.width * 2 * scale, masterBlock.height * 2 * scale);
             
+            var mainShape:b2PolygonShape = new b2PolygonShape();
+            mainShape.SetAsOrientedBox(masterBlock.width, masterBlock.height, masterBlock.center, masterBlock.rotation);
+            boxDef.shape = mainShape;
+                
+            bodyDef.userData = new Rectangle(masterBlock.width * 2 * scale, masterBlock.height * 2 * scale);
+            var body:b2Body = addShape(boxDef, bodyDef);
             
             for (var i:int = 1; i < orientedBlocks.length; i++) {
-                var block:OrientedBox = orientedBlocks[i];
+                var orientedBlock:OrientedBox = orientedBlocks[i];
                 var blockShape:b2PolygonShape = new b2PolygonShape();
-                blockShape.SetAsOrientedBox(block.width, block.height, block.center, block.rotation);
+                blockShape.SetAsOrientedBox(orientedBlock.width, orientedBlock.height, orientedBlock.center, orientedBlock.rotation);
                 
                 boxDef.shape = blockShape;
-                
-                var rect:Rectangle = new Rectangle(block.width * 2 * scale, block.height * 2 * scale);
-                rect.x = block.center.x * scale;
-                rect.y = block.center.y * scale;
-                rect.rotation = Util.RAD_TO_DEG * block.rotation;
-                boxDef.userData = rect;
+                var rect:Rectangle = new Rectangle(orientedBlock.width * 2 * scale, orientedBlock.height * 2 * scale);
+                rect.x = orientedBlock.center.x * scale;
+                rect.y = orientedBlock.center.y * scale;
+                rect.rotation = Util.RAD_TO_DEG * orientedBlock.rotation;
                 bodyDef.userData.addChild(rect);
                 
                 addShape(boxDef, bodyDef);
@@ -86,6 +87,7 @@ package com.becker.animation.box2d.builders
             
             return body;  
         }
+   
         
         public function buildBall(radius:Number, bodyDef:b2BodyDef, 
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
@@ -103,7 +105,7 @@ package com.becker.animation.box2d.builders
             
             return addShape(circleDef, bodyDef);
         }
-        
+
         public function buildPolygon(points:Array, bodyDef:b2BodyDef, 
                                      density:Number = 1.0, 
                                      friction:Number = 0.5, 
