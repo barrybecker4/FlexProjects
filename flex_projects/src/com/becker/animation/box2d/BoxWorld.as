@@ -50,7 +50,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     private var showDebug:Boolean = false;
     private var debugSprite:Sprite;
    
-    private var mouseInteractor:MouseInteractor;
+    private var dragInteractor:MouseDragInteractor;
     private var firstTime:Boolean;
         
     
@@ -127,7 +127,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     public function onEnterFrame(e:Event):void{
           
        if (firstTime && enableSimulation && this.stage != null) {
-            mouseInteractor = new MouseInteractor(this, world); 
+            dragInteractor = new MouseDragInteractor(this, world); 
             firstTime = false;
         }
         
@@ -140,7 +140,7 @@ public class BoxWorld extends UIComponent implements Animatible {
         drawAllBodies();
         drawAllJoints();
 
-        mouseInteractor.handleMouseInteraction(TIME_STEP, simulation.scale); 
+        dragInteractor.handleMouseInteraction(TIME_STEP, simulation.scale); 
     }
     
     /** Go through body list and update sprite positions/rotations */

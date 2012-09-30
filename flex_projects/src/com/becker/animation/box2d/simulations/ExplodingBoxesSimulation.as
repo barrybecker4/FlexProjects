@@ -31,18 +31,21 @@ package com.becker.animation.box2d.simulations {
         
         private var builder:BasicShapeBuilder;   
           
-        private var enterPointsVec:Array = new Array();
-        private var numEnterPoints:int = 0;
+        private var enterPointsVec:Array = new Array();  // move to exploder
+        private var numEnterPoints:int = 0;        // move to exploder, but used outside too
         
         /** the vector of exploding bodies */
-        private var explodingBodies:Vector.<b2Body>;
-        /** the number of cuts for every explosion */
-        private var explosionCuts:Number=5;
+        private var explodingBodies:Vector.<b2Body>; //  move to exploder
+        
+        
+        
         /** explosion x and y center */
-        private var explosionX:Number;
-        private var explosionY:Number;
+        private var explosionX:Number;   //  move to exploder
+        private var explosionY:Number;   //  move to exploder
+        
         /** explosion radius, useful to determine the velocity of debris */
-        private var explosionRadius:Number = 50;
+        private var explosionRadius:Number = 50;   //  move to exploder
+        
         
         
         override public function initialize(world:b2World, canvas:UIComponent,
@@ -52,7 +55,6 @@ package com.becker.animation.box2d.simulations {
         }
         
         override public function addStaticElements():void {
-            
             addWalls();
         }
            
@@ -150,12 +152,47 @@ package com.becker.animation.box2d.simulations {
             tempBox.CreateFixture(fixtureDef);
             numEnterPoints++;
         }
+      
+        
+        /** update function to simulate and render the world */
+        public function update(e:Event):void {
+            world.Step(1/30, 10, 10);
+            world.ClearForces();
+            var spr:Sprite;
+            for (var b:b2Body = world.GetBodyList(); b; b = b.GetNext()) {
+                spr = b.GetUserData();
+                if (spr) {
+                    spr.x=b.GetPosition().x*scale;
+                    spr.y=b.GetPosition().y*scale;
+                    spr.rotation=b.GetAngle()*180/Math.PI;
+                }
+            }
+            world.DrawDebugData();
+        }
+        
+        
+        /** for debug frawing */
+        private function debugDraw():void {
+            var debugDraw:b2DebugDraw = new b2DebugDraw();
+            var debugSprite:Sprite = new Sprite();
+            canvas.addChild(debugSprite);
+            debugDraw.SetSprite(debugSprite);
+            debugDraw.SetDrawScale(scale);
+            debugDraw.SetFlags(b2DebugDraw.e_shapeBit|b2DebugDraw.e_jointBit);
+            debugDraw.SetFillAlpha(0.5);
+            world.SetDebugDraw(debugDraw);
+        }
+        
+          
         
         /** function to create an explosion */
         private function boom(e:MouseEvent):void {
             var cutAngle:Number;
             explosionX = canvas.mouseX;
             explosionY = canvas.mouseY;
+            /** the number of cuts for every explosion */
+            var explosionCuts:Number = 5;   // make constant to shatter into more pieves
+        
             // I am looking for a body under my mouse
             var clickedBody:b2Body=GetBodyAtXY(new b2Vec2(explosionX/scale,explosionY/scale));
             if (clickedBody!=null) {
@@ -166,19 +203,22 @@ package com.becker.animation.box2d.simulations {
                 // the explosion begins!
                 for (var i:Number=1; i<=explosionCuts; i++) {
                     // choosing a random angle
-                    cutAngle=Math.random()*Math.PI*2;
+                    cutAngle = Math.random() * Math.PI * 2;
+                    
                     // creating the two points to be used for the raycast, according to the random angle and mouse position
                     // also notice how I need to add a little offset (i/10) or Box2D will crash. Probably it's not able to 
                     // determine raycast on objects whose area is very very close to zero (or zero)
-                    var p1:b2Vec2=new b2Vec2((explosionX+i/10-2000*Math.cos(cutAngle))/scale,(explosionY-2000*Math.sin(cutAngle))/scale);
-                    var p2:b2Vec2=new b2Vec2((explosionX+2000*Math.cos(cutAngle))/scale,(explosionY+2000*Math.sin(cutAngle))/scale);
+                    var sin:Number = 2000.0 * Math.sin(cutAngle);
+                    var cos:Number = 2000.0 * Math.cos(cutAngle);
+                    var p1:b2Vec2 = new b2Vec2((explosionX+i/10 - cos)/ scale, (explosionY - sin)/ scale);
+                    var p2:b2Vec2 = new b2Vec2((explosionX + cos)/ scale, (explosionY + sin)/ scale);
                     world.RayCast(intersection, p1, p2);
                     world.RayCast(intersection, p2, p1);
-                    enterPointsVec=new Array(numEnterPoints);
+                    enterPointsVec = new Array(numEnterPoints);
                 }
             }
         }
-             
+            
         /**
          * this function returns the body at a X,Y coordinate without using a temp body like the one in
          * the original Box2D distribution. It uses QueryPoint method.
@@ -199,22 +239,6 @@ package com.becker.animation.box2d.simulations {
             return touchedBody;
         }
         
-        /** update function to simulate and render the world */
-        public function update(e:Event):void {
-            world.Step(1/30, 10, 10);
-            world.ClearForces();
-            var spr:Sprite;
-            for (var b:b2Body = world.GetBodyList(); b; b = b.GetNext()) {
-                spr = b.GetUserData();
-                if (spr) {
-                    spr.x=b.GetPosition().x*scale;
-                    spr.y=b.GetPosition().y*scale;
-                    spr.rotation=b.GetAngle()*180/Math.PI;
-                }
-            }
-            world.DrawDebugData();
-        }
-        
         /** find the intersection of the fixture with the point and its normal. */
         private function intersection(fixture:b2Fixture, 
             point:b2Vec2, normal:b2Vec2, fraction:Number):Number {
@@ -222,15 +246,20 @@ package com.becker.animation.box2d.simulations {
             if (explodingBodies.indexOf(fixture.GetBody()) != -1) {
                 var spr:Sprite = fixture.GetBody().GetUserData();
                 
-                // Throughout this whole code I use only one global vector, and that is enterPointsVec. Why do I need it you ask? 
-                // Well, the problem is that the world.RayCast() method calls this function only when it sees that a given line gets into the body - it doesnt see when the line gets out of it.
-                // I must have 2 intersection points with a body so that it can be sliced, thats why I use world.RayCast() again, but this time from B to A - that way the point, at which BA enters the body is the point at which AB leaves it!
-                // For that reason, I use a vector enterPointsVec, where I store the points, at which AB enters the body. And later on, if I see that BA enters a body, which has been entered already by AB, I fire the splitObj() function!
-                // I need a unique ID for each body, in order to know where its corresponding enter point is - I store that id in the userData of each body.
+                // Throughout this whole code, only enterPointsVec is global. 
+                // The problem is that the world.RayCast() method calls this function only when it 
+                // sees that a given line gets into the body - it doesn't see when the line gets out of it.
+                // Mst have 2 intersection points with a body so that it can be sliced, thats why world.RayCast() is used again, 
+                // but this time from B to A - that way the point, at which BA enters the body is the point at which AB leaves it!
+                // For that reason, the vector enterPointsVec, where the points are stored, at which AB enters the body. 
+                // Later on, if BA enters a body, which has been entered already by AB, splitObj() function is fired.
+                // Need a unique ID for each body, in order to know where its corresponding enter point is.
+                // That id is stored in the userData of each body.
                 if (spr is TexturedBox) {
                     var userD:TexturedBox = spr as TexturedBox;
                     if (enterPointsVec[userD.index]) {
-                        // If this body has already had an intersection point, then it now has two intersection points, thus it must be split in two - thats where the splitObj() method comes in.
+                        // If this body has already had an intersection point, then it now has two intersection points.
+                        // Thus it must be split in two - thats where the splitObj() method comes in.
                         splitObj(fixture.GetBody(), enterPointsVec[userD.index], point.Copy());
                     }
                     else {
@@ -439,17 +468,6 @@ package com.becker.animation.box2d.simulations {
             return 0;
         }
         
-        /** for debug frawing */
-        private function debugDraw():void {
-            var debugDraw:b2DebugDraw = new b2DebugDraw();
-            var debugSprite:Sprite = new Sprite();
-            canvas.addChild(debugSprite);
-            debugDraw.SetSprite(debugSprite);
-            debugDraw.SetDrawScale(scale);
-            debugDraw.SetFlags(b2DebugDraw.e_shapeBit|b2DebugDraw.e_jointBit);
-            debugDraw.SetFillAlpha(0.5);
-            world.SetDebugDraw(debugDraw);
-        }
         
         /**
          * This is a function which finds the determinant of a 3x3 matrix.

@@ -19,7 +19,7 @@ package com.becker.animation.box2d.simulations {
         public function AbstractSimulation() {}
         
         public function initialize(world:b2World, canvas:UIComponent,
-                            params:PhysicalParameters):void {
+                                   params:PhysicalParameters):void {
             this.world = world;    
             this.canvas = canvas;
             this.params = params;
