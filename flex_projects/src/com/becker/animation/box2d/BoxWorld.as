@@ -126,7 +126,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     
     public function onEnterFrame(e:Event):void{
           
-       if (firstTime && enableSimulation && this.stage != null) {
+        if (firstTime && enableSimulation && this.stage != null) {
             dragInteractor = new MouseDragInteractor(this, world); 
             firstTime = false;
         }
