@@ -9,7 +9,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
     import com.becker.animation.box2d.ExplodeInteractor;
-    import com.becker.animation.sprites.TexturedBox;
+    import com.becker.animation.sprites.ExplodableShape;
     import com.becker.common.Images;
     import com.becker.common.PhysicalParameters;
     import flash.display.BitmapData;
@@ -119,7 +119,7 @@ package com.becker.animation.box2d.simulations {
             
             bodyDef.position.Set(xPos/scale, yPos/scale);
             // custom userData used to map the texture
-            bodyDef.userData = new TexturedBox(explodeInteractor.numEnterPoints, vec, texture);
+            bodyDef.userData = new ExplodableShape(explodeInteractor.numEnterPoints, vec, texture);
             canvas.addChild(bodyDef.userData);    // is this right????
             var fixtureDef:b2FixtureDef = new b2FixtureDef();
             fixtureDef.density=1;

@@ -8,7 +8,7 @@ package com.becker.animation.box2d {
     import Box2D.Dynamics.b2Fixture;
     import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
-    import com.becker.animation.sprites.TexturedBox;
+    import com.becker.animation.sprites.ExplodableShape;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
     import mx.core.UIComponent;
@@ -59,9 +59,9 @@ package com.becker.animation.box2d {
             // I am looking for a body under my mouse
             var clickedBody:b2Body = GetBodyAtXY(new b2Vec2(explosionX/scale, explosionY/scale));
             if (clickedBody != null) {
-                // storing the exploding bodies in a vector. I need to do it since I do not want other bodies
-                // to be affected by the raycast and explode
-                explodingBodies=new Vector.<b2Body>();
+                // storing the exploding bodies in a vector. Need to do this since other bodies
+                // should not be affected by the raycast and explode.
+                explodingBodies = new Vector.<b2Body>();
                 explodingBodies.push(clickedBody);
                 // the explosion begins!
                 for (var i:Number = 1; i <= explosionCuts; i++) {
@@ -122,15 +122,15 @@ package com.becker.animation.box2d {
                 // Mst have 2 intersection points with a body so that it can be sliced, thats why world.RayCast() is used again, 
                 // but this time from B to A - that way the point, at which BA enters the body is the point at which AB leaves it!
                 // For that reason, the vector enterPointsVec, where the points are stored, at which AB enters the body. 
-                // Later on, if BA enters a body, which has been entered already by AB, splitObj() function is fired.
+                // Later on, if BA enters a body, which has been entered already by AB, splitObject() function is fired.
                 // Need a unique ID for each body, in order to know where its corresponding enter point is.
                 // That id is stored in the userData of each body.
-                if (spr is TexturedBox) {
-                    var userD:TexturedBox = spr as TexturedBox;
+                if (spr is ExplodableShape) {
+                    var userD:ExplodableShape = spr as ExplodableShape;
                     if (enterPointsVec[userD.index]) {
                         // If this body has already had an intersection point, then it now has two intersection points.
-                        // Thus it must be split in two - thats where the splitObj() method comes in.
-                        splitObj(fixture.GetBody(), enterPointsVec[userD.index], point.Copy());
+                        // Thus it must be split in two - thats where the splitObject() method comes in.
+                        splitObject(fixture.GetBody(), enterPointsVec[userD.index], point.Copy());
                     }
                     else {
                         enterPointsVec[userD.index]=point;
@@ -160,15 +160,16 @@ package com.becker.animation.box2d {
             return area;
         }
 
-        /** split the object */
-        private function splitObj(sliceBody:b2Body, A:b2Vec2, B:b2Vec2):void {
+        /** split the object into two objects */
+        private function splitObject(sliceBody:b2Body, A:b2Vec2, B:b2Vec2):void {
+            
             var origFixture:b2Fixture=sliceBody.GetFixtureList();
             var poly:b2PolygonShape=origFixture.GetShape() as b2PolygonShape;
             var verticesVec:Object = poly.GetVertices();
             var numVertices:int = poly.GetVertexCount();
             var shape1Vertices:Array = new Array();
             var shape2Vertices:Array = new Array();
-            var origUserData:TexturedBox = sliceBody.GetUserData();
+            var origUserData:ExplodableShape = sliceBody.GetUserData();
             var origUserDataId:int = origUserData.index;
             var d:Number;
             var polyShape:b2PolygonShape=new b2PolygonShape();
@@ -178,12 +179,13 @@ package com.becker.animation.box2d {
             world.DestroyBody(sliceBody);
             canvas.removeChild(origUserData);
             
-            // The world.RayCast() method returns points in world coordinates, so use the b2Body.GetLocalPoint() to convert them to local coordinates.
+            // The world.RayCast() method returns points in world coordinates, 
+            // so use the b2Body.GetLocalPoint() to convert them to local coordinates.
             A=sliceBody.GetLocalPoint(A);
             B = sliceBody.GetLocalPoint(B);
             
-            // I use shape1Vertices and shape2Vertices to store the vertices of the two new shapes that are about to be created. 
-            // Since both point A and B are vertices of the two new shapes, I add them to both vectors.
+            // Use shape1Vertices and shape2Vertices to store the vertices of the two new shapes that are about to be created. 
+            // Since both point A and B are vertices of the two new shapes, add them to both vectors.
             shape1Vertices.push(A, B);
             shape2Vertices.push(A, B);
             
@@ -203,9 +205,10 @@ package com.becker.animation.box2d {
                 }
             }
             
-            // In order to be able to create the two new shapes, I need to have the vertices arranged in clockwise order.
-            // call my custom method, arrangeClockwise(), which takes as a parameter a vector, representing the coordinates of the 
-            // shape's vertices and returns a new vector, with the same points arranged clockwise.
+            // In order to be able to create the two new shapes, need to have the vertices arranged in clockwise order.
+            // Call custom method, arrangeClockwise(), which takes as a parameter a vector, 
+            // representing the coordinates of the shape's vertices and
+            // returns a new vector, with the same points arranged clockwise.
             shape1Vertices=arrangeClockwise(shape1Vertices);
             shape2Vertices = arrangeClockwise(shape2Vertices);
             
@@ -222,7 +225,7 @@ package com.becker.animation.box2d {
             if (getArea(shape1Vertices,shape1Vertices.length)>=0.05) {
                 polyShape.SetAsArray(shape1Vertices);
                 fixtureDef.shape = polyShape;
-                bodyDef.userData = new TexturedBox(origUserDataId, shape1Vertices, origUserData.texture);
+                bodyDef.userData = new ExplodableShape(origUserDataId, shape1Vertices, origUserData.texture);
                 canvas.addChild(bodyDef.userData);
                 enterPointsVec[origUserDataId] = null;
                 body=world.CreateBody(bodyDef);
@@ -233,11 +236,12 @@ package com.becker.animation.box2d {
                 // the shape will be also part of the explosion and can explode too
                 explodingBodies.push(body);
             }
+            
             // creating the second shape, if big enough
             if (getArea(shape2Vertices,shape2Vertices.length)>=0.05) {
                 polyShape.SetAsArray(shape2Vertices);
                 fixtureDef.shape=polyShape;
-                bodyDef.userData = new TexturedBox(numEnterPoints, shape2Vertices, origUserData.texture);
+                bodyDef.userData = new ExplodableShape(numEnterPoints, shape2Vertices, origUserData.texture);
                 canvas.addChild(bodyDef.userData);
                 enterPointsVec.push(null);
                 numEnterPoints++;
