@@ -19,7 +19,7 @@ import flash.geom.Point;
  * 
  * @author Barry Becker
  */
-public class MouseInteractor {
+public class MouseDragInteractor {
      
     private var owner:Sprite;
     private var world:b2World;
@@ -40,7 +40,7 @@ public class MouseInteractor {
      * @param owner the owning sprite for which we will handle mouse interation.
      * @param world the physical world instance.
      */
-    public function MouseInteractor(owner:Sprite, world:b2World) {
+    public function MouseDragInteractor(owner:Sprite, world:b2World) {
         this.owner = owner;
         this.world = world;
             
