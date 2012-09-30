@@ -17,6 +17,8 @@
     [Embed(source='../../../assets/images/pool_pennies_small.jpg')]
     public static const POOL_PENNIES:Class;
     
+    [Embed(source='../../../assets/images/crate.jpg')]
+    public static const CRATE:Class;
     
     
     /**

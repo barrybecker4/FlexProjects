@@ -73,7 +73,7 @@
         }   
         
         private function toggleAnimation():void {      
-                        
+                       
             app.enableSimulation = !app.enableSimulation; 
             animateButton.label = app.enableSimulation ? PAUSE_LABEL : RESUME_LABEL;        
         }     
