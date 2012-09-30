@@ -6,12 +6,12 @@ package  com.becker.animation.sprites {
     import flash.geom.Matrix;
     import mx.core.UIComponent;
     
-    public class TexturedBox extends AbstractShape { 
+    public class ExplodableShape extends AbstractShape { 
         
         public var index:int;
         public var texture:BitmapData;
         
-        public function TexturedBox(index:int, verticesVec:Array, texture:BitmapData) {
+        public function ExplodableShape(index:int, verticesVec:Array, texture:BitmapData) {
             
             super(0xaa77ff);
             this.index = index;
