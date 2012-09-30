@@ -30,6 +30,7 @@ package com.becker.animation.box2d.simulations {
         private var builder:BasicShapeBuilder;   
         private var explodeInteractor:ExplodeInteractor;
         private var firstTime:Boolean = true;
+        private var numEnterPoints:int;  // try and remove this, it should not be needed.
       
         override public function initialize(world:b2World, canvas:UIComponent,
                                             params:PhysicalParameters):void {
@@ -72,7 +73,7 @@ package com.becker.animation.box2d.simulations {
             wallBodyDef.position.Set(pX/scale,pY/scale);
             var wall:b2Body=world.CreateBody(wallBodyDef);
             wall.CreateFixture(wallFixture);
-            explodeInteractor.numEnterPoints++;
+            numEnterPoints++;
         }
         
         /** add a stack of crates */
@@ -119,7 +120,7 @@ package com.becker.animation.box2d.simulations {
             
             bodyDef.position.Set(xPos/scale, yPos/scale);
             // custom userData used to map the texture
-            bodyDef.userData = new ExplodableShape(explodeInteractor.numEnterPoints, vec, texture);
+            bodyDef.userData = new ExplodableShape(numEnterPoints, vec, texture);
             canvas.addChild(bodyDef.userData);    // is this right????
             var fixtureDef:b2FixtureDef = new b2FixtureDef();
             fixtureDef.density=1;
@@ -128,7 +129,7 @@ package com.becker.animation.box2d.simulations {
             fixtureDef.shape = boxDef;
             var tempBox:b2Body = world.CreateBody(bodyDef);
             tempBox.CreateFixture(fixtureDef);
-            explodeInteractor.numEnterPoints++;
+            numEnterPoints++;
         }
       
         
