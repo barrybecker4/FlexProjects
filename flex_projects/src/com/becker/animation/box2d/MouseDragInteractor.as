@@ -16,6 +16,7 @@ import flash.geom.Point;
 
 /**
  * Handles the mouse interaction with the environment.
+ * Allows one to throw around objects via an elastic tether.
  * 
  * @author Barry Becker
  */
