@@ -4,7 +4,6 @@ package  com.becker.animation.sprites {
     
     import flash.display.DisplayObject;
     
-    
     //[Embed(source="../../../../assets/fonts/Agent Orange.ttf", fontName="agentFont", mimeType="application/x-font-truetype")]
     
     /**
