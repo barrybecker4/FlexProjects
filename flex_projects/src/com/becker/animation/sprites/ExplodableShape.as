@@ -16,6 +16,13 @@ package  com.becker.animation.sprites {
             super(0xaa77ff);
             this.index = index;
             this.texture = texture;
+            
+            drawShape(verticesVec);
+        }
+        
+        private function drawShape(verticesVec:Array):void {
+            
+            // This 0.2 is wrong - currently tied to the scale factor in the world - which it should not be.
             var halfWidth:int = 0.2 * texture.width;
             var halfHeight:int = 0.2 * texture.height;
             
