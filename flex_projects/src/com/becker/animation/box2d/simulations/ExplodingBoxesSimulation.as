@@ -4,7 +4,6 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
-    import Box2D.Dynamics.b2DebugDraw;
     import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
@@ -17,8 +16,6 @@ package com.becker.animation.box2d.simulations {
     import flash.events.Event;
     import flash.events.MouseEvent;
     import mx.core.UIComponent;
-    import mx.events.FlexEvent;
-    import mx.controls.Alert;
     
     
     /**
@@ -45,9 +42,6 @@ package com.becker.animation.box2d.simulations {
         }
            
         override public function addDynamicElements():void {
-            // calling the debug draw. This is used to show you the bitmaps are correctly applied.
-            debugDraw();
-
             addCrates();
         }
         
@@ -140,7 +134,7 @@ package com.becker.animation.box2d.simulations {
                 canvas.stage.addEventListener(MouseEvent.MOUSE_DOWN, explodeInteractor.doExplosion);
                 firstTime = false;
             }
-        
+
             world.Step(1/30, 10, 10);
             world.ClearForces();
             var spr:Sprite;
@@ -152,21 +146,8 @@ package com.becker.animation.box2d.simulations {
                     spr.rotation=b.GetAngle()*180/Math.PI;
                 }
             }
-            world.DrawDebugData();
         }
-        
-        
-        /** for debug frawing */
-        private function debugDraw():void {
-            var debugDraw:b2DebugDraw = new b2DebugDraw();
-            var debugSprite:Sprite = new Sprite();
-            canvas.addChild(debugSprite);
-            debugDraw.SetSprite(debugSprite);
-            debugDraw.SetDrawScale(scale);
-            debugDraw.SetFlags(b2DebugDraw.e_shapeBit|b2DebugDraw.e_jointBit);
-            debugDraw.SetFillAlpha(0.5);
-            world.SetDebugDraw(debugDraw);
-        }
+
     }
 }
 

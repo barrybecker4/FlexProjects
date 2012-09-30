@@ -8,18 +8,17 @@
   <compiler>
     <define append="true">
       <name>CONFIG::debug</name>
-      <value>false</value>
+      <value>true</value>
     </define>
     <define append="true">
       <name>CONFIG::release</name>
-      <value>true</value>
+      <value>false</value>
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
       <value>'9/30/2012'</value>
     </define>
-    <optimize>true</optimize>
-    <verbose-stacktraces>false</verbose-stacktraces>
+    <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
       <path-element>E:\projects\flex_projects\flex_projects\src</path-element>
       <path-element>E:\projects\flex_projects\Box2DLib\Build\FlashDevelop\bin</path-element>

@@ -38,7 +38,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     private var simulation:Simulation;
     
     private static const VELOCITY_ITERATIONS:int = 10;
-    private static const STEP_ITERATIONS:int = 5;
+    private static const STEP_ITERATIONS:int = 10;
     private static const TIME_STEP:Number = 1.0/20.0;
     private static const ORIG_WIDTH:int = 1200;
     
