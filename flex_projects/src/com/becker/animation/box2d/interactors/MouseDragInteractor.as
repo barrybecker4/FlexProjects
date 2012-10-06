@@ -1,4 +1,4 @@
-package  com.becker.animation.box2d {
+package  com.becker.animation.box2d.interactors {
 import Box2D.Collision.*;
 import Box2D.Collision.Shapes.*;
 import Box2D.Common.Math.*;
@@ -13,6 +13,7 @@ import com.becker.animation.sprites.AbstractShape;
 import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.geom.Point;
+import flash.events.MouseEvent;
 
 /**
  * Handles the mouse interaction with the environment.
@@ -24,6 +25,8 @@ public class MouseDragInteractor {
      
     private var owner:Sprite;
     private var world:b2World;
+    private var timeStep:Number;
+    private var scale:Number;
     private var mouseJoint:b2MouseJoint;
     private var mousePVec:b2Vec2 = new b2Vec2();
        
@@ -41,11 +44,14 @@ public class MouseDragInteractor {
      * @param owner the owning sprite for which we will handle mouse interation.
      * @param world the physical world instance.
      */
-    public function MouseDragInteractor(owner:Sprite, world:b2World) {
+    public function MouseDragInteractor(owner:Sprite, world:b2World, timeStep:Number, scale:Number) {
         this.owner = owner;
         this.world = world;
+        this.timeStep = timeStep;
+        this.scale = scale;
             
         input = new Input(owner);
+        owner.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleMouseInteraction);
     }
       
     /**
@@ -53,23 +59,23 @@ public class MouseDragInteractor {
      * @param timeStep time increment in simulation
      * @param scale scale factor of the physical objects in the world. 
      */
-    public function handleMouseInteraction(timeStep:Number, scale:Number):void{
+    public function handleMouseInteraction(event:MouseEvent):void {
                  
         // Update mouse joint
-        UpdateMouseWorld(scale)
-        MouseDestroy();
-        MouseDrag(timeStep);
+        updateMouseWorld(scale)
+        mouseDestroy();
+        mouseDrag(timeStep);
         
         // Update input (last)
         Input.update();    
     }
     
-    private function UpdateMouseWorld(scale:Number):void {
+    private function updateMouseWorld(scale:Number):void {
         var mouseWorld:Point = owner.globalToLocal(new Point(Input.mouseX, Input.mouseY));
         mouseWorldPhys = new Point(mouseWorld.x/scale, mouseWorld.y/scale); 
     }
     
-    private function MouseDrag(timeStep:Number):void{
+    private function mouseDrag(timeStep:Number):void{
         // mouse press
         if (Input.mouseDown && draggedBody == null){
             startMouseDrag(timeStep);
@@ -87,7 +93,7 @@ public class MouseDragInteractor {
     }
     
     private function startMouseDrag(timeStep:Number):void {
-        GetBodyAtMouse(mouseDragCallback);
+        getBodyAtMouse(mouseDragCallback);
     }
     
     private function mouseDragCallback(fixture:b2Fixture):void {
@@ -135,23 +141,22 @@ public class MouseDragInteractor {
     }
           
     /** on mouse press */
-    public function MouseDestroy():void{
+    public function mouseDestroy():void{
 
         if (!Input.mouseDown && Input.isKeyPressed(68/*D*/)){
-            GetBodyAtMouse(destroyCallback);
+            getBodyAtMouse(destroyCallback);
         }
     }   
     
     private function destroyCallback(fixture:b2Fixture):void {
         var body:b2Body = getBodyFromFixture(fixture);
-        if (body)
-        {
+        if (body) {
             owner.removeChild(body.GetUserData());
             world.DestroyBody(body);
         }
     }
     
-    private function GetBodyAtMouse(queryCallback:Function):void {
+    private function getBodyAtMouse(queryCallback:Function):void {
         // Make a small box.
         mousePVec.Set(mouseWorldPhys.x, mouseWorldPhys.y);
         var aabb:b2AABB = new b2AABB();
@@ -164,7 +169,7 @@ public class MouseDragInteractor {
         world.QueryAABB(queryCallback, aabb);
     } 
     
-    public function getBodyFromFixture(fixture:b2Fixture):b2Body {
+    private function getBodyFromFixture(fixture:b2Fixture):b2Body {
         var body:b2Body = null;
         if (fixture) {
             

@@ -14,6 +14,7 @@ import com.becker.animation.box2d.simulations.BridgeSimulation;
 import com.becker.animation.box2d.simulations.HelloWorldSimulation;
 import com.becker.animation.box2d.simulations.RagDollSimulation;
 import com.becker.animation.box2d.simulations.TheoJansenSimulation;
+import com.becker.animation.box2d.interactors.MouseDragInteractor;
 import com.becker.animation.sprites.AbstractShape;
 import com.becker.common.Util;
 
@@ -22,6 +23,7 @@ import flash.events.Event;
 
 import mx.core.UIComponent;
 import mx.events.ResizeEvent;
+import flash.events.MouseEvent;
 
 /**
  * The simulated world of shapes interacting with the users mouse and the environment.
@@ -127,7 +129,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     public function onEnterFrame(e:Event):void{
           
         if (firstTime && enableSimulation && this.stage != null) {
-            dragInteractor = new MouseDragInteractor(this, world); 
+            dragInteractor = new MouseDragInteractor(this, world, TIME_STEP, simulation.scale); 
             firstTime = false;
         }
         
@@ -138,9 +140,7 @@ public class BoxWorld extends UIComponent implements Animatible {
         }
         
         drawAllBodies();
-        drawAllJoints();
-
-        dragInteractor.handleMouseInteraction(TIME_STEP, simulation.scale); 
+        drawAllJoints(); 
     }
     
     /** Go through body list and update sprite positions/rotations */
@@ -176,7 +176,6 @@ public class BoxWorld extends UIComponent implements Animatible {
             }
         }
     }
-   
    
     private function createWorld():b2World {
         

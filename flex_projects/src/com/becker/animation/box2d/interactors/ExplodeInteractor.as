@@ -1,4 +1,4 @@
-package com.becker.animation.box2d {
+package com.becker.animation.box2d.interactors {
     
     import Box2D.Collision.Shapes.b2PolygonShape;
     import Box2D.Collision.Shapes.b2Shape;
@@ -9,6 +9,7 @@ package com.becker.animation.box2d {
     import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.sprites.ExplodableShape;
+    import com.becker.animation.box2d.Exploder;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
     import mx.core.UIComponent;

@@ -22,7 +22,7 @@ package com.becker.animation.box2d {
         /** Number of cuts to make when exploding */
         private static const NUM_CUTS:int = 5;
         /** Box2d has broblems if the slices get too thin */
-        private static const TOLERANCE:Number = 0.00000000001;
+        private static const TOLERANCE:Number = 0.0000001;
         
         public var enterPointsVec:Array = new Array();  
         public var numEnterPoints:int = 0; 
