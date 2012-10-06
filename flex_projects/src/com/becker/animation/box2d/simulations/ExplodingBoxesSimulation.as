@@ -7,10 +7,11 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
-    import com.becker.animation.box2d.ExplodeInteractor;
+    import com.becker.animation.box2d.interactors.ExplodeInteractor;
     import com.becker.animation.sprites.ExplodableShape;
     import com.becker.common.Images;
     import com.becker.common.PhysicalParameters;
+    import com.becker.common.Util;
     import flash.display.BitmapData;
     import flash.display.Sprite;
     import flash.events.Event;
@@ -52,7 +53,6 @@ package com.becker.animation.box2d.simulations {
             addWall(0,240,20,480);
             addWall(640, 240, 20, 480);
         }
-        
          
         /** simple function to add a static wall */
         private function addWall(pX:Number, pY:Number, width:Number, hieght:Number):void {
@@ -101,10 +101,10 @@ package com.becker.animation.box2d.simulations {
         private function createBody(xPos:Number, yPos:Number, 
                                     verticesArr:Array, texture:BitmapData):void {
 
-            // I need this temp vector to convert pixels coordinates to Box2D meters coordinates
+            // This temp vector helps convert pixel coordinates to Box2D meters coordinates
             var vec:Array = new Array();
             for (var i:Number=0; i < verticesArr.length; i++) {
-                vec.push(new b2Vec2(verticesArr[i].x / scale,verticesArr[i].y/scale));
+                vec.push(new b2Vec2(verticesArr[i].x / scale,verticesArr[i].y / scale));
             }
             var bodyDef:b2BodyDef = new b2BodyDef();
             bodyDef.type = b2Body.b2_dynamicBody;
@@ -141,9 +141,9 @@ package com.becker.animation.box2d.simulations {
             for (var b:b2Body = world.GetBodyList(); b; b = b.GetNext()) {
                 spr = b.GetUserData();
                 if (spr) {
-                    spr.x=b.GetPosition().x*scale;
-                    spr.y=b.GetPosition().y*scale;
-                    spr.rotation=b.GetAngle()*180/Math.PI;
+                    spr.x = b.GetPosition().x * scale;
+                    spr.y = b.GetPosition().y * scale;
+                    spr.rotation = b.GetAngle() * Util.RAD_TO_DEG;
                 }
             }
         }
