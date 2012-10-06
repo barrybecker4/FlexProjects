@@ -100,7 +100,7 @@ public class MouseDragInteractor {
         if (fixture)
         {
             draggedBody = getBodyFromFixture(fixture);
-            if (!mouseJoint) {
+            if (!mouseJoint && draggedBody) {
                 var md:b2MouseJointDef = new b2MouseJointDef();
                 
                 md.bodyA = world.GetGroundBody();

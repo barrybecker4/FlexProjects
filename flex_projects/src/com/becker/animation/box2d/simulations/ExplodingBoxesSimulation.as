@@ -114,7 +114,7 @@ package com.becker.animation.box2d.simulations {
             
             bodyDef.position.Set(xPos/scale, yPos/scale);
             // custom userData used to map the texture
-            bodyDef.userData = new ExplodableShape(numEnterPoints, vec, texture);
+            bodyDef.userData = new ExplodableShape(numEnterPoints, vec, scale, texture);
             canvas.addChild(bodyDef.userData);    // is this right????
             var fixtureDef:b2FixtureDef = new b2FixtureDef();
             fixtureDef.density=1;
@@ -146,6 +146,10 @@ package com.becker.animation.box2d.simulations {
                     spr.rotation = b.GetAngle() * Util.RAD_TO_DEG;
                 }
             }
+        }
+        
+        override public function cleanup():void {
+            canvas.stage.removeEventListener(MouseEvent.MOUSE_DOWN, explodeInteractor.doExplosion);
         }
 
     }

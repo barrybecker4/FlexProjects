@@ -34,5 +34,8 @@ package com.becker.animation.box2d.simulations {
         public function get scale():Number {
             return 20;
         }
+        
+        public function cleanup():void {
+        }
     }
 }

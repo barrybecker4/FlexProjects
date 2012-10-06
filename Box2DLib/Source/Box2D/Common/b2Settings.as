@@ -183,7 +183,7 @@ public class b2Settings{
     */
 	static public function b2Assert(a:Boolean) : void
 	{
-		if (!a){
+		if (!a) {
 			//var nullVec:b2Vec2;
 			//nullVec.x++;
 			throw "Assertion Failed";

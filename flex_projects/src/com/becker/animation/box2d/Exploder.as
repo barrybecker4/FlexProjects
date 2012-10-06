@@ -221,7 +221,7 @@ package com.becker.animation.box2d {
             
             polyShape.SetAsArray(shapeVertices);
             fixtureDef.shape = polyShape;
-            bodyDef.userData = new ExplodableShape(index, shapeVertices, origUserData.texture);
+            bodyDef.userData = new ExplodableShape(index, shapeVertices, scale, origUserData.texture);
             canvas.addChild(bodyDef.userData);
             
             var body:b2Body = world.CreateBody(bodyDef);

@@ -18,5 +18,7 @@ package com.becker.animation.box2d {
         function addDynamicElements():void
         
         function get scale():Number;
+        
+        function cleanup():void;
     }
 }
