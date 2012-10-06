@@ -4,26 +4,16 @@ import Box2D.Collision.Shapes.*;
 import Box2D.Common.Math.*;
 import Box2D.Dynamics.*;
 import Box2D.Dynamics.Joints.b2Joint;
+import com.becker.animation.Animatible;
+import com.becker.animation.sprites.AbstractShape;
 import com.becker.animation.sprites.Line;
 import com.becker.common.PhysicalParameters;
-import flash.display.Shape;
-import flash.geom.Point;
-
-import com.becker.animation.Animatible;
-import com.becker.animation.box2d.simulations.BridgeSimulation;
-import com.becker.animation.box2d.simulations.HelloWorldSimulation;
-import com.becker.animation.box2d.simulations.RagDollSimulation;
-import com.becker.animation.box2d.simulations.TheoJansenSimulation;
-import com.becker.animation.box2d.interactors.MouseDragInteractor;
-import com.becker.animation.sprites.AbstractShape;
 import com.becker.common.Util;
-
 import flash.display.Sprite;
 import flash.events.Event;
-
 import mx.core.UIComponent;
 import mx.events.ResizeEvent;
-import flash.events.MouseEvent;
+
 
 /**
  * The simulated world of shapes interacting with the users mouse and the environment.
@@ -51,8 +41,6 @@ public class BoxWorld extends UIComponent implements Animatible {
     
     private var showDebug:Boolean = false;
     private var debugSprite:Sprite;
-   
-    private var dragInteractor:MouseDragInteractor;
     private var firstTime:Boolean;
         
     
@@ -129,7 +117,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     public function onEnterFrame(e:Event):void{
           
         if (firstTime && enableSimulation && this.stage != null) {
-            dragInteractor = new MouseDragInteractor(this, world, TIME_STEP, simulation.scale); 
+            simulation.createInteractors(); 
             firstTime = false;
         }
         
@@ -192,7 +180,6 @@ public class BoxWorld extends UIComponent implements Animatible {
             removeDebugDrawing();
         }
     }
-  
     
     private function addDebugDrawing():void {
         // if already showing debug, dont do it again.

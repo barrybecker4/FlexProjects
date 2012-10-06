@@ -234,8 +234,6 @@ package com.becker.common
                 
                 if (Math.abs(proposedAngle - adjAngle) > angleLimit)
                 {
-                    trace("angle="+Math.abs(proposedAngle) + " to different from adjAngle="+
-                        Math.abs(adjAngle) +" so limiting to "+oldAngle);
                     if (proposedAngle - adjAngle > 0) {                    
                         ang = adjAngle - angleLimit; 
                     } else {

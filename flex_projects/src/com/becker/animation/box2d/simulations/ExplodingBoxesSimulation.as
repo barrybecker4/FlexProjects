@@ -26,16 +26,12 @@ package com.becker.animation.box2d.simulations {
     public class ExplodingBoxesSimulation extends AbstractSimulation {
         
         private var builder:BasicShapeBuilder;   
-        private var explodeInteractor:ExplodeInteractor;
-        private var firstTime:Boolean = true;
         private var numEnterPoints:int;  // try and remove this, it should not be needed.
       
         override public function initialize(world:b2World, canvas:UIComponent,
                                             params:PhysicalParameters):void {
             super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);  
-            explodeInteractor = new ExplodeInteractor(world, canvas, scale);
-            canvas.addEventListener(Event.ENTER_FRAME, update); 
         }
       
         override public function addStaticElements():void {
@@ -126,32 +122,9 @@ package com.becker.animation.box2d.simulations {
             numEnterPoints++;
         }
       
-        
-        /** update function to simulate and render the world */
-        public function update(e:Event):void {
-            
-            if (firstTime && canvas.stage != null) {
-                canvas.stage.addEventListener(MouseEvent.MOUSE_DOWN, explodeInteractor.doExplosion);
-                firstTime = false;
-            }
-
-            world.Step(1/30, 10, 10);
-            world.ClearForces();
-            var spr:Sprite;
-            for (var b:b2Body = world.GetBodyList(); b; b = b.GetNext()) {
-                spr = b.GetUserData();
-                if (spr) {
-                    spr.x = b.GetPosition().x * scale;
-                    spr.y = b.GetPosition().y * scale;
-                    spr.rotation = b.GetAngle() * Util.RAD_TO_DEG;
-                }
-            }
+        override public function createInteractors():void {
+            interactors = [new ExplodeInteractor(world, canvas, scale)];
         }
-        
-        override public function cleanup():void {
-            canvas.stage.removeEventListener(MouseEvent.MOUSE_DOWN, explodeInteractor.doExplosion);
-        }
-
     }
 }
 

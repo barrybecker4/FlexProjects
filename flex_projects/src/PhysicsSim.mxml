@@ -62,7 +62,7 @@
             
             if (debugCheckbox.selected) {
                 debugCheckbox.selected = false;
-                debugStateChanged()
+                debugStateChanged();
             }
             var sim:Simulation = 
                 simulations.getSimulation(String(simulationCombo.selectedItem)); 

@@ -14,17 +14,17 @@ package  com.becker.animation.box2d {
         /**
          * Called when a contact point is added. This includes the geometry
          * and the forces.
-         *
+         */
         override public function BeginContact(point:b2Contact):void {
-            var normVel:Number = point.velocity.Normalize();
+            //var normVel:Number = point.velocity.Normalize();
             //var volume:Number = (normVel * normVel)/100;
-            var volume:Number = normVel/10;
+            var volume:Number = 0.1 + Math.random() / 5.0; // normVel / 10;
             //trace("sep = " + point.separation)
             if (volume > 0) {
                 //trace("new contact vol=" + volume);            
-                Sounds.playHit(volume);
+                Sounds.playScrape(volume);
             }
-        };*/
+        };
         
         /**
          * Called when a contact point is added. This includes the geometry
@@ -38,14 +38,11 @@ package  com.becker.animation.box2d {
      
             var volume:Number = sum/60.0;
             if (volume > 0) {
-                //trace("new contact vol=" + volume);            
+                //trace("new contact vol=" + volume); 
+                //Sounds.playScrape(volume);
                 Sounds.playHit(volume);
             }
-        };
-  
-    
+        };  
     }
-
-
 
 }
