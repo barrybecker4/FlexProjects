@@ -155,13 +155,11 @@ package com.becker.animation.box2d {
             
             // creating the first shape, if big enough
             if (getArea(shape1Vertices) >= 0.05) {
-                trace("shape1 verts=" + shape1Vertices);
                 createFragment(shape1Vertices, origUserData.index, fixtureDef, bodyDef, sliceBody);
             }
             
             // creating the second shape, if big enough
             if (getArea(shape2Vertices) >= 0.05) {
-                trace("shape2 verts=" + shape2Vertices);
                 createFragment(shape2Vertices, numEnterPoints, fixtureDef, bodyDef, sliceBody);
             }
         }
@@ -216,6 +214,7 @@ package com.becker.animation.box2d {
         private function createFragment(shapeVertices:Array, index:int,
                              fixtureDef:b2FixtureDef, bodyDef:b2BodyDef, sliceBody:b2Body):void {
               
+            //trace("shape verts=" + shapeVertices);
             var origUserData:ExplodableShape = sliceBody.GetUserData();
             var polyShape:b2PolygonShape = new b2PolygonShape();
             

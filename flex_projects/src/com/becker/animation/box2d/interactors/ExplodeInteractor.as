@@ -17,7 +17,7 @@ package com.becker.animation.box2d.interactors {
     /**
      * Lets you blow up stuff by clicking on it.
      */
-    public class ExplodeInteractor  {
+    public class ExplodeInteractor implements Interactor {
                 
         private var world:b2World;
         private var canvas:UIComponent;
@@ -29,17 +29,20 @@ package com.becker.animation.box2d.interactors {
             this.world = world;
             this.canvas = canvas;
             this.scale = scale;
+            canvas.stage.addEventListener(MouseEvent.MOUSE_DOWN, doExplosion);
+        }
+        
+        public function removeMouseHandlers():void {
+            canvas.stage.removeEventListener(MouseEvent.MOUSE_DOWN, doExplosion);
         }
         
         /** function to create an explosion */
-        public function doExplosion(e:MouseEvent):void {
+        private function doExplosion(e:MouseEvent):void {
             
-            // I am looking for a body under my mouse
             var clickedBody:b2Body = 
                 GetBodyAtXY(new b2Vec2(canvas.mouseX / scale, canvas.mouseY / scale));
                 
             if (clickedBody != null) {
-                
                 var exploder:Exploder = new Exploder(world, canvas, scale);
                 exploder.explodeBody(clickedBody, canvas.mouseX, canvas.mouseY);
             }

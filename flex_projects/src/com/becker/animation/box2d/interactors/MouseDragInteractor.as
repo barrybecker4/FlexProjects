@@ -5,6 +5,7 @@ import Box2D.Common.Math.*;
 import Box2D.Dynamics.*;
 import Box2D.Dynamics.Joints.b2MouseJoint;
 import Box2D.Dynamics.Joints.b2MouseJointDef;
+import flash.display.Stage;
 
 import General.Input;
 
@@ -21,11 +22,10 @@ import flash.events.MouseEvent;
  * 
  * @author Barry Becker
  */
-public class MouseDragInteractor {
+public class MouseDragInteractor implements Interactor {
      
     private var owner:Sprite;
     private var world:b2World;
-    private var timeStep:Number;
     private var scale:Number;
     private var mouseJoint:b2MouseJoint;
     private var mousePVec:b2Vec2 = new b2Vec2();
@@ -44,27 +44,28 @@ public class MouseDragInteractor {
      * @param owner the owning sprite for which we will handle mouse interation.
      * @param world the physical world instance.
      */
-    public function MouseDragInteractor(owner:Sprite, world:b2World, timeStep:Number, scale:Number) {
+    public function MouseDragInteractor(owner:Sprite, world:b2World, scale:Number) {
         this.owner = owner;
         this.world = world;
-        this.timeStep = timeStep;
         this.scale = scale;
             
         input = new Input(owner);
         owner.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleMouseInteraction);
     }
+    
+    public function removeMouseHandlers():void {
+        owner.stage.removeEventListener(MouseEvent.MOUSE_MOVE, handleMouseInteraction);
+    }
       
     /**
      * Respond to user dragging of shapes.
-     * @param timeStep time increment in simulation
-     * @param scale scale factor of the physical objects in the world. 
      */
-    public function handleMouseInteraction(event:MouseEvent):void {
+    private function handleMouseInteraction(event:MouseEvent):void {
                  
         // Update mouse joint
         updateMouseWorld(scale)
         mouseDestroy();
-        mouseDrag(timeStep);
+        mouseDrag();
         
         // Update input (last)
         Input.update();    
@@ -75,10 +76,10 @@ public class MouseDragInteractor {
         mouseWorldPhys = new Point(mouseWorld.x/scale, mouseWorld.y/scale); 
     }
     
-    private function mouseDrag(timeStep:Number):void{
+    private function mouseDrag():void{
         // mouse press
         if (Input.mouseDown && draggedBody == null){
-            startMouseDrag(timeStep);
+            startMouseDrag();
         }       
       
         // mouse release
@@ -92,7 +93,7 @@ public class MouseDragInteractor {
         }
     }
     
-    private function startMouseDrag(timeStep:Number):void {
+    private function startMouseDrag():void {
         getBodyAtMouse(mouseDragCallback);
     }
     
