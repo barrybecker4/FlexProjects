@@ -10,12 +10,14 @@ package  com.becker.animation.sprites {
         
         public var index:int;
         public var texture:BitmapData;
+        private var scale:Number;
         
-        public function ExplodableShape(index:int, verticesVec:Array, texture:BitmapData) {
+        public function ExplodableShape(index:int, verticesVec:Array, scale:Number, texture:BitmapData) {
             
             super(0xaa77ff);
             this.index = index;
             this.texture = texture;
+            this.scale = scale;
             
             drawShape(verticesVec);
         }
@@ -23,8 +25,8 @@ package  com.becker.animation.sprites {
         private function drawShape(verticesVec:Array):void {
             
             // This 0.2 is wrong - currently tied to the scale factor in the world - which it should not be.
-            var halfWidth:int = 0.2 * texture.width;
-            var halfHeight:int = 0.2 * texture.height;
+            var halfWidth:int = scale; //0.2 * texture.width;
+            var halfHeight:int = scale; //0.2 * texture.height;
             
             // Use the matrix so the center of the shape drawn matches the center of the BitmapData image.
             // "move" the BitmapData projection left by half its width and up by half its height.

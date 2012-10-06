@@ -136,8 +136,13 @@ public class b2Vec2
 		return b2Math.IsValid(x) && b2Math.IsValid(y);
 	}
 
+    
+    public function toString():String {
+        return "(" + x + ", " + y + ")";
+    }
 	public var x:Number;
 	public var y:Number;
+    
 };
 
 }

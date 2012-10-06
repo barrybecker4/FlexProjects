@@ -150,12 +150,14 @@ package com.becker.animation.box2d.builders
             var lineShape:b2PolygonShape = new b2PolygonShape();
             var verts:Array = [new b2Vec2(start.x, start.y), new b2Vec2(stop.x, stop.y)]; 
             lineShape.SetAsArray(verts, 2);
-            var diff:Point = new Point(stop.x - start.x, stop.y - start.y);
             lineDef.shape = lineShape;
             
+            var diff:Point = new Point(stop.x - start.x, stop.y - start.y);
             bodyDef.userData = new Line(diff, scale);
-            return addShape(lineDef, bodyDef); 
+            return addShapeWithoutFixture(lineDef, bodyDef); 
         }
+        
+
         
         /** Different depending on whether we are passed b2Vec2 or Points */
         private function getPointsFromArray(points:Array):Array {

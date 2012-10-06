@@ -69,16 +69,16 @@ public class BoxWorld extends UIComponent implements Animatible {
         firstTime = true;
         world = createWorld();
         simulation.initialize(world, this, params);
+        if (this.simulation != null) {
+            this.simulation.cleanup();
+        }
         this.simulation = simulation;
         startAnimation(); 
     }
     
     public function startAnimating():void {
-        if (world == null) {
-            //setSimulation(AVAILABLE_SIMULATIONS[0]);
-        }
     }
-    
+
     public function startAnimation():void {
                           
         this.removeAllChildren();

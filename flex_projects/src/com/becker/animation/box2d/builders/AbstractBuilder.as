@@ -33,6 +33,14 @@ package com.becker.animation.box2d.builders
             return body;
         }
         
+        /** Will just be visible without physical presence. Not sure why this is needed */
+        protected function addShapeWithoutFixture(fixtureDef:b2FixtureDef, bodyDef:b2BodyDef):b2Body {           
+          
+            var body:b2Body = world.CreateBody(bodyDef);
+            canvas.addChild(bodyDef.userData);
+            return body;
+        }
+        
         public static function degreesToRadians(angle:Number):Number {
             return angle * (180.0/Math.PI);
         }
