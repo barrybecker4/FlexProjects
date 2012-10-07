@@ -19,18 +19,11 @@ package com.becker.animation.box2d.simulations {
      * Simulates a car moving with a bunch of balls and crap.
      */
     public class CarSimulation extends AbstractSimulation {
-        
-        private static const SPEED_INC:Number = 0.8;
-        
+
         private var builder:BasicShapeBuilder;   
         private var carBuilder:CarBuilder; 
         private var crapBuilder:CrapBuilder;
         private var car:Car;
-        
-        private var braking:Boolean = false;
-        private var increaseAcceleration:Boolean = false;
-        private var decreaseAcceleration:Boolean = false;
-        private var motorSpeed:Number = 0.0;
                   
         
         override public function initialize(world:b2World, canvas:UIComponent,
@@ -49,10 +42,14 @@ package com.becker.animation.box2d.simulations {
             bodyDef.position.Set(30, 30);
             bodyDef.angle = -0.05;
             bodyDef.type =  b2Body.b2_staticBody;
-            builder.buildBlock(35, 2, bodyDef, 0.5, 1.0, 0.1);
+            builder.buildBlock(85, 2, bodyDef, 0.5, 1.0, 0.1);
             
             bodyDef.position.Set(61, 26);
             builder.buildBlock(1.0, 0.4, bodyDef, 0.5, 1.0, 0.1);
+            
+            bodyDef.angle = 0.1;
+            bodyDef.position.Set(-60, 30);
+            builder.buildBlock(40, 2, bodyDef, 0.5, 1.0, 0.1);
         }
         
         override public function addDynamicElements():void {
@@ -67,32 +64,13 @@ package com.becker.animation.box2d.simulations {
          */
         override public function onFrameUpdate():void {
             
-            if (braking) {
-                motorSpeed *= 0.8;
-            }
-            else {
-                motorSpeed *=0.99;  // damping due to friction
-            }
-            
-            if (increaseAcceleration) {
-                motorSpeed += SPEED_INC;
-            }
-            else if (decreaseAcceleration) {
-                motorSpeed -= SPEED_INC;
-            }
-            
-            car.setMotorSpeed(motorSpeed);
-            
-            braking = false;
-            increaseAcceleration = false;
-            decreaseAcceleration = false;
+            car.updateMotor();
             
             var xOffset:Number = -scale * car.carBody.GetWorldCenter().x + canvas.width / 2 - car.carBody.GetLinearVelocity().x * 10;
             var yOffset:Number = -scale * car.carBody.GetWorldCenter().y + canvas.height / 2 - car.carBody.GetLinearVelocity().y * 10;
             canvas.x -= (canvas.x - xOffset) / 3;
             canvas.y -= (canvas.y - yOffset) / 3;
         }
-        
           
         private function addRandomCrap():void {
             var bodyDef:b2BodyDef = new b2BodyDef();
@@ -107,21 +85,22 @@ package com.becker.animation.box2d.simulations {
         
         override public function createInteractors():void {
             var dragInteractor:MouseDragInteractor = new MouseDragInteractor(canvas, world, scale);
-            var kbdInteractor:KeyboardInteractor = new KeyboardInteractor(canvas, world, scale);
+            var kbdInteractor:KeyboardInteractor = new KeyboardInteractor(canvas);
             kbdInteractor.keyPressHandler = keyHandler;
             interactors = [dragInteractor, kbdInteractor];
         }
         
+        /** handler for the KeyboardInteractor */
         private function keyHandler(keyCode:uint):void {
            
             if (keyCode == 66) {   // B: braking
-                braking = true;
+                car.braking = true;
             }
             else if (keyCode == 39) {  // right arrow
-                increaseAcceleration = true;
+                car.increaseAcceleration = true;
             } 
             else if (keyCode == 37) {  // left arrow
-                decreaseAcceleration = true;
+                car.decreaseAcceleration = true;
             }
         }
      

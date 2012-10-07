@@ -25,7 +25,7 @@ package com.becker.animation.box2d.interactors {
         
         
         /** Constructor */
-        public function ExplodeInteractor(world:b2World, canvas:UIComponent, scale:Number ) {
+        public function ExplodeInteractor(world:b2World, canvas:UIComponent, scale:Number) {
             this.world = world;
             this.canvas = canvas;
             this.scale = scale;
