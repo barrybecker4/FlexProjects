@@ -34,7 +34,7 @@ package com.becker.animation.box2d.builders
         
         private static const DEFAULT_SIZE:Number = 10.0;
         private static const DENSITY:Number = 1.0;
-        private static const FRICTION:Number = 0.7;
+        private static const FRICTION:Number = 0.9;
         private static const RESTITUTION:Number = 0.1;
         
         
@@ -81,35 +81,6 @@ package com.becker.animation.box2d.builders
             addBalls(numBalls, shapeSize, bodyDef);
             addPolygons(numPolygons, bodyDef);
         }       
-        
-        
-        
-         /*
-        private function addRandomCrap():void {
-            var bodyDef:b2BodyDef = new b2BodyDef();
-            addSmallBalls(40, bodyDef);                       
-            addBallsAndBlocks(6, bodyDef);
-        } */
-        
-        
-        /** Some random balls and blocks 
-        private function addBallsAndBlocks(n:int, bodyDef:b2BodyDef):void {
-            
-            for (var i:int = 1; i < n; i++) {
-                bodyDef.position.Set(Math.random() * 15 + 10, Math.random() * 5);
-
-                var rX:Number = Math.random() + 0.5;
-                var rY:Number = Math.random() + 0.5;
-          
-                if (Math.random() < 0.5) {
-                    builder.buildBlock(rX, rY, bodyDef, params.density, params.friction, params.restitution);
-                } 
-                else {
-                    builder.buildBall(rX, bodyDef, params.density, params.friction, params.restitution);
-                }  
-            }
-        }*/
-        
         
         public function addBlocks(num:int, size:Number, bodyDef:b2BodyDef):void  {
             

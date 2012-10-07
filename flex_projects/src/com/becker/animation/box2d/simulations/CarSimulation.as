@@ -4,8 +4,13 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
+    import com.becker.animation.box2d.builders.items.car.Car;
     import com.becker.animation.box2d.builders.CarBuilder;
     import com.becker.animation.box2d.builders.CrapBuilder;
+    import com.becker.animation.box2d.builders.items.car.Car;
+    import com.becker.animation.box2d.interactors.KeyboardInteractor;
+    import com.becker.animation.box2d.interactors.MouseDragInteractor;
+    import com.becker.animation.box2d.interactors.KeyboardInteractor;
     import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
      
@@ -15,9 +20,17 @@ package com.becker.animation.box2d.simulations {
      */
     public class CarSimulation extends AbstractSimulation {
         
+        private static const SPEED_INC:Number = 0.8;
+        
         private var builder:BasicShapeBuilder;   
         private var carBuilder:CarBuilder; 
         private var crapBuilder:CrapBuilder;
+        private var car:Car;
+        
+        private var braking:Boolean = false;
+        private var increaseAcceleration:Boolean = false;
+        private var decreaseAcceleration:Boolean = false;
+        private var motorSpeed:Number = 0.0;
                   
         
         override public function initialize(world:b2World, canvas:UIComponent,
@@ -45,8 +58,41 @@ package com.becker.animation.box2d.simulations {
         override public function addDynamicElements():void {
             
             addRandomCrap(); 
-            carBuilder.buildInstance(14, 20, params);
+            car = carBuilder.buildInstance(14, 20, params);
         }
+        
+        /**
+         * Called every time a new frame is drawn.
+         * change the car's acceleration based on specifications
+         */
+        override public function onFrameUpdate():void {
+            
+            if (braking) {
+                motorSpeed *= 0.8;
+            }
+            else {
+                motorSpeed *=0.99;  // damping due to friction
+            }
+            
+            if (increaseAcceleration) {
+                motorSpeed += SPEED_INC;
+            }
+            else if (decreaseAcceleration) {
+                motorSpeed -= SPEED_INC;
+            }
+            
+            car.setMotorSpeed(motorSpeed);
+            
+            braking = false;
+            increaseAcceleration = false;
+            decreaseAcceleration = false;
+            
+            var xOffset:Number = -scale * car.carBody.GetWorldCenter().x + canvas.width / 2 - car.carBody.GetLinearVelocity().x * 10;
+            var yOffset:Number = -scale * car.carBody.GetWorldCenter().y + canvas.height / 2 - car.carBody.GetLinearVelocity().y * 10;
+            canvas.x -= (canvas.x - xOffset) / 3;
+            canvas.y -= (canvas.y - yOffset) / 3;
+        }
+        
           
         private function addRandomCrap():void {
             var bodyDef:b2BodyDef = new b2BodyDef();
@@ -54,10 +100,30 @@ package com.becker.animation.box2d.simulations {
             
             crapBuilder.setSpawnSpread(900, 80);
             crapBuilder.setShapeSize(5.0);
-            crapBuilder.addCrap(bodyDef, 5, 5, 6);
+            crapBuilder.addCrap(bodyDef, 15, 15, 16);
             crapBuilder.setSpawnSpread(900, 0);
             crapBuilder.addBalls(10, 4, bodyDef);
         } 
+        
+        override public function createInteractors():void {
+            var dragInteractor:MouseDragInteractor = new MouseDragInteractor(canvas, world, scale);
+            var kbdInteractor:KeyboardInteractor = new KeyboardInteractor(canvas, world, scale);
+            kbdInteractor.keyPressHandler = keyHandler;
+            interactors = [dragInteractor, kbdInteractor];
+        }
+        
+        private function keyHandler(keyCode:uint):void {
+           
+            if (keyCode == 66) {   // B: braking
+                braking = true;
+            }
+            else if (keyCode == 39) {  // right arrow
+                increaseAcceleration = true;
+            } 
+            else if (keyCode == 37) {  // left arrow
+                decreaseAcceleration = true;
+            }
+        }
      
     }
 }

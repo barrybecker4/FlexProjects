@@ -21,6 +21,9 @@ package com.becker.animation.box2d {
         /** The dynamic elements move and can be interacted with */
         function addDynamicElements():void
         
+        /** Called every time a new frame is drawn. */
+        function onFrameUpdate():void;
+        
         /** How big things are */
         function get scale():Number;
         

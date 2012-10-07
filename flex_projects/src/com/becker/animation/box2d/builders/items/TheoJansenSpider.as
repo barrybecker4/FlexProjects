@@ -1,4 +1,4 @@
-package com.becker.animation.box2d.builders {
+package com.becker.animation.box2d.builders.items {
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.b2Body;
     

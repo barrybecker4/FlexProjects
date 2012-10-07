@@ -32,7 +32,7 @@ package com.becker.animation.box2d.interactors {
             canvas.stage.addEventListener(MouseEvent.MOUSE_DOWN, doExplosion);
         }
         
-        public function removeMouseHandlers():void {
+        public function removeHandlers():void {
             canvas.stage.removeEventListener(MouseEvent.MOUSE_DOWN, doExplosion);
         }
         

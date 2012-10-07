@@ -110,7 +110,7 @@
                      <mx:Label text="Simulation" />
                      <mx:ComboBox id="simulationCombo" 
                                   dataProvider="{AvailableSimulations.AVAILABLE_SIMULATIONS}"  
-                                  selectedIndex="5" change="simulationSelected()" />  
+                                  selectedIndex="4" change="simulationSelected()" />  
                 </mx:HBox>
                 <mx:Spacer width="100%" />
                 <control:FontSelector id="fontSelector" changeHandler="fontSelected" />

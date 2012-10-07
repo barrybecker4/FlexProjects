@@ -7,7 +7,7 @@ package com.becker.animation.box2d.interactors {
      */
     public interface Interactor {
         
-        function removeMouseHandlers():void;
+        function removeHandlers():void;
     }
     
 }
