@@ -1,16 +1,15 @@
 package com.becker.animation.box2d.simulations {
     
+    import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
-    import com.becker.animation.box2d.builders.items.car.Car;
     import com.becker.animation.box2d.builders.CarBuilder;
     import com.becker.animation.box2d.builders.CrapBuilder;
     import com.becker.animation.box2d.builders.items.car.Car;
     import com.becker.animation.box2d.interactors.KeyboardInteractor;
     import com.becker.animation.box2d.interactors.MouseDragInteractor;
-    import com.becker.animation.box2d.interactors.KeyboardInteractor;
     import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
      
@@ -36,7 +35,6 @@ package com.becker.animation.box2d.simulations {
         
         override public function addStaticElements():void {
             
-            // Add ground body
             var bodyDef:b2BodyDef = new b2BodyDef();
             
             bodyDef.position.Set(30, 30);
@@ -66,10 +64,12 @@ package com.becker.animation.box2d.simulations {
             
             car.updateMotor();
             
-            var xOffset:Number = -scale * car.carBody.GetWorldCenter().x + canvas.width / 2 - car.carBody.GetLinearVelocity().x * 10;
-            var yOffset:Number = -scale * car.carBody.GetWorldCenter().y + canvas.height / 2 - car.carBody.GetLinearVelocity().y * 10;
-            canvas.x -= (canvas.x - xOffset) / 3;
-            canvas.y -= (canvas.y - yOffset) / 3;
+            var center:b2Vec2 = car.carBody.GetWorldCenter();
+            var velocity:b2Vec2 = car.carBody.GetLinearVelocity();
+            var xOffset:Number = -scale * center.x + canvas.width / 2 - velocity.x;
+            var yOffset:Number = -scale * center.y + canvas.height / 2 - velocity.y;
+            canvas.x -= (canvas.x - xOffset) / 30;
+            canvas.y -= (canvas.y - yOffset) / 30;
         }
           
         private function addRandomCrap():void {

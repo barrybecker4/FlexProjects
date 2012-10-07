@@ -80,47 +80,18 @@ package com.becker.animation.box2d.simulations {
             
             // then createBody builds the final body and applies the bitmap.
             // the first two arguments are the X and Y position of the center of the crate, in pixels
-            createBody(95, 420, crateCoordVector, crateBitmap);
-            createBody(245, 420, crateCoordVector, crateBitmap);
-            createBody(395, 420, crateCoordVector, crateBitmap);
-            createBody(545, 420, crateCoordVector, crateBitmap);
-            createBody(170, 320, crateCoordVector, crateBitmap);
-            createBody(320, 320, crateCoordVector, crateBitmap);
-            createBody(470, 320, crateCoordVector, crateBitmap);
-            createBody(245, 220, crateCoordVector, crateBitmap);
-            createBody(395, 220, crateCoordVector, crateBitmap);
-            createBody(320, 120, crateCoordVector, crateBitmap);
+            builder.createExplodableBody(95, 420, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(245, 420, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(395, 420, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(545, 420, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(170, 320, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(320, 320, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(470, 320, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(245, 220, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(395, 220, crateCoordVector, crateBitmap, numEnterPoints++);
+            builder.createExplodableBody(320, 120, crateCoordVector, crateBitmap, numEnterPoints++);
         }
        
-        
-        /** function to create and texture a dynamic body */
-        private function createBody(xPos:Number, yPos:Number, 
-                                    verticesArr:Array, texture:BitmapData):void {
-
-            // This temp vector helps convert pixel coordinates to Box2D meters coordinates
-            var vec:Array = new Array();
-            for (var i:Number=0; i < verticesArr.length; i++) {
-                vec.push(new b2Vec2(verticesArr[i].x / scale,verticesArr[i].y / scale));
-            }
-            var bodyDef:b2BodyDef = new b2BodyDef();
-            bodyDef.type = b2Body.b2_dynamicBody;
-            
-            var boxDef:b2PolygonShape = new b2PolygonShape();
-            boxDef.SetAsArray(vec);
-            
-            bodyDef.position.Set(xPos/scale, yPos/scale);
-            // custom userData used to map the texture
-            bodyDef.userData = new ExplodableShape(numEnterPoints, vec, scale, texture);
-            canvas.addChild(bodyDef.userData);    // is this right????
-            var fixtureDef:b2FixtureDef = new b2FixtureDef();
-            fixtureDef.density=1;
-            fixtureDef.friction=0.2;
-            fixtureDef.restitution=0.5;
-            fixtureDef.shape = boxDef;
-            var tempBox:b2Body = world.CreateBody(bodyDef);
-            tempBox.CreateFixture(fixtureDef);
-            numEnterPoints++;
-        }
       
         override public function createInteractors():void {
             interactors = [new ExplodeInteractor(world, canvas, scale)];

@@ -27,7 +27,7 @@ package com.becker.animation.box2d.builders
             var body:b2Body = world.CreateBody(bodyDef);
             
             body.CreateFixture(fixtureDef);
-            body.ResetMassData();
+            //body.ResetMassData();
             canvas.addChild(bodyDef.userData);
 
             return body;

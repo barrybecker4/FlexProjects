@@ -49,6 +49,7 @@ package com.becker.animation.box2d.simulations {
             interactors = [new MouseDragInteractor(canvas, world, scale)];
         }
         
+        /** Cleanup when the simulation is destroyed */
         public function cleanup():void {
             for each (var interactor:Interactor in interactors) {
                 interactor.removeHandlers();

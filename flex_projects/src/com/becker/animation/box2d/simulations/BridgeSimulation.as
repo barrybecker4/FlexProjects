@@ -15,6 +15,7 @@ package com.becker.animation.box2d.simulations {
     import mx.core.UIComponent;
     
     public class BridgeSimulation extends AbstractSimulation {
+        
         private static const NUM_SHAPES:Number = 50;
         private static const NUM_PLANKS:int = 10;
         
@@ -55,9 +56,7 @@ package com.becker.animation.box2d.simulations {
             crapBuilder.addCrap(bodyDef, 6, 5, 15);
         }
         
-        /**
-         * Bridge
-         */
+        /** Bridge */
         private function addBridge(bodyDef:b2BodyDef):void {
             
             var body:b2Body;

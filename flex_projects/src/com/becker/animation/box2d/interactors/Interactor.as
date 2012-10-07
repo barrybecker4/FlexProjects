@@ -3,6 +3,7 @@ package com.becker.animation.box2d.interactors {
     
     /**
      * Interface for all simulation interactors.
+     * 
      * @author Barry Becker
      */
     public interface Interactor {

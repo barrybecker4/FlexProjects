@@ -10,8 +10,10 @@ package com.becker.animation.box2d.builders
     import Box2D.Dynamics.b2World;
     import Box2D.Dynamics.b2FixtureDef;
     import com.becker.animation.sprites.AbstractShape;
+    import com.becker.animation.sprites.ExplodableShape;
     import com.becker.animation.sprites.Line;
     import com.becker.common.PhysicalParameters;
+    import flash.display.BitmapData;
     
     import com.becker.animation.sprites.Circle;
     import com.becker.animation.sprites.Polygon;
@@ -157,6 +159,33 @@ package com.becker.animation.box2d.builders
             return addShapeWithoutFixture(lineDef, bodyDef); 
         }
         
+        /** function to create and texture a dynamic body */
+        public function createExplodableBody(xPos:Number, yPos:Number, 
+                                    verticesArr:Array, texture:BitmapData, numEnterPoints:int):b2Body {
+
+            // This temp vector helps convert pixel coordinates to Box2D meters coordinates
+            var vec:Array = new Array();
+            for (var i:Number=0; i < verticesArr.length; i++) {
+                vec.push(new b2Vec2(verticesArr[i].x / scale,verticesArr[i].y / scale));
+            }
+            var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.type = b2Body.b2_dynamicBody;
+            
+            var polyDef:b2PolygonShape = new b2PolygonShape();
+            polyDef.SetAsArray(vec);
+            
+            bodyDef.position.Set(xPos/scale, yPos/scale);
+            // custom userData used to map the texture
+            bodyDef.userData = new ExplodableShape(numEnterPoints, vec, scale, texture);
+            
+            var fixtureDef:b2FixtureDef = new b2FixtureDef();
+            fixtureDef.density=1;
+            fixtureDef.friction=0.2;
+            fixtureDef.restitution=0.5;
+            fixtureDef.shape = polyDef;
+            
+            return addShape(fixtureDef, bodyDef); 
+        }
 
         
         /** Different depending on whether we are passed b2Vec2 or Points */
