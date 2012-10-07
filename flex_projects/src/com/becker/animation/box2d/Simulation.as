@@ -27,6 +27,9 @@ package com.becker.animation.box2d {
         /** How big things are */
         function get scale():Number;
         
+        /** change the scale */
+        function set scale(value:Number):void;
+        
         /** Interactors define how the user will interact with the simulation */
         function createInteractors():void
         

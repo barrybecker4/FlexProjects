@@ -15,10 +15,12 @@ package com.becker.animation.box2d.simulations {
      */
     public class AbstractSimulation implements Simulation {
         
+        //private static const DEFAULT_SCALE:Number = 20;
         protected var world:b2World;
         protected var canvas:UIComponent;
         protected var params:PhysicalParameters;
         protected var interactors:Array;
+        private var _scale:Number;
         
         /** an array of interactors to us in the simulation */
         protected var _interactors:Array;
@@ -30,6 +32,7 @@ package com.becker.animation.box2d.simulations {
             this.world = world;    
             this.canvas = canvas;
             this.params = params;
+            _scale = canvas.width / 80;
         }
         
         public function addStaticElements():void {
@@ -59,7 +62,11 @@ package com.becker.animation.box2d.simulations {
         }
         
         public function get scale():Number {
-            return 20;
+            return _scale;
+        }
+        
+        public function set scale(s:Number):void {
+            _scale = s;
         }
     }
 }

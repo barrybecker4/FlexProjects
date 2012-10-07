@@ -20,7 +20,8 @@ package com.becker.animation.box2d {
     public class Exploder  {
         
         /** Number of cuts to make when exploding */
-        private static const NUM_CUTS:int = 5;
+        private static const NUM_CUTS:int = 3;
+        
         /** Box2d has broblems if the slices get too thin */
         private static const TOLERANCE:Number = 0.0000001;
         
@@ -59,8 +60,10 @@ package com.becker.animation.box2d {
             explodingBodies.push(body);
             
             // the explosion begins!
+            var segmentAng:Number = 2 * Math.PI / NUM_CUTS;
             for (var i:Number = 1; i <= NUM_CUTS; i++) {
-                doRandomRayCast(i);
+                var cutAngle:Number = i * segmentAng + Math.random() * segmentAng / 6.0;
+                doRayCast(cutAngle);
                 enterPointsVec = new Array(numEnterPoints);
             }
         }
@@ -71,13 +74,11 @@ package com.becker.animation.box2d {
          * Need to add a little offset (i/10) or Box2D will crash. Probably it's not able to 
          * determine raycast on objects whose area is very very close to zero (or zero).
          */
-        private function doRandomRayCast(i:int):void {
-
-            var cutAngle:Number = Math.random() * Math.PI * 2;
+        private function doRayCast(cutAngle:Number ):void {
             
             var sin:Number = 2000.0 * Math.sin(cutAngle);
             var cos:Number = 2000.0 * Math.cos(cutAngle);
-            var p1:b2Vec2 = new b2Vec2((explosionX + Math.random()/10.0 - cos)/ scale, (explosionY - sin)/ scale);
+            var p1:b2Vec2 = new b2Vec2((explosionX + Math.random() - cos)/ scale, (explosionY - sin)/ scale);
             //  new b2Vec2((explosionX + i/10.0 - cos)/ scale, (explosionY - sin)/ scale);
             var p2:b2Vec2 = new b2Vec2((explosionX + cos) / scale, (explosionY + sin) / scale);
             world.RayCast(intersection, p1, p2);
