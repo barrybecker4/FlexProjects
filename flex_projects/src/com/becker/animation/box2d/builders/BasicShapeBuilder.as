@@ -101,7 +101,7 @@ package com.becker.animation.box2d.builders
                 circleDef.filter.groupIndex = groupIndex;
             }
             circleDef.shape = new b2CircleShape(radius);
-            bodyDef.userData = new Circle(radius * scale);
+            bodyDef.userData = new Circle(radius * scale, null, 0x4455ee);
             
             return addShape(circleDef, bodyDef);
         }

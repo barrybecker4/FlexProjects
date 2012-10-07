@@ -1,6 +1,7 @@
 package com.becker.animation.box2d.builders {
     
     import Box2D.Collision.Shapes.b2PolygonShape;
+    import com.becker.animation.box2d.builders.items.RagDoll;
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
     import Box2D.Dynamics.b2Body;

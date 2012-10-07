@@ -1,4 +1,4 @@
-package com.becker.animation.box2d.builders {
+package com.becker.animation.box2d.builders.items {
     import Box2D.Dynamics.b2Body;
     
     public class RagDoll {

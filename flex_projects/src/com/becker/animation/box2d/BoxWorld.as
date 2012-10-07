@@ -120,6 +120,8 @@ public class BoxWorld extends UIComponent implements Animatible {
             simulation.createInteractors(); 
             firstTime = false;
         }
+        // for stuff in the simulation that needs to be updated every frame
+        simulation.onFrameUpdate(); 
         
         world.Step(TIME_STEP, VELOCITY_ITERATIONS, STEP_ITERATIONS); 
         world.ClearForces();

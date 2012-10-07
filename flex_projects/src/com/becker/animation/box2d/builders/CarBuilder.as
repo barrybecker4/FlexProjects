@@ -15,6 +15,7 @@ package com.becker.animation.box2d.builders {
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
     import com.becker.animation.sprites.Line;
     import com.becker.common.PhysicalParameters;
+    import com.becker.animation.box2d.builders.items.car.Car;
     import flash.geom.Point;
     import mx.core.UIComponent;
     
@@ -25,10 +26,10 @@ package com.becker.animation.box2d.builders {
         
         private static const T_SCALE:Number = 4.0;
         private static const SIZE:Number = 2.0;
+        private static const WHEEL_RADIUS:Number = 0.6;
         private static const AXLE_ANGLE:Number = Math.PI / 4;
         private static const MOTOR_SPEED:Number = -2.0;
-        private static const MOTOR_TORQUE:Number = SIZE * 200.0;
-        private static const TORQUE_INC:Number = 60.0;
+        private static const MOTOR_TORQUE:Number = SIZE * 150.0;
         
         private var shapeBuilder:BasicShapeBuilder;
         private var params:PhysicalParameters;    
@@ -123,7 +124,7 @@ package com.becker.animation.box2d.builders {
                                          car.axles[1].GetWorldCenter().y - SIZE * 0.3 * Math.sin( -AXLE_ANGLE));
                 }
                
-                car.wheels[i] = shapeBuilder.buildBall(SIZE * 0.7, bodyDef, 0.2, 0.9, 0.2, -1);
+                car.wheels[i] = shapeBuilder.buildBall(SIZE * WHEEL_RADIUS, bodyDef, 0.2, 0.9, 0.2, -1);
             }
         }
         
@@ -139,24 +140,24 @@ package com.becker.animation.box2d.builders {
             car.motors[1] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
              
             // Set motor speeds. belongs in update
-            car.motors[0].SetMotorSpeed(10 * Math.PI * 0.5); 
+            car.motors[0].SetMotorSpeed(1); // 5 * Math.PI * 0.5); 
             // (input.isPressed(40) ? 1 : input.isPressed(38) ? -1 : 0));
-            car.motors[0].SetMaxMotorTorque(TORQUE_INC);
+            car.motors[0].SetMaxMotorTorque(10); // Car.TORQUE_INC);
             // input.isPressed(40) || input.isPressed(38) ? 17 : 0.5);
      
-            car.motors[1].SetMotorSpeed(10 * Math.PI * 0.5); 
+            car.motors[1].SetMotorSpeed(1); // 5 * Math.PI * 0.5); 
             // (input.isPressed(40) ? 1 : input.isPressed(38) ? -1 : 0));
-            car.motors[1].SetMaxMotorTorque(TORQUE_INC); 
+            car.motors[1].SetMaxMotorTorque(10); // Car.TORQUE_INC); 
             // input.isPressed(40) || input.isPressed(38) ? 12 : 0.5);
      
-            car.springs[0].SetMaxMotorForce(30 + Math.abs(MOTOR_TORQUE*Math.pow(car.springs[0].GetJointTranslation(), 2)));
-            //car.spring1.SetMotorSpeed(-4*Math.pow(spring1.GetJointTranslation(), 1));
-            car.springs[0].SetMotorSpeed((car.springs[0].GetMotorSpeed() - 10*car.springs[0].GetJointTranslation())*0.4);         
+            // not sure what this stuff does yet
+            car.springs[0].SetMaxMotorForce(30 + Math.abs(MOTOR_TORQUE * Math.pow(car.springs[0].GetJointTranslation(), 2)));
+            car.springs[0].SetMotorSpeed((car.springs[0].GetMotorSpeed() - 10 * car.springs[0].GetJointTranslation()) * 0.4);         
      
-            car.springs[1].SetMaxMotorForce(20+Math.abs(MOTOR_TORQUE*Math.pow(car.springs[1].GetJointTranslation(), 2)));
-            car.springs[1].SetMotorSpeed(-4*Math.pow(car.springs[1].GetJointTranslation(), 1));
+            car.springs[1].SetMaxMotorForce(30 + Math.abs(MOTOR_TORQUE * Math.pow(car.springs[1].GetJointTranslation(), 2)));
+            car.springs[1].SetMotorSpeed(-4 * Math.pow(car.springs[1].GetJointTranslation(), 1));
      
-            car.carBody.ApplyTorque(TORQUE_INC); // 30 * (input.isPressed(37) ? 1: input.isPressed(39) ? -1 : 0));
+            car.carBody.ApplyTorque(100); // Car.TORQUE_INC); // 30 * (input.isPressed(37) ? 1: input.isPressed(39) ? -1 : 0));
         }
     }
 }

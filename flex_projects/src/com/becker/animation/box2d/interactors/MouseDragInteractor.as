@@ -53,7 +53,7 @@ public class MouseDragInteractor implements Interactor {
         owner.stage.addEventListener(MouseEvent.MOUSE_MOVE, handleMouseInteraction);
     }
     
-    public function removeMouseHandlers():void {
+    public function removeHandlers():void {
         owner.stage.removeEventListener(MouseEvent.MOUSE_MOVE, handleMouseInteraction);
     }
       

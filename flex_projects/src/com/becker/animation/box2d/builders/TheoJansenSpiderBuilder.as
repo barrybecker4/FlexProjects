@@ -14,6 +14,7 @@ package com.becker.animation.box2d.builders {
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
     import com.becker.animation.sprites.Line;
     import com.becker.common.PhysicalParameters;
+    import com.becker.animation.box2d.builders.items.TheoJansenSpider;
     import flash.geom.Point;
     import mx.core.UIComponent;
     

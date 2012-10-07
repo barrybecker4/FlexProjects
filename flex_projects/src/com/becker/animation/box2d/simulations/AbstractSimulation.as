@@ -38,14 +38,23 @@ package com.becker.animation.box2d.simulations {
         public function addDynamicElements():void {
         }
         
+        /**
+         * Called every time a new frame is drawn.
+         * The default is to do nothing.
+         */
+        public function onFrameUpdate():void {
+        }
+        
         public function createInteractors():void {
             interactors = [new MouseDragInteractor(canvas, world, scale)];
         }
         
         public function cleanup():void {
             for each (var interactor:Interactor in interactors) {
-                interactor.removeMouseHandlers();
+                interactor.removeHandlers();
             }
+            canvas.x = 0;
+            canvas.y = 0;
         }
         
         public function get scale():Number {
