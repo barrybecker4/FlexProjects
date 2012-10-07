@@ -16,7 +16,8 @@ import mx.events.ResizeEvent;
 
 
 /**
- * The simulated world of shapes interacting with the users mouse and the environment.
+ * The simulated world of shapes.
+ * The simulation that is set on the word defines what will be shown in it.
  * 
  * ideas todo:
  *  - simplify simple shape construction to include position.
@@ -91,13 +92,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     } 
     
     private function resized(evt:ResizeEvent):void {
-        var oldWidth:int = evt.oldWidth;
-        
-        //var scale:Number = Number(this.width) / ORIG_WIDTH;
-        //this.stage.scaleX = scale;
-        //this.stage.scaleY = scale;
-        //this.stage.stageWidth = this.width;
-        //this.stage.stageHeight = this.height;
+        //simulation.scale = this.width / 100;
     }
     
     [Bindable]

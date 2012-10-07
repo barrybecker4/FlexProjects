@@ -80,7 +80,7 @@ package com.becker.animation.box2d.simulations {
             crapBuilder.setShapeSize(5.0);
             crapBuilder.addCrap(bodyDef, 15, 15, 16);
             crapBuilder.setSpawnSpread(900, 0);
-            crapBuilder.addBalls(10, 4, bodyDef);
+            crapBuilder.addBalls(40, 4, bodyDef);
         } 
         
         override public function createInteractors():void {
