@@ -31,7 +31,7 @@ package  com.becker.common {
         {
             var sound:Sound = new soundClass() as Sound;
             var transform:SoundTransform = new SoundTransform(volume);
-            sound.play(150, 1, transform);
+            sound.play(0, 1, transform);
             /*
             var soundEffect:SoundEffect = new SoundEffect();
             soundEffect.volumeFrom = volume;

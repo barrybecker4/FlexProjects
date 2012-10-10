@@ -12,22 +12,17 @@ package  com.becker.animation.box2d {
     public class ContactListener extends b2ContactListener {
 
         /**
-         * Called when a contact point is added. This includes the geometry
-         * and the forces.
-         */
+         * Called when a contact point is added. 
+         *
         override public function BeginContact(point:b2Contact):void {
-            //var normVel:Number = point.velocity.Normalize();
-            //var volume:Number = (normVel * normVel)/100;
-            var volume:Number = 0.1 + Math.random() / 5.0; // normVel / 10;
-            //trace("sep = " + point.separation)
-            if (volume > 0) {
-                //trace("new contact vol=" + volume);            
-                Sounds.playScrape(volume);
+            var volume:Number = 0.1 + Math.random() / 50.0; 
+            if (volume > 0) {     
+                //Sounds.playScrape(volume);
             }
-        };
+        };*/
         
         /**
-         * Called when a contact point is added. This includes the geometry
+         * Called after the contact has been solved. This includes the geometry
          * and the forces.
          */
         override public function PostSolve(point:b2Contact, impulse:b2ContactImpulse):void {
@@ -37,11 +32,11 @@ package  com.becker.animation.box2d {
             }
      
             var volume:Number = sum/60.0;
-            if (volume > 0) {
-                //trace("new contact vol=" + volume); 
-                //Sounds.playScrape(volume);
+            if (volume > 0.01) {
+                //trace("new hit contact vol=" + volume); 
                 Sounds.playHit(volume);
             }
+           
         };  
     }
 
