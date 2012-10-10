@@ -7,10 +7,10 @@ package com.becker.animation.box2d {
     import Box2D.Dynamics.b2Fixture;
     import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
-    import Box2D.Common.Math.b2Math;
     import com.becker.animation.sprites.ExplodableShape;
     import com.becker.common.Util;
     import flash.display.Sprite;
+    import flash.geom.Point;
     import mx.core.UIComponent;
     
     /**
@@ -19,11 +19,14 @@ package com.becker.animation.box2d {
      */
     public class Exploder  {
         
-        /** Number of cuts to make when exploding */
+        /** Number of cuts to make when exploding. Determines the number of shards you get. */
         private static const NUM_CUTS:int = 3;
         
-        /** Box2d has broblems if the slices get too thin */
+        /** Box2d has problems if the slices get too thin */
         private static const TOLERANCE:Number = 0.0000001;
+        
+        /** The explosion radius. Used to determine the velocity of debris. */
+        private var EXPLOSION_RADIUS:Number = 50;  
         
         public var enterPointsVec:Array = new Array();  
         public var numEnterPoints:int = 0; 
@@ -36,12 +39,9 @@ package com.becker.animation.box2d {
         private var explodingBodies:Vector.<b2Body>;
         
         // explosion center 
-        private var explosionX:Number;  
-        private var explosionY:Number;  
+        private var explosionLocation:Point;  
         
-        /** explosion radius, useful to determine the velocity of debris */
-        private var explosionRadius:Number = 50;  
-        
+
         /** Constructor */
         public function Exploder(world:b2World, canvas:UIComponent, scale:Number) {
             this.world = world;
@@ -50,11 +50,10 @@ package com.becker.animation.box2d {
             enterPointsVec = new Array(0);
         }
         
-        /** function to create an explosion */
-        public function explodeBody(body:b2Body, explosionX:int, explosionY:int):void {
+        /** function to create an explosion. Create roughly equally sized shards. */
+        public function explodeBody(body:b2Body, explosionLocation:Point):void {
             
-            this.explosionX = explosionX;
-            this.explosionY = explosionY;
+            this.explosionLocation = explosionLocation;
             
             explodingBodies = new Vector.<b2Body>();
             explodingBodies.push(body);
@@ -62,7 +61,7 @@ package com.becker.animation.box2d {
             // the explosion begins!
             var segmentAng:Number = 2 * Math.PI / NUM_CUTS;
             for (var i:Number = 1; i <= NUM_CUTS; i++) {
-                var cutAngle:Number = i * segmentAng + Math.random() * segmentAng / 6.0;
+                var cutAngle:Number = i * segmentAng + Math.random() * segmentAng / 5.0;
                 doRayCast(cutAngle);
                 enterPointsVec = new Array(numEnterPoints);
             }
@@ -71,16 +70,19 @@ package com.becker.animation.box2d {
         /**
          * Cast a random ray through the object that is being exploded.
          * Create the two points to be used for the raycast, according to the random angle and mouse position.
-         * Need to add a little offset (i/10) or Box2D will crash. Probably it's not able to 
-         * determine raycast on objects whose area is very very close to zero (or zero).
          */
         private function doRayCast(cutAngle:Number ):void {
             
             var sin:Number = 2000.0 * Math.sin(cutAngle);
             var cos:Number = 2000.0 * Math.cos(cutAngle);
-            var p1:b2Vec2 = new b2Vec2((explosionX + Math.random() - cos)/ scale, (explosionY - sin)/ scale);
+            var p1:b2Vec2 = new b2Vec2((explosionLocation.x - cos)/ scale, (explosionLocation.y - sin)/ scale);
             //  new b2Vec2((explosionX + i/10.0 - cos)/ scale, (explosionY - sin)/ scale);
-            var p2:b2Vec2 = new b2Vec2((explosionX + cos) / scale, (explosionY + sin) / scale);
+            var p2:b2Vec2 = new b2Vec2((explosionLocation.x + cos) / scale, (explosionLocation.y + sin) / scale);
+            
+            // RayCast() calls the intersection function only when it 
+            // sees that a given line gets into the body - it doesn't see when the line gets out of it.
+            // Must have 2 intersection points with a body so that it can be sliced, thats why RayCast() is called again, 
+            // but this time from p2 to p1 - that way the point, at which p2p1 enters the body is the point at which p1p2 leaves it.
             world.RayCast(intersection, p1, p2);
             world.RayCast(intersection, p2, p1);
         }
@@ -92,24 +94,19 @@ package com.becker.animation.box2d {
             if (explodingBodies.indexOf(fixture.GetBody()) != -1) {
                 var spr:Sprite = fixture.GetBody().GetUserData();
                 
-                // Only enterPointsVec is global. 
-                // The problem is that the world.RayCast() method calls this function only when it 
-                // sees that a given line gets into the body - it doesn't see when the line gets out of it.
-                // Must have 2 intersection points with a body so that it can be sliced, thats why world.RayCast() is used again, 
-                // but this time from B to A - that way the point, at which BA enters the body is the point at which AB leaves it!
-                // For that reason, the vector enterPointsVec, where the points are stored, at which AB enters the body. 
+                // The global vector, enterPointsVec, where the points are stored, at which AB enters the body. 
                 // Later on, if BA enters a body, which has been entered already by AB, splitObject() function is fired.
                 // Need a unique ID for each body, in order to know where its corresponding enter point is.
                 // That id is stored in the userData of each body.
                 if (spr is ExplodableShape) {
-                    var userD:ExplodableShape = spr as ExplodableShape;
-                    if (enterPointsVec[userD.index]) {
+                    var explodingShape:ExplodableShape = spr as ExplodableShape;
+                    if (enterPointsVec[explodingShape.index]) {
                         // If this body has already had an intersection point, then it now has two intersection points.
                         // Thus it must be split in two.
-                        splitObject(fixture.GetBody(), enterPointsVec[userD.index], point.Copy());
+                        splitObject(fixture.GetBody(), enterPointsVec[explodingShape.index], point.Copy());
                     }
                     else {
-                        enterPointsVec[userD.index] = point;
+                        enterPointsVec[explodingShape.index] = point;
                     }
                 }
             }
@@ -264,38 +261,38 @@ package com.becker.animation.box2d {
          */
         private function setExplosionVelocity(body:b2Body):b2Vec2 
         {
-            var distX:Number = body.GetWorldCenter().x * scale - explosionX;
+            var distX:Number = body.GetWorldCenter().x * scale - explosionLocation.x;
             if (distX < 0) {
-                if (distX < -explosionRadius) {
+                if (distX < -EXPLOSION_RADIUS) {
                     distX=0;
                 }
                 else {
-                    distX = -explosionRadius-distX;
+                    distX = -EXPLOSION_RADIUS-distX;
                 }
             }
             else {
-                if (distX>explosionRadius) {
+                if (distX > EXPLOSION_RADIUS) {
                     distX = 0;
                 }
                 else {
-                    distX = explosionRadius-distX;
+                    distX = EXPLOSION_RADIUS-distX;
                 }
             }
-            var distY:Number = body.GetWorldCenter().y * scale - explosionY;
+            var distY:Number = body.GetWorldCenter().y * scale - explosionLocation.y;
             if (distY<0) {
-                if (distY < -explosionRadius) {
+                if (distY < -EXPLOSION_RADIUS) {
                     distY = 0;
                 }
                 else {
-                    distY = -explosionRadius - distY;
+                    distY = -EXPLOSION_RADIUS - distY;
                 }
             }
             else {
-                if (distY > explosionRadius) {
+                if (distY > EXPLOSION_RADIUS) {
                     distY = 0;
                 }
                 else {
-                    distY = explosionRadius - distY;
+                    distY = EXPLOSION_RADIUS - distY;
                 }
             }
             distX *= 0.25;

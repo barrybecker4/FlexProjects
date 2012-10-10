@@ -12,6 +12,7 @@ package com.becker.animation.box2d.interactors {
     import com.becker.animation.box2d.Exploder;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
+    import flash.geom.Point;
     import mx.core.UIComponent;
     
     /**
@@ -44,7 +45,7 @@ package com.becker.animation.box2d.interactors {
                 
             if (clickedBody != null) {
                 var exploder:Exploder = new Exploder(world, canvas, scale);
-                exploder.explodeBody(clickedBody, canvas.mouseX, canvas.mouseY);
+                exploder.explodeBody(clickedBody, new Point(canvas.mouseX, canvas.mouseY));
             }
         }
 
