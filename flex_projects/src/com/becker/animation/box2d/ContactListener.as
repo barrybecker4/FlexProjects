@@ -33,10 +33,8 @@ package  com.becker.animation.box2d {
      
             var volume:Number = sum/60.0;
             if (volume > 0.01) {
-                //trace("new hit contact vol=" + volume); 
                 Sounds.playHit(volume);
             }
-           
         };  
     }
 
