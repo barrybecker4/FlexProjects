@@ -19,6 +19,9 @@ package com.becker.animation.box2d.simulations {
      */
     public class CarSimulation extends AbstractSimulation {
 
+        /** How fast the scene updates to the correct centered location after the car moves. */
+        private static const SCENE_SCROLL_RESTITUTION:Number = 10;
+        
         private var builder:BasicShapeBuilder;   
         private var carBuilder:CarBuilder; 
         private var crapBuilder:CrapBuilder;
@@ -58,18 +61,21 @@ package com.becker.animation.box2d.simulations {
         
         /**
          * Called every time a new frame is drawn.
-         * change the car's acceleration based on specifications
+         * change the car's acceleration based on specifications.
+         * Also scrolls the whole scene so it is centered on the car.
          */
         override public function onFrameUpdate():void {
             
             car.updateMotor();
             
+            
             var center:b2Vec2 = car.carBody.GetWorldCenter();
             var velocity:b2Vec2 = car.carBody.GetLinearVelocity();
             var xOffset:Number = -scale * center.x + canvas.width / 2 - velocity.x;
             var yOffset:Number = -scale * center.y + canvas.height / 2 - velocity.y;
-            canvas.x -= (canvas.x - xOffset) / 30;
-            canvas.y -= (canvas.y - yOffset) / 30;
+            canvas.x -= (canvas.x - xOffset) / SCENE_SCROLL_RESTITUTION;
+            canvas.y -= (canvas.y - yOffset) / SCENE_SCROLL_RESTITUTION;
+            
         }
           
         private function addRandomCrap():void {
