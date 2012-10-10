@@ -124,6 +124,34 @@ import flash.geom.Point;
         public static function determinate(p1:b2Vec2, p2:b2Vec2, p3:b2Vec2):Number {
             return p1.x * p2.y + p2.x * p3.y + p3.x * p1.y - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x;
         }
+        
+        /** 
+         * function to get the area of a shape. Tiny shapes will be removed to increase performance. 
+         * @param vertices vertices of a polygonal shape
+         * @return area of the polygon.
+         */
+        public static function findArea(vertices:Array):Number {
+ 
+            var count:uint = vertices.length;
+            var area:Number = 0.0;
+            var p1X:Number = 0.0;
+            var p1Y:Number = 0.0;
+            var inv3:Number = 1.0 / 3.0;
+            
+            for (var i:int = 0; i < count; ++i) {
+                var p2:b2Vec2 = vertices[i];
+                var p3:b2Vec2 = (i + 1 < count) ? vertices[int(i+1)] : vertices[0];
+                var e1X:Number = p2.x - p1X;
+                var e1Y:Number = p2.y - p1Y;
+                var e2X:Number = p3.x - p1X;
+                var e2Y:Number = p3.y - p1Y;
+                var D:Number = (e1X * e2Y - e1Y * e2X);
+                var triangleArea:Number = 0.5 * D;
+                area += triangleArea;
+            }
+            return area;
+        }
+        
              
     }
 }
