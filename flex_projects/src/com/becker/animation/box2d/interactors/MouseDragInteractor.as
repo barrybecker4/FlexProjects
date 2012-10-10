@@ -5,16 +5,13 @@ import Box2D.Common.Math.*;
 import Box2D.Dynamics.*;
 import Box2D.Dynamics.Joints.b2MouseJoint;
 import Box2D.Dynamics.Joints.b2MouseJointDef;
-import flash.display.Stage;
-
-import General.Input;
-
 import com.becker.animation.sprites.AbstractShape;
-
 import flash.display.Graphics;
 import flash.display.Sprite;
-import flash.geom.Point;
 import flash.events.MouseEvent;
+import flash.geom.Point;
+import General.Input;
+
 
 /**
  * Handles the mouse interaction with the environment.
@@ -24,11 +21,16 @@ import flash.events.MouseEvent;
  */
 public class MouseDragInteractor implements Interactor {
      
+    /** Max amount of force the tether will exert when dragging. */
+    private static const DRAG_FORCE:Number = 300;
+    
+    /** accounts for UI controls that may be at the top of the application window */
+    private static const TOP_OFFSET:int = 200;
+    
     private var owner:Sprite;
     private var world:b2World;
     private var scale:Number;
     private var mouseJoint:b2MouseJoint;
-    private var mousePVec:b2Vec2 = new b2Vec2();
        
     /** world mouse position. */
     private static var mouseWorldPhys:Point;
@@ -71,8 +73,10 @@ public class MouseDragInteractor implements Interactor {
         Input.update();    
     }
     
-    private function updateMouseWorld(scale:Number):void {
-        var mouseWorld:Point = owner.globalToLocal(new Point(Input.mouseX, Input.mouseY));
+    /** determine the new scaled location of the mouse's scaled world corrdinates */
+    private function updateMouseWorld(scale:Number):void { 
+        var mousePoint:Point = new Point(Input.mouseX + owner.x, Input.mouseY + owner.y);
+        var mouseWorld:Point = owner.globalToLocal(mousePoint);
         mouseWorldPhys = new Point(mouseWorld.x/scale, mouseWorld.y/scale); 
     }
     
@@ -102,13 +106,13 @@ public class MouseDragInteractor implements Interactor {
         {
             draggedBody = getBodyFromFixture(fixture);
             if (!mouseJoint && draggedBody) {
-                var md:b2MouseJointDef = new b2MouseJointDef();
+                var mouseJointDef:b2MouseJointDef = new b2MouseJointDef();
                 
-                md.bodyA = world.GetGroundBody();
-                md.bodyB = draggedBody;
-                md.target.Set(mouseWorldPhys.x, mouseWorldPhys.y);
-                md.maxForce = 300.0 * draggedBody.GetMass();
-                mouseJoint = world.CreateJoint(md) as b2MouseJoint;
+                mouseJointDef.bodyA = world.GetGroundBody();
+                mouseJointDef.bodyB = draggedBody;
+                mouseJointDef.target.Set(mouseWorldPhys.x, mouseWorldPhys.y);
+                mouseJointDef.maxForce = DRAG_FORCE * draggedBody.GetMass();
+                mouseJoint = world.CreateJoint(mouseJointDef) as b2MouseJoint;
                 
                 draggedBody.SetAwake(true);
             }     
@@ -131,8 +135,31 @@ public class MouseDragInteractor implements Interactor {
         
         var shape:AbstractShape = AbstractShape(draggedBody.GetUserData());
         var start:Point = new Point(shape.x, shape.y); 
-        var end:Point = new Point(Input.mouseX, Input.mouseY - 200); 
         
+        var x:Number = Input.mouseX;
+        var y:Number = Input.mouseY - TOP_OFFSET;
+        var end:Point = new Point(x, y); 
+        
+        drawTether(start, end);
+    }
+    
+    /**  Query the world for overlapping shapes. */
+    private function getBodyAtMouse(queryCallback:Function):void {
+        world.QueryAABB(queryCallback, createBBoxAtMouse());
+    } 
+    
+    /**  Make a small selection box at the location of the mouse. */
+    private function createBBoxAtMouse():b2AABB {
+        var bbox:b2AABB = new b2AABB();
+        var x:Number =  mouseWorldPhys.x;
+        var y:Number =  mouseWorldPhys.y;
+        bbox.lowerBound.Set(x - 0.001, y - 0.001);
+        bbox.upperBound.Set(x + 0.001, y + 0.001);
+        return bbox;
+    }
+    
+    /** connects the mouse location to the dragged body */
+    private function drawTether(start:Point, end:Point):void {
         var g:Graphics = owner.graphics;
         g.clear();
         g.lineStyle(2, 0xff8888);
@@ -149,6 +176,7 @@ public class MouseDragInteractor implements Interactor {
         }
     }   
     
+    /** removes and destroys the currently dragged body. */
     private function destroyCallback(fixture:b2Fixture):void {
         var body:b2Body = getBodyFromFixture(fixture);
         if (body) {
@@ -157,23 +185,10 @@ public class MouseDragInteractor implements Interactor {
         }
     }
     
-    private function getBodyAtMouse(queryCallback:Function):void {
-        // Make a small box.
-        mousePVec.Set(mouseWorldPhys.x, mouseWorldPhys.y);
-        var aabb:b2AABB = new b2AABB();
-        aabb.lowerBound.Set(mouseWorldPhys.x - 0.001, mouseWorldPhys.y - 0.001);
-        aabb.upperBound.Set(mouseWorldPhys.x + 0.001, mouseWorldPhys.y + 0.001);
-        
-        // Query the world for overlapping shapes.
-        var k_maxCount:int = 10;
-        var shapes:Array = new Array();
-        world.QueryAABB(queryCallback, aabb);
-    } 
-    
+    /** figure out which body the selected fixture is attache dto */
     private function getBodyFromFixture(fixture:b2Fixture):b2Body {
         var body:b2Body = null;
         if (fixture) {
-            
             if (b2Body(fixture.GetBody()).GetType() != b2Body.b2_staticBody) {
                 
                 body = fixture.GetBody();
