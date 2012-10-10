@@ -9,7 +9,7 @@ package com.becker.animation.box2d.interactors {
     import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.sprites.ExplodableShape;
-    import com.becker.animation.box2d.Exploder;
+    import com.becker.animation.box2d.explosion.Exploder;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
     import flash.geom.Point;
