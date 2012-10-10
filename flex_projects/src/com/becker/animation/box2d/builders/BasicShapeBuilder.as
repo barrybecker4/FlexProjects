@@ -180,9 +180,9 @@ package com.becker.animation.box2d.builders
             bodyDef.userData = new ExplodableShape(numEnterPoints, vec, scale, texture);
             
             var fixtureDef:b2FixtureDef = new b2FixtureDef();
-            fixtureDef.density=1;
-            fixtureDef.friction=0.2;
-            fixtureDef.restitution=0.5;
+            fixtureDef.density = 1;
+            fixtureDef.friction = 0.5;
+            fixtureDef.restitution = 0.2;
             fixtureDef.shape = polyDef;
             
             return addShape(fixtureDef, bodyDef); 

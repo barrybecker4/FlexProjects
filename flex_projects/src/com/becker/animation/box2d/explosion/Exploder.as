@@ -20,10 +20,10 @@ package com.becker.animation.box2d.explosion {
     public class Exploder  {
         
         /** Number of cuts to make when exploding. Determines the number of shards you get. */
-        private static const NUM_CUTS:int = 3;
+        private static const NUM_CUTS:int = 6;
         
         public var enterPointsVec:Array = new Array();  
-        public var numEnterPoints:int = 0; 
+        public var numEnterPoints:int = 0;
         
         private var world:b2World;
         private var canvas:UIComponent;
@@ -31,9 +31,7 @@ package com.becker.animation.box2d.explosion {
         
         /** the vector of exploding bodies */
         private var explodingBodies:Vector.<b2Body>;
-        
-        // explosion center 
-        private var explosionLocation:Point;  
+        private var expLoc:b2Vec2;
         
 
         /** Constructor */
@@ -45,9 +43,9 @@ package com.becker.animation.box2d.explosion {
         }
         
         /** function to create an explosion. Create roughly equally sized shards. */
-        public function explodeBody(body:b2Body, explosionLocation:Point):void {
+        public function explodeBody(body:b2Body, explosionLocation:b2Vec2):void {
             
-            this.explosionLocation = explosionLocation;
+            this.expLoc = explosionLocation;
             
             explodingBodies = new Vector.<b2Body>();
             explodingBodies.push(body);
@@ -56,7 +54,7 @@ package com.becker.animation.box2d.explosion {
             var segmentAng:Number = 2 * Math.PI / NUM_CUTS;
             for (var i:Number = 1; i <= NUM_CUTS; i++) {
                 var cutAngle:Number = i * segmentAng + Math.random() * segmentAng / 5.0;
-                doRayCast(cutAngle);
+                doRayCast(cutAngle, explosionLocation);
                 enterPointsVec = new Array(numEnterPoints);
             }
         }
@@ -65,7 +63,7 @@ package com.becker.animation.box2d.explosion {
          * Cast a random ray through the object that is being exploded.
          * Create the two points to be used for the raycast, according to the random angle and mouse position.
          */
-        private function doRayCast(cutAngle:Number ):void {
+        private function doRayCast(cutAngle:Number, explosionLocation:b2Vec2):void {
             
             var sin:Number = 2000.0 * Math.sin(cutAngle);
             var cos:Number = 2000.0 * Math.cos(cutAngle);
@@ -82,8 +80,8 @@ package com.becker.animation.box2d.explosion {
         }
         
         /** find the intersection of the fixture with the point and its normal. */
-        private function intersection(fixture:b2Fixture, 
-            point:b2Vec2, normal:b2Vec2, fraction:Number):Number {
+        private function intersection(fixture:b2Fixture, point:b2Vec2, 
+                                      normal:b2Vec2, fraction:Number):Number {
                 
             if (explodingBodies.indexOf(fixture.GetBody()) != -1) {
                 var spr:Sprite = fixture.GetBody().GetUserData();
@@ -98,6 +96,7 @@ package com.becker.animation.box2d.explosion {
                         // If this body has already had an intersection point, then it now has two intersection points.
                         // Thus it must be split in two.
                         var splitter:Splitter = new Splitter(world, canvas, scale, enterPointsVec);
+                        splitter.setVelocityGenerator(new ExplosionVelocityGenerator(expLoc, scale));
                         var fragments:Vector.<b2Body> = 
                             splitter.splitObject(fixture.GetBody(), enterPointsVec[explodingShape.index], point.Copy());
                         explodingBodies = explodingBodies.concat(fragments);

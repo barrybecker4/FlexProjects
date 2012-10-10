@@ -45,7 +45,7 @@ package com.becker.animation.box2d.interactors {
                 
             if (clickedBody != null) {
                 var exploder:Exploder = new Exploder(world, canvas, scale);
-                exploder.explodeBody(clickedBody, new Point(canvas.mouseX, canvas.mouseY));
+                exploder.explodeBody(clickedBody, new b2Vec2(canvas.mouseX, canvas.mouseY));
             }
         }
 

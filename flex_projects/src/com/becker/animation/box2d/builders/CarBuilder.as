@@ -24,8 +24,7 @@ package com.becker.animation.box2d.builders {
      */
     public class CarBuilder extends AbstractBuilder {
         
-        private static const T_SCALE:Number = 4.0;
-        private static const SIZE:Number = 2.0;
+        private static const SIZE:Number = 2.5;
         private static const WHEEL_RADIUS:Number = 0.6;
         private static const AXLE_ANGLE:Number = Math.PI / 4;
         private static const MOTOR_SPEED:Number = -2.0;

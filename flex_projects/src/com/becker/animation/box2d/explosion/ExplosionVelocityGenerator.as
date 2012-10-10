@@ -15,12 +15,12 @@ package com.becker.animation.box2d.explosion {
         
         private var VELOCITY_SCALE:Number = 0.25;
         
-        private var explosionLocation:Point;
+        private var explosionLocation:b2Vec2;
         private var scale:Number;
         
 
         /** Constructor */
-        public function ExplosionVelocityGenerator(explosionLocation:Point, scale:Number) {
+        public function ExplosionVelocityGenerator(explosionLocation:b2Vec2, scale:Number) {
             this.explosionLocation = explosionLocation;
             this.scale = scale;
         }
@@ -31,8 +31,8 @@ package com.becker.animation.box2d.explosion {
          * @param body body to find velocidy of
          * @return velocity vector of the body
          */
-        public function setVelocity(body:b2Body):b2Vec2 
-        {
+        public function setVelocity(body:b2Body):b2Vec2  {
+            
             var distX:Number = body.GetWorldCenter().x * scale - explosionLocation.x;
             if (distX < 0) {
                 if (distX < -EXPLOSION_RADIUS) {
