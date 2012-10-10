@@ -1,4 +1,4 @@
-package com.becker.animation.box2d {
+package com.becker.animation.box2d.explosion {
     
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.b2Body;
