@@ -25,7 +25,8 @@ package com.becker.animation.box2d.builders
     import mx.core.UIComponent;
     
     public class BasicShapeBuilder extends AbstractBuilder {
-
+        
+        /** Constructor */
         public function BasicShapeBuilder(world:b2World, canvas:UIComponent, scale:Number) {
             super(world, canvas, scale);
         }

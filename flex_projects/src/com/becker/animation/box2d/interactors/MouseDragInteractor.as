@@ -21,11 +21,11 @@ import General.Input;
  */
 public class MouseDragInteractor implements Interactor {
      
-    /** Max amount of force the tether will exert when dragging. */
+    /** Max amount of force the tether will exert when dragging. Should be passed to constructor. */
     private static const DRAG_FORCE:Number = 300;
     
-    /** accounts for UI controls that may be at the top of the application window */
-    private static const TOP_OFFSET:int = 200;
+    /** accounts for UI controls that may be at the top of the application window and any padding. */
+    private static const OFFSET:Point = new Point(10, 190);
     
     private var owner:Sprite;
     private var world:b2World;
@@ -59,9 +59,7 @@ public class MouseDragInteractor implements Interactor {
         owner.stage.removeEventListener(MouseEvent.MOUSE_MOVE, handleMouseInteraction);
     }
       
-    /**
-     * Respond to user dragging of shapes.
-     */
+    /** Respond to user dragging of shapes. */
     private function handleMouseInteraction(event:MouseEvent):void {
                  
         // Update mouse joint
@@ -77,7 +75,7 @@ public class MouseDragInteractor implements Interactor {
     private function updateMouseWorld(scale:Number):void { 
         var mousePoint:Point = new Point(Input.mouseX + owner.x, Input.mouseY + owner.y);
         var mouseWorld:Point = owner.globalToLocal(mousePoint);
-        mouseWorldPhys = new Point(mouseWorld.x/scale, mouseWorld.y/scale); 
+        mouseWorldPhys = new Point(mouseWorld.x / scale, mouseWorld.y / scale); 
     }
     
     private function mouseDrag():void{
@@ -101,10 +99,12 @@ public class MouseDragInteractor implements Interactor {
         getBodyAtMouse(mouseDragCallback);
     }
     
+    /** Called when something is dragged. Make it a bullet to avoid tunneling. */
     private function mouseDragCallback(fixture:b2Fixture):void {
         if (fixture)
         {
             draggedBody = getBodyFromFixture(fixture);
+            draggedBody.SetBullet(true);
             if (!mouseJoint && draggedBody) {
                 var mouseJointDef:b2MouseJointDef = new b2MouseJointDef();
                 
@@ -121,6 +121,7 @@ public class MouseDragInteractor implements Interactor {
     
     private function stopMouseDrag():void {
         if (mouseJoint) {
+            draggedBody.SetBullet(false);
             draggedBody = null;
             world.DestroyJoint(mouseJoint);
             
@@ -135,10 +136,7 @@ public class MouseDragInteractor implements Interactor {
         
         var shape:AbstractShape = AbstractShape(draggedBody.GetUserData());
         var start:Point = new Point(shape.x, shape.y); 
-        
-        var x:Number = Input.mouseX;
-        var y:Number = Input.mouseY - TOP_OFFSET;
-        var end:Point = new Point(x, y); 
+        var end:Point = new Point(Input.mouseX - OFFSET.x, Input.mouseY - OFFSET.y); 
         
         drawTether(start, end);
     }

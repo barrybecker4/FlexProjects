@@ -11,6 +11,9 @@ package com.becker.animation.box2d.builders
     
     public class AbstractBuilder  {
         
+        /** Turn on to avoid tunneling */
+        private static const IS_BULLET:Boolean = false;
+        
         protected var world:b2World;
         protected var canvas:UIComponent;
         protected var scale:Number;
@@ -25,6 +28,7 @@ package com.becker.animation.box2d.builders
         protected function addShape(fixtureDef:b2FixtureDef, bodyDef:b2BodyDef):b2Body {           
           
             var body:b2Body = world.CreateBody(bodyDef);
+            body.SetBullet(IS_BULLET);
             
             body.CreateFixture(fixtureDef);
             //body.ResetMassData();
