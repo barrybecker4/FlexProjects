@@ -1,24 +1,8 @@
 package com.becker.animation.box2d.builders
 {
-    import Box2D.Collision.b2AABB;
-    import Box2D.Collision.Shapes.b2CircleShape;
-    import Box2D.Collision.Shapes.b2PolygonShape;
-    import Box2D.Common.Math.b2Vec2;
-    import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
-    import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
-    import Box2D.Dynamics.b2FixtureDef;
-    import com.becker.animation.sprites.AbstractShape;
-    import com.becker.animation.sprites.Line;
-    import com.becker.common.PhysicalParameters;
-    
-    import com.becker.animation.sprites.Circle;
-    import com.becker.animation.sprites.Polygon;
-    import com.becker.animation.sprites.Rectangle;
-    
     import flash.geom.Point;
-    
     import mx.core.UIComponent;
     
     /**
@@ -36,8 +20,6 @@ package com.becker.animation.box2d.builders
         private static const DENSITY:Number = 1.0;
         private static const FRICTION:Number = 0.9;
         private static const RESTITUTION:Number = 0.1;
-        
-        
         private var xPos:int = DEFAULT_X_POS;
         private var yPos:int = DEFAULT_Y_POS;
         

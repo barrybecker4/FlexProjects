@@ -31,9 +31,7 @@ package com.becker.animation.box2d.builders
             body.SetBullet(IS_BULLET);
             
             body.CreateFixture(fixtureDef);
-            //body.ResetMassData();
             canvas.addChild(bodyDef.userData);
-
             return body;
         }
         

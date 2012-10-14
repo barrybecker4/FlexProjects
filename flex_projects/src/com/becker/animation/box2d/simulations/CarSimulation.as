@@ -67,8 +67,6 @@ package com.becker.animation.box2d.simulations {
         override public function onFrameUpdate():void {
             
             car.updateMotor();
-            
-            
             var center:b2Vec2 = car.carBody.GetWorldCenter();
             var velocity:b2Vec2 = car.carBody.GetLinearVelocity();
             var xOffset:Number = -scale * center.x + canvas.width / 2 - velocity.x;
@@ -76,6 +74,7 @@ package com.becker.animation.box2d.simulations {
             canvas.x -= (canvas.x - xOffset) / SCENE_SCROLL_RESTITUTION;
             canvas.y -= (canvas.y - yOffset) / SCENE_SCROLL_RESTITUTION;
             
+            car.updateShockAbsorbers();
         }
           
         private function addRandomCrap():void {

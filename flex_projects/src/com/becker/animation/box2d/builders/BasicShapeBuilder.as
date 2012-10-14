@@ -50,6 +50,10 @@ package com.becker.animation.box2d.builders
             return addShape(boxDef, bodyDef); 
         }
         
+        /**
+         * 
+         * @return body with children for all the decorating blocks.
+         */
         public function buildCompoundBlock(orientedBlocks:Array, bodyDef:b2BodyDef, 
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
                 groupIndex:int = int.MAX_VALUE):b2Body {
@@ -70,6 +74,8 @@ package com.becker.animation.box2d.builders
                 
             bodyDef.userData = new Rectangle(masterBlock.width * 2 * scale, masterBlock.height * 2 * scale);
             var body:b2Body = addShape(boxDef, bodyDef);
+            var children:Array = [];
+            body.GetUserData().childBodies = children;
             
             for (var i:int = 1; i < orientedBlocks.length; i++) {
                 var orientedBlock:OrientedBox = orientedBlocks[i];
@@ -83,12 +89,10 @@ package com.becker.animation.box2d.builders
                 rect.rotation = Util.RAD_TO_DEG * orientedBlock.rotation;
                 bodyDef.userData.addChild(rect);
                 
-                addShape(boxDef, bodyDef);
+                children.push(addShape(boxDef, bodyDef));
             }
-
             body.ResetMassData();    
-            
-            return body;  
+            return body;
         }
    
         

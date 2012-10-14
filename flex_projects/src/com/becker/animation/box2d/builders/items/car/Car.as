@@ -8,6 +8,7 @@ package com.becker.animation.box2d.builders.items.car {
        
         private static const MAX_SPEED:Number = 40;
         private static const SPEED_INC:Number = 0.8;
+        private static const MOTOR_TORQUE:Number = 400.0;
         
         public var carBody: b2Body;
         
@@ -48,6 +49,19 @@ package com.becker.animation.box2d.builders.items.car {
             braking = false;
             increaseAcceleration = false;
             decreaseAcceleration = false;
+        }
+        
+        public function updateShockAbsorbers():void {
+            // not sure what this stuff does yet
+            var spring:b2PrismaticJoint = springs[0];
+            spring.SetMaxMotorForce(30 + Math.abs(MOTOR_TORQUE * Math.pow(spring.GetJointTranslation(), 2)));
+            spring.SetMotorSpeed((spring.GetMotorSpeed() - 10 * spring.GetJointTranslation()) * 0.4);         
+     
+            spring = springs[1];
+            spring.SetMaxMotorForce(30 + Math.abs(MOTOR_TORQUE * Math.pow(spring.GetJointTranslation(), 2)));
+            spring.SetMotorSpeed(-4 * Math.pow(spring.GetJointTranslation(), 1));
+     
+            carBody.ApplyTorque(100); 
         }
         
         /** as speed increases, torque is reduced - like in an automatic trasmission. */

@@ -12,10 +12,10 @@ package com.becker.animation.box2d.builders.items.car {
         
         /**
          * Constructor
-         * @param	gear something like -1, 0, 1, 2, ...
-         * @param	label What the gear is to be called. e.g. "reverse", "low", "3", etc.
-         * @param	torque power
-         * @param	speed angular velocity
+         * @param  gear something like -1, 0, 1, 2, ...
+         * @param  label What the gear is to be called. e.g. "reverse", "low", "3", etc.
+         * @param  torque power
+         * @param  speed angular velocity
          */
         public function Gear(gear:int, label:String, torque:uint, speed:int) {
             
