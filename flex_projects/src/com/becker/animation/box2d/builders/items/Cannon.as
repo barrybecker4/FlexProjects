@@ -18,7 +18,7 @@ package com.becker.animation.box2d.builders.items {
         public static const PLAYER:String = "Player";
         public static const BULLET:String = "Bullet";
         
-        private static const POWER_FACTOR:Number = 0.25;
+        private static const POWER_FACTOR:Number = 0.5;
         
         private var _cannonBody:b2Body;        
         private var _sensor:b2FixtureDef;
@@ -79,7 +79,6 @@ package com.becker.animation.box2d.builders.items {
             } else if (keyCode == 37) { // left arrow
                 xspeed = -3;
             }
-            
         }
         
         public function updateJump(keyCode:int):void {
@@ -92,8 +91,10 @@ package com.becker.animation.box2d.builders.items {
         
         public function pointTowardMouse(mouseX:Number, mouseY:Number, scale:Number):void {
             var tip:b2Vec2 = bazooka.GetWorldCenter();
-            tip.x = cannonBody.GetUserData().x = cannonBody.GetPosition().x * scale;
-            tip.y = cannonBody.GetUserData().y = cannonBody.GetPosition().y * scale;
+            tip.x = cannonBody.GetWorldCenter().x + cannonBody.GetPosition().x * scale;
+               //cannonBody.GetUserData().x + cannonBody.GetPosition().x * scale;
+            tip.y = cannonBody.GetWorldCenter().y + cannonBody.GetPosition().y * scale;
+               //cannonBody.GetUserData().y + cannonBody.GetPosition().y * scale;
             // orient toward mouse
             var dist_x:Number = tip.x - mouseX;
             var dist_y:Number = tip.y - mouseY;
@@ -108,35 +109,19 @@ package com.becker.animation.box2d.builders.items {
         /** fire the cannon bullet */
         public function fire(world:b2World, shapeBuilder:BasicShapeBuilder):void {
             
-            trace("bang!");
             charging = 0;
             
-            var x:Number = (bazooka.GetWorldCenter().x + (bazooka.GetUserData().width + 3) * Math.cos(bazooka_angle)) / shapeBuilder.scale;
-            var y:Number = (bazooka.GetWorldCenter().y + (bazooka.GetUserData().width + 3) * Math.sin(bazooka_angle)) / shapeBuilder.scale;
+            var x:Number = bazooka.GetWorldCenter().x + (bazooka.GetUserData().height/shapeBuilder.scale) * Math.cos(3.0 * Math.PI/2.0  + bazooka_angle); // shapeBuilder.scale;
+            var y:Number = bazooka.GetWorldCenter().y + (bazooka.GetUserData().height/shapeBuilder.scale) * Math.sin(3.0 * Math.PI/2.0  + bazooka_angle); // shapeBuilder.scale;
             var bodyDef:b2BodyDef = new b2BodyDef();
+            //trace("start pos = " + x + ", " + y);
             bodyDef.position.Set(x, y);
             bodyDef.type = b2Body.b2_dynamicBody;
             
-            var body:b2Body = shapeBuilder.buildBullet(0.4, bodyDef, 1.0, 0.5, 0.2);
-            //body.GetUserData().name = Cannon.BULLET;
-            /*
-            var boxDef:b2FixtureDef = new b2FixtureDef();
+            var body:b2Body = shapeBuilder.buildBullet(0.4, bodyDef, 1.0, 0.3, 0.2);
             
-            var shape:b2PolygonShape = new b2PolygonShape();
-            shape.SetAsBox(3 / scale, 3 / scale);
-            boxDef.shape = shape;
-            
-            boxDef.friction = 0.3;
-            boxDef.density = 1;
-            // the bullet now has its own class
-            bodyDef.userData = new Bullet(1.0);
-            var body:b2Body = world.CreateBody(bodyDef);
-            body.CreateFixture(boxDef);
-            body.ResetMassData(); 
-            */
-            
-            x = Math.cos(bazooka_angle) * power * POWER_FACTOR;
-            y = Math.sin(bazooka_angle) * power * POWER_FACTOR;
+            x = Math.cos(bazooka_angle + 3.0*Math.PI/2.0 ) * power * POWER_FACTOR;
+            y = Math.sin(bazooka_angle + 3.0*Math.PI/2.0 ) * power * POWER_FACTOR;
             body.ApplyImpulse(new b2Vec2(x, y), body.GetWorldCenter());
             // resetting the power
             power = 1;
