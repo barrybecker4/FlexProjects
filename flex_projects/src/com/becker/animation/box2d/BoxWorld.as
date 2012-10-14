@@ -20,9 +20,11 @@ import mx.events.ResizeEvent;
  * The simulation that is set on the word defines what will be shown in it.
  * 
  * ideas todo:
- *  - simplify simple shape construction to include position.
+ *  - add artillary demo. 
+ *  - fix rendering of shock absorbers on car.
+ *  - cleanup simple shape construction (inlude positions and params).
  *  - make scene scale with window resize.
- *  - make game
+ *  - make car game. Mount gun on car.
  */
 public class BoxWorld extends UIComponent implements Animatible {
     
@@ -31,7 +33,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     private var simulation:Simulation;
     
     private static const VELOCITY_ITERATIONS:int = 10;
-    private static const STEP_ITERATIONS:int = 10;
+    private static const STEP_ITERATIONS:int = 6;
     private static const TIME_STEP:Number = 1.0/20.0;
     private static const ORIG_WIDTH:int = 1200;
     

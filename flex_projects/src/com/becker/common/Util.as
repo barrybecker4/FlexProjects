@@ -150,8 +150,6 @@ import flash.geom.Point;
                 area += triangleArea;
             }
             return area;
-        }
-        
-             
+        } 
     }
 }

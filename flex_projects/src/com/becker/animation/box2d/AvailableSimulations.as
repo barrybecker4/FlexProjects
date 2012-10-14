@@ -4,6 +4,7 @@ import Box2D.Collision.*;
 import Box2D.Collision.Shapes.*;
 import Box2D.Common.Math.*;
 import Box2D.Dynamics.*;
+import com.becker.animation.box2d.simulations.ArtillarySimulation;
 
 import com.becker.animation.box2d.simulations.BridgeSimulation;
 import com.becker.animation.box2d.simulations.HelloWorldSimulation;
@@ -29,6 +30,7 @@ public class AvailableSimulations {
            "Bridge", 
            "Theo Jansen Spider",
            "Car",
+           "Artillary",
            "ExplodingBoxes"
      ]; 
     
@@ -51,7 +53,9 @@ public class AvailableSimulations {
                 simulation = new TheoJansenSimulation(); break;
             case AVAILABLE_SIMULATIONS[4]: 
                 simulation = new CarSimulation(); break;
-            case AVAILABLE_SIMULATIONS[5]: 
+                case AVAILABLE_SIMULATIONS[5]: 
+                simulation = new ArtillarySimulation(); break;
+            case AVAILABLE_SIMULATIONS[6]: 
                 simulation = new ExplodingBoxesSimulation(); break;
             default: throw new Error("Unexpected sim :" + simulationName);
         }

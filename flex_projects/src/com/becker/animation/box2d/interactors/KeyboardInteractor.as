@@ -3,18 +3,9 @@ import Box2D.Collision.*;
 import Box2D.Collision.Shapes.*;
 import Box2D.Common.Math.*;
 import Box2D.Dynamics.*;
-import Box2D.Dynamics.Joints.b2MouseJoint;
-import Box2D.Dynamics.Joints.b2MouseJointDef;
-import flash.display.Stage;
-
-import General.Input;
-
-import com.becker.animation.sprites.AbstractShape;
-
-import flash.display.Graphics;
 import flash.display.Sprite;
-import flash.geom.Point;
 import flash.events.KeyboardEvent;
+import General.Input;
 
 /**
  * Handles the keboard actions.
@@ -24,17 +15,12 @@ import flash.events.KeyboardEvent;
 public class KeyboardInteractor implements Interactor {
      
     private var owner:Sprite;
-    
-    /** mouse input. */
-    private var input:Input;
-    
     private var _keyPressHandler:Function;
 
  
     /**
      * Constructor
-     * @param owner the owning sprite for which we will handle mouse interation.
-     * @param world the physical world instance.
+     * @param owner the owning sprite for which we will handle keyboard interation.
      */
     public function KeyboardInteractor(owner:Sprite) {
         this.owner = owner;
