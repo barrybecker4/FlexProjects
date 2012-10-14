@@ -8,6 +8,8 @@ package  com.becker.animation.sprites {
     public class AbstractShape extends UIComponent {
         
          protected var color:uint;
+         
+         public var childBodies:Array;
         
          public function AbstractShape(color:uint = 0x9988cc) {
 
