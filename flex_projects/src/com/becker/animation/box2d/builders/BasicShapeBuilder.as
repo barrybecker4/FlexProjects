@@ -74,8 +74,6 @@ package com.becker.animation.box2d.builders
                 
             bodyDef.userData = new Rectangle(masterBlock.width * 2 * scale, masterBlock.height * 2 * scale);
             var body:b2Body = addShape(boxDef, bodyDef);
-            var children:Array = [];
-            body.GetUserData().childBodies = children;
             
             for (var i:int = 1; i < orientedBlocks.length; i++) {
                 var orientedBlock:OrientedBox = orientedBlocks[i];
@@ -89,7 +87,7 @@ package com.becker.animation.box2d.builders
                 rect.rotation = Util.RAD_TO_DEG * orientedBlock.rotation;
                 bodyDef.userData.addChild(rect);
                 
-                children.push(addShape(boxDef, bodyDef));
+                addShape(boxDef, bodyDef);
             }
             body.ResetMassData();    
             return body;

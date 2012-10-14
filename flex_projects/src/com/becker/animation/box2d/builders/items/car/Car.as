@@ -46,6 +46,9 @@ package com.becker.animation.box2d.builders.items.car {
             
             setMotorSpeed(motorSpeed);
             
+            // helps to keep the car on the ground during strong acceleration.
+            carBody.ApplyTorque(motorSpeed);
+            
             braking = false;
             increaseAcceleration = false;
             decreaseAcceleration = false;
@@ -61,17 +64,7 @@ package com.becker.animation.box2d.builders.items.car {
             spring = springs[1];
             spring.SetMaxMotorForce(0 + Math.abs(MOTOR_TORQUE * Math.pow(spring.GetJointTranslation(), 2)));
             spring.SetMotorSpeed( -4.0 * Math.pow(spring.GetJointTranslation(), 1));
-            
-            /*
-         spring1.SetMaxMotorForce(30+Math.abs(800*Math.pow(spring1.GetJointTranslation(), 2)));
-         //spring1.SetMotorSpeed(-4*Math.pow(spring1.GetJointTranslation(), 1));
-         spring1.SetMotorSpeed((spring1.GetMotorSpeed() - 10*spring1.GetJointTranslation())*0.4);         
- 
-         spring2.SetMaxMotorForce(20+Math.abs(800*Math.pow(spring2.GetJointTranslation(), 2)));
-         spring2.SetMotorSpeed(-4*Math.pow(spring2.GetJointTranslation(), 1));
- 
-         cart.ApplyTorque(30*(input.isPressed(37) ? 1: input.isPressed(39) ? -1 : 0));
- */
+             
         }
         
         /** as speed increases, torque is reduced - like in an automatic trasmission. */
