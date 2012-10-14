@@ -135,12 +135,13 @@ public class BoxWorld extends UIComponent implements Animatible {
         for (var bb:b2Body = world.GetBodyList(); bb; bb = bb.GetNext()) {
            
             //for (var fixture:b2Fixture = bb.GetFixtureList(); fixture; fixture = fixture.GetNext()) {
-            var shape:AbstractShape = AbstractShape(bb.GetUserData()); 
-            if (shape) {
-                shape.x = bb.GetPosition().x * simulation.scale;
-                shape.y = bb.GetPosition().y * simulation.scale;
-                shape.rotation = bb.GetAngle() * Util.RAD_TO_DEG;
-            }
+                var shape:AbstractShape = AbstractShape(bb.GetUserData()); 
+                if (shape) {
+                    shape.x = bb.GetPosition().x * simulation.scale;
+                    shape.y = bb.GetPosition().y * simulation.scale;
+                    shape.rotation = bb.GetAngle() * Util.RAD_TO_DEG;
+                }
+            //}
         } 
     }
     
@@ -190,7 +191,7 @@ public class BoxWorld extends UIComponent implements Animatible {
             dbgDraw.SetDrawScale(simulation.scale);
             dbgDraw.SetFillAlpha(0.4);
             dbgDraw.SetLineThickness(2.0);
-            dbgDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit); //0xFFFFFFFF;
+            dbgDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit || b2DebugDraw.e_pairBit);  //0xFFFFFFFF;
             world.SetDebugDraw(dbgDraw);
             world.DrawDebugData();
             showDebug = true;

@@ -7,8 +7,8 @@ package com.becker.animation.box2d.builders.items.car {
     public class Car {
        
         private static const MAX_SPEED:Number = 40;
-        private static const SPEED_INC:Number = 0.8;
-        private static const MOTOR_TORQUE:Number = 400.0;
+        private static const SPEED_INC:Number = 0.6;
+        private static const MOTOR_TORQUE:Number = 500.0;
         
         public var carBody: b2Body;
         
@@ -52,16 +52,26 @@ package com.becker.animation.box2d.builders.items.car {
         }
         
         public function updateShockAbsorbers():void {
-            // not sure what this stuff does yet
-            var spring:b2PrismaticJoint = springs[0];
+            // rear wheel
+            var spring:b2PrismaticJoint = springs[0]; 
             spring.SetMaxMotorForce(30 + Math.abs(MOTOR_TORQUE * Math.pow(spring.GetJointTranslation(), 2)));
-            spring.SetMotorSpeed((spring.GetMotorSpeed() - 10 * spring.GetJointTranslation()) * 0.4);         
+            spring.SetMotorSpeed((spring.GetMotorSpeed() - 10.0 * spring.GetJointTranslation()) * 0.4);         
      
+            // front wheel
             spring = springs[1];
-            spring.SetMaxMotorForce(30 + Math.abs(MOTOR_TORQUE * Math.pow(spring.GetJointTranslation(), 2)));
-            spring.SetMotorSpeed(-4 * Math.pow(spring.GetJointTranslation(), 1));
-     
-            carBody.ApplyTorque(100); 
+            spring.SetMaxMotorForce(0 + Math.abs(MOTOR_TORQUE * Math.pow(spring.GetJointTranslation(), 2)));
+            spring.SetMotorSpeed( -4.0 * Math.pow(spring.GetJointTranslation(), 1));
+            
+            /*
+         spring1.SetMaxMotorForce(30+Math.abs(800*Math.pow(spring1.GetJointTranslation(), 2)));
+         //spring1.SetMotorSpeed(-4*Math.pow(spring1.GetJointTranslation(), 1));
+         spring1.SetMotorSpeed((spring1.GetMotorSpeed() - 10*spring1.GetJointTranslation())*0.4);         
+ 
+         spring2.SetMaxMotorForce(20+Math.abs(800*Math.pow(spring2.GetJointTranslation(), 2)));
+         spring2.SetMotorSpeed(-4*Math.pow(spring2.GetJointTranslation(), 1));
+ 
+         cart.ApplyTorque(30*(input.isPressed(37) ? 1: input.isPressed(39) ? -1 : 0));
+ */
         }
         
         /** as speed increases, torque is reduced - like in an automatic trasmission. */
