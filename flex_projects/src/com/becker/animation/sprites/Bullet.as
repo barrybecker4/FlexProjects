@@ -14,10 +14,10 @@ package com.becker.animation.sprites {
     public class Bullet extends Circle {
         
         /** The bullet will be removed after this amount of time */
-        private static const BULLET_DURATION:uint = 5000;
+        private static const BULLET_DURATION:uint = 4000;
         
         /** setting the time to 10,000 milliseconds = 10 seconds */
-        public var time_count:Timer = new Timer(10000);
+        public var time_count:Timer = new Timer(BULLET_DURATION);
         
         /**  flag to determine if I have to remove the bullet */
         public var remove_the_bullet:Boolean = false;
@@ -33,7 +33,7 @@ package com.becker.animation.sprites {
      
         /**
          * removing the time listener and setting the flag to true
-         * @param	event
+         * @param event timer event
          */
         public function bullet_is_old(event:TimerEvent):void {
             time_count.removeEventListener(TimerEvent.TIMER, bullet_is_old);

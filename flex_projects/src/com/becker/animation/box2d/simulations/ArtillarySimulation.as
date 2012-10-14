@@ -69,6 +69,7 @@ package com.becker.animation.box2d.simulations {
                             break;
                         case Cannon.BULLET :
                             if (bb.GetUserData().has_to_be_removed()) {
+                                canvas.removeChild(bb.GetUserData());
                                 bb.SetUserData(null);
                                 world.DestroyBody(bb);
                             }

@@ -11,6 +11,7 @@ package com.becker.animation.box2d.builders {
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
     import com.becker.animation.box2d.builders.items.Cannon;
     import com.becker.animation.sprites.Bazooka;
+    import com.becker.animation.sprites.Rectangle;
     import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
     
@@ -65,13 +66,16 @@ package com.becker.animation.box2d.builders {
             
             var ground_sensor:b2FixtureDef = new b2FixtureDef();
             ground_sensor.isSensor = true;
-            ground_sensor.userData = "groundsensor";
+            //ground_sensor.userData = "groundsensor";
             
             var sensorShape:b2PolygonShape = new b2PolygonShape();
             sensorShape.SetAsOrientedBox(10 / scale, 5 / scale, new b2Vec2(0, 27 / scale), 0);
             ground_sensor.shape = sensorShape;
             
             var body:b2Body = world.CreateBody(bodyDef);
+            var box:Rectangle = new Rectangle(1, 1);
+            box.name = "groundsensor";
+            body.SetUserData(box);
             body.CreateFixture(ground_sensor);
             body.ResetMassData() //SetMassFromShapes();
             
