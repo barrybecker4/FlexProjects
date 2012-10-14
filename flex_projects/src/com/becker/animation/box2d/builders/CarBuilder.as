@@ -22,7 +22,6 @@ package com.becker.animation.box2d.builders {
         private static const WHEEL_RADIUS:Number = 0.6;
         private static const AXLE_ANGLE:Number = Math.PI / 4;
         
-        
         private var shapeBuilder:BasicShapeBuilder;
         private var params:PhysicalParameters;    
         private var car:Car;
@@ -122,12 +121,12 @@ package com.becker.animation.box2d.builders {
             revoluteJointDef.Initialize(car.axles[1], car.wheels[1], car.wheels[1].GetWorldCenter());
             car.motors[1] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
              
-            // Set motor speeds. belongs in update
-            car.motors[0].SetMotorSpeed(1); // 5 * Math.PI * 0.5); 
-            car.motors[0].SetMaxMotorTorque(10); // Car.TORQUE_INC);
+            // Set initial motor speeds.
+            car.motors[0].SetMotorSpeed(1); 
+            car.motors[0].SetMaxMotorTorque(10); 
      
-            car.motors[1].SetMotorSpeed(1); // 5 * Math.PI * 0.5); 
-            car.motors[1].SetMaxMotorTorque(10); // Car.TORQUE_INC); 
+            car.motors[1].SetMotorSpeed(1);  
+            car.motors[1].SetMaxMotorTorque(10);  
         }
     }
 }

@@ -57,6 +57,8 @@ package com.becker.animation.box2d.simulations {
             
             addRandomCrap(); 
             car = carBuilder.buildInstance(14, 20, params);
+            
+            car.carBody.ApplyTorque(1000);
         }
         
         /**
@@ -67,14 +69,17 @@ package com.becker.animation.box2d.simulations {
         override public function onFrameUpdate():void {
             
             car.updateMotor();
+            scrollToCarCenter();
+            car.updateShockAbsorbers();
+        }
+        
+        private function scrollToCarCenter():void {
             var center:b2Vec2 = car.carBody.GetWorldCenter();
             var velocity:b2Vec2 = car.carBody.GetLinearVelocity();
             var xOffset:Number = -scale * center.x + canvas.width / 2 - velocity.x;
             var yOffset:Number = -scale * center.y + canvas.height / 2 - velocity.y;
             canvas.x -= (canvas.x - xOffset) / SCENE_SCROLL_RESTITUTION;
             canvas.y -= (canvas.y - yOffset) / SCENE_SCROLL_RESTITUTION;
-            
-            car.updateShockAbsorbers();
         }
           
         private function addRandomCrap():void {
@@ -82,10 +87,10 @@ package com.becker.animation.box2d.simulations {
             bodyDef.type = b2Body.b2_dynamicBody;
             
             crapBuilder.setSpawnSpread(900, 80);
-            crapBuilder.setShapeSize(5.0);
+            crapBuilder.setShapeSize(4.0);
             crapBuilder.addCrap(bodyDef, 15, 15, 16);
             crapBuilder.setSpawnSpread(900, 0);
-            crapBuilder.addBalls(40, 4, bodyDef);
+            crapBuilder.addBalls(40, 3, bodyDef);
         } 
         
         override public function createInteractors():void {
