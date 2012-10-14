@@ -43,14 +43,14 @@ package com.becker.animation.box2d.simulations {
             bodyDef.position.Set(30, 30);
             bodyDef.angle = -0.05;
             bodyDef.type =  b2Body.b2_staticBody;
-            builder.buildBlock(85, 2, bodyDef, 0.5, 1.0, 0.1);
+            builder.buildBlock(85, 2, bodyDef, 0.5, 1.5, 0.1);
             
             bodyDef.position.Set(61, 26);
-            builder.buildBlock(1.0, 0.4, bodyDef, 0.5, 1.0, 0.1);
+            builder.buildBlock(1.0, 0.4, bodyDef, 0.5, 1.5, 0.1);
             
             bodyDef.angle = 0.1;
             bodyDef.position.Set(-60, 30);
-            builder.buildBlock(40, 2, bodyDef, 0.5, 1.0, 0.1);
+            builder.buildBlock(40, 2, bodyDef, 0.5, 1.5, 0.1);
         }
         
         override public function addDynamicElements():void {

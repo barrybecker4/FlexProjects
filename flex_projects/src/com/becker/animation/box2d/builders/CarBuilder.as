@@ -19,6 +19,13 @@ package com.becker.animation.box2d.builders {
     public class CarBuilder extends AbstractBuilder {
         
         private static const SIZE:Number = 2.5;
+        
+        private static const BODY_WIDTH:Number = 1.6;
+        private static const BODY_HEIGHT:Number = 0.3;
+        private static const SHOCK_DISTANCE:Number = 1.0;
+        private static const SHOCK_WIDTH:Number = 0.16;
+        private static const SHOCK_HEIGHT:Number = 0.5;
+        private static const SHOCK_DEPTH:Number = 0.4;
         private static const WHEEL_RADIUS:Number = 0.6;
         private static const AXLE_ANGLE:Number = Math.PI / 4;
         
@@ -48,28 +55,26 @@ package com.becker.animation.box2d.builders {
 
             return car;
         }
-    
+
+        /** Create a compound body for all the fixed car parts. */
         private function createCarBody(bodyDef:b2BodyDef):void {
             var blocks:Array = [
-                new OrientedBox(SIZE * 1.5, SIZE * 0.3, new b2Vec2(0, 0), 0),
-                new OrientedBox(SIZE * 0.4, SIZE * 0.15, 
-                    new b2Vec2( -1 * SIZE, 0.3 * SIZE), -AXLE_ANGLE),
-                new OrientedBox(SIZE * 0.4, SIZE * 0.15, 
-                    new b2Vec2( 1 * SIZE, 0.3 * SIZE),  AXLE_ANGLE),
-                new OrientedBox(SIZE * 0.4, SIZE * 0.1,  
-                    new b2Vec2(SIZE * ( -1 - 0.6 * Math.cos(AXLE_ANGLE)), 
-                              SIZE * (0.3 + 0.6 * Math.sin(AXLE_ANGLE))), -AXLE_ANGLE),
-                new OrientedBox(SIZE * 0.4, SIZE * 0.1, 
-                    new b2Vec2(SIZE * (1 + 0.6 * Math.cos( -AXLE_ANGLE)), 
-                               SIZE * (0.3 - 0.6 * Math.sin( -AXLE_ANGLE))), AXLE_ANGLE)
+                new OrientedBox(SIZE * BODY_WIDTH, SIZE * BODY_HEIGHT, new b2Vec2(0, 0), 0),
+                new OrientedBox(SIZE * SHOCK_WIDTH, SIZE * SHOCK_HEIGHT, 
+                    new b2Vec2( -SHOCK_DISTANCE * SIZE, SHOCK_DEPTH * SIZE), AXLE_ANGLE),
+                new OrientedBox(SIZE * SHOCK_WIDTH, SIZE * SHOCK_HEIGHT, 
+                    new b2Vec2( SHOCK_DISTANCE * SIZE, SHOCK_DEPTH * SIZE),  -AXLE_ANGLE),
             ];
             
             car.carBody = shapeBuilder.buildCompoundBlock(blocks, bodyDef, 2, 0.5, 0.2, -1); 
-            car.axles[0] = car.carBody.GetUserData().childBodies[2];
-            car.axles[1] = car.carBody.GetUserData().childBodies[3];
         }
         
         private function createAxles(bodyDef:b2BodyDef):void {
+            
+            car.axles[0] =  createAxle(1, bodyDef);
+            car.axles[1] =  createAxle(-1, bodyDef);
+            
+                               
             var boxDef:b2FixtureDef = new b2FixtureDef();
             boxDef.density = 1.0;
             var prismaticJointDef:b2PrismaticJointDef = createPrismaticJoint();
@@ -81,6 +86,16 @@ package com.becker.animation.box2d.builders {
                                          new b2Vec2(-Math.cos(-AXLE_ANGLE), Math.sin(-AXLE_ANGLE)));
      
             car.springs[1] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint;
+        }
+        
+        private function createAxle(sign:Number, bodyDef:b2BodyDef):b2Body {
+        
+            var center:b2Vec2 = car.carBody.GetWorldCenter();
+            var ang:Number = sign * AXLE_ANGLE;
+            bodyDef.position.Set(center.x + SIZE * -sign * ( SHOCK_DISTANCE + SHOCK_HEIGHT * Math.cos(ang)), 
+                                 center.y + SIZE * (SHOCK_DEPTH + sign * SHOCK_HEIGHT * Math.sin(ang)));
+            bodyDef.angle = ang;
+            return shapeBuilder.buildBlock(SIZE * SHOCK_WIDTH / 2.0, SIZE * SHOCK_HEIGHT, bodyDef, 1.0, 0.5, 0.0, -1); 
         }
         
         private function createPrismaticJoint():b2PrismaticJointDef {
@@ -98,15 +113,13 @@ package com.becker.animation.box2d.builders {
      
             for (var i:int = 0; i < 2; i++) {
      
-                if (i == 0) {
-                    bodyDef.position.Set(car.axles[0].GetWorldCenter().x - SIZE * 0.3 * Math.cos(AXLE_ANGLE), 
-                                         car.axles[0].GetWorldCenter().y + SIZE * 0.3 * Math.sin(AXLE_ANGLE));
-                }
-                else {
-                    bodyDef.position.Set(car.axles[1].GetWorldCenter().x + SIZE * 0.3 * Math.cos( -AXLE_ANGLE), 
-                                         car.axles[1].GetWorldCenter().y - SIZE * 0.3 * Math.sin( -AXLE_ANGLE));
-                }
-                car.wheels[i] = shapeBuilder.buildBall(SIZE * WHEEL_RADIUS, bodyDef, 0.2, 0.9, 0.2, -1);
+                var sign:Number = (i == 0) ? 1: -1;
+                var center:b2Vec2 = car.axles[i].GetWorldCenter();
+                
+                bodyDef.position.Set(center.x - sign * SIZE * 0.3 * Math.cos(sign * AXLE_ANGLE), 
+                                     center.y + sign * SIZE * 0.3 * Math.sin(sign * AXLE_ANGLE));
+
+                car.wheels[i] = shapeBuilder.buildBall(SIZE * WHEEL_RADIUS, bodyDef, 0.2, 1.1, 0.2, -1);
             }
         }
         

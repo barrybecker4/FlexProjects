@@ -9,8 +9,6 @@ package  com.becker.animation.sprites {
         
          protected var color:uint;
          
-         public var childBodies:Array;
-        
          public function AbstractShape(color:uint = 0x9988cc) {
 
              this.color = color;     
