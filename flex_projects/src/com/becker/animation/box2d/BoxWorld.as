@@ -19,12 +19,6 @@ import mx.events.ResizeEvent;
  * The simulated world of shapes.
  * The simulation that is set on the word defines what will be shown in it.
  * 
- * ideas todo:
- *  - add artillary demo. 
- *  - fix rendering of shock absorbers on car.
- *  - cleanup simple shape construction (inlude positions and params).
- *  - make scene scale with window resize.
- *  - make car game. Mount gun on car.
  */
 public class BoxWorld extends UIComponent implements Animatible {
     

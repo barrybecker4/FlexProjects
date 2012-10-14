@@ -10,25 +10,24 @@ package com.becker.animation.box2d.builders
     import mx.core.UIComponent;
     
     public class AbstractBuilder  {
-        
-        /** Turn on to avoid tunneling */
-        private static const IS_BULLET:Boolean = false;
+      
         
         protected var world:b2World;
         protected var canvas:UIComponent;
-        protected var scale:Number;
+        private var _scale:Number;
         
         
         public function AbstractBuilder(world:b2World, canvas:UIComponent, scale:Number) {
             this.world = world; 
             this.canvas = canvas;
-            this.scale = scale;
+            _scale = scale;
         }
                       
-        protected function addShape(fixtureDef:b2FixtureDef, bodyDef:b2BodyDef):b2Body {           
+        protected function addShape(fixtureDef:b2FixtureDef, bodyDef:b2BodyDef, 
+                                    isBullet:Boolean = false):b2Body {           
           
             var body:b2Body = world.CreateBody(bodyDef);
-            body.SetBullet(IS_BULLET);
+            body.SetBullet(isBullet);
             
             body.CreateFixture(fixtureDef);
             canvas.addChild(bodyDef.userData);
@@ -44,7 +43,11 @@ package com.becker.animation.box2d.builders
         }
         
         public static function degreesToRadians(angle:Number):Number {
-            return angle * (180.0/Math.PI);
+            return angle * (180.0 / Math.PI);
+        }
+        
+        public function get scale():Number {
+            return _scale;
         }
     }
 }

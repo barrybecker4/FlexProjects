@@ -14,7 +14,7 @@ package com.becker.animation.box2d.builders {
     import mx.core.UIComponent;
     
     /**
-     * Build a car with manipulable parmeters
+     * Build a parameterized car 
      */
     public class CarBuilder extends AbstractBuilder {
         
@@ -22,10 +22,10 @@ package com.becker.animation.box2d.builders {
         
         private static const BODY_WIDTH:Number = 1.6;
         private static const BODY_HEIGHT:Number = 0.3;
-        private static const SHOCK_DISTANCE:Number = 1.0;
+        private static const SHOCK_DISTANCE:Number = 1.6;
         private static const SHOCK_WIDTH:Number = 0.16;
         private static const SHOCK_HEIGHT:Number = 0.5;
-        private static const SHOCK_DEPTH:Number = 0.4;
+        private static const SHOCK_DEPTH:Number = 0.1;
         private static const WHEEL_RADIUS:Number = 0.6;
         private static const AXLE_ANGLE:Number = Math.PI / 4;
         
@@ -73,7 +73,6 @@ package com.becker.animation.box2d.builders {
             
             car.axles[0] =  createAxle(1, bodyDef);
             car.axles[1] =  createAxle(-1, bodyDef);
-            
                                
             var boxDef:b2FixtureDef = new b2FixtureDef();
             boxDef.density = 1.0;
@@ -92,10 +91,13 @@ package com.becker.animation.box2d.builders {
         
             var center:b2Vec2 = car.carBody.GetWorldCenter();
             var ang:Number = sign * AXLE_ANGLE;
-            bodyDef.position.Set(center.x + SIZE * -sign * ( SHOCK_DISTANCE + SHOCK_HEIGHT * Math.cos(ang)), 
-                                 center.y + SIZE * (SHOCK_DEPTH + sign * SHOCK_HEIGHT * Math.sin(ang)));
+            bodyDef.position.Set(
+                center.x + SIZE * -sign * ( SHOCK_DISTANCE + SHOCK_HEIGHT * Math.cos(ang)), 
+                center.y + SIZE * (SHOCK_DEPTH + sign * SHOCK_HEIGHT * Math.sin(ang)));
             bodyDef.angle = ang;
-            return shapeBuilder.buildBlock(SIZE * SHOCK_WIDTH / 2.0, SIZE * SHOCK_HEIGHT, bodyDef, 1.0, 0.5, 0.0, -1); 
+            return shapeBuilder.buildBlock(SIZE * SHOCK_WIDTH / 2.0, 
+                                           SIZE * SHOCK_HEIGHT, bodyDef, 
+                                           1.0, 0.5, 0.0, -1); 
         }
         
         private function createPrismaticJoint():b2PrismaticJointDef {
