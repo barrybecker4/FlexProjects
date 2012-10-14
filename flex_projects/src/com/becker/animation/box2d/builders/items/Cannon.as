@@ -4,11 +4,11 @@ package com.becker.animation.box2d.builders.items {
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
-    import Box2D.Dynamics.b2FilterData;
-    import Box2D.Dynamics.b2Fixture;
     import Box2D.Dynamics.b2FixtureDef;
     import Box2D.Dynamics.b2World;
-    import com.becker.animation.box2d.BoxWorld;
+    import Box2D.Dynamics.Joints.b2RevoluteJoint;
+    import com.becker.animation.box2d.builders.BasicShapeBuilder;
+    import com.becker.animation.box2d.builders.CannonContactListener;
     import com.becker.animation.sprites.Bazooka;
     import com.becker.animation.sprites.Bullet;
     import com.becker.common.Util;
@@ -16,13 +16,19 @@ package com.becker.animation.box2d.builders.items {
     public class Cannon {
         
         public static const PLAYER:String = "Player";
-        public static const BULLET:String = "bullet";
+        public static const BULLET:String = "Bullet";
+        
+        private static const POWER_FACTOR:Number = 0.25;
         
         private var _cannonBody:b2Body;        
         private var _sensor:b2FixtureDef;
         
-        public var _bazooka:Bazooka;
+        public var _bazooka:b2Body;
         public var bazooka_angle:Number;
+        public var doJump:Boolean = false;
+        private var _contactListener:CannonContactListener;
+        
+        //public var joint:b2RevoluteJoint;
         
         /** speed at which to emit projectiles */
         public var xspeed:int = 0;
@@ -39,11 +45,12 @@ package com.becker.animation.box2d.builders.items {
         public var charging:int = 0;
      
                                   
-        public function Cannon(cannonBody:b2Body, bazooka:Bazooka, sensor:b2FixtureDef) {
+        public function Cannon(cannonBody:b2Body, bazooka:b2Body, sensor:b2FixtureDef, contactListener:CannonContactListener) {
                     
              _cannonBody = cannonBody;
              _bazooka = bazooka; 
              _sensor = sensor;
+             _contactListener = contactListener;
         }
         
         public function update():void {
@@ -62,22 +69,57 @@ package com.becker.animation.box2d.builders.items {
                 // show the correct bazooka frame
                 ////_bazooka.gotoAndStop(power);
             }
+            xspeed = 0;
+        }
+        
+        public function updateXSpeed(keyCode:int):void {
+            
+            if (keyCode == 39) { // right arrow
+                xspeed = 3;
+            } else if (keyCode == 37) { // left arrow
+                xspeed = -3;
+            }
+            
+        }
+        
+        public function updateJump(keyCode:int):void {
+            if (keyCode == 38) { // up arrow
+                if (_contactListener.can_jump()) { // checking if the hero can jump
+                    doJump = true;
+                }
+            }
+        }
+        
+        public function pointTowardMouse(mouseX:Number, mouseY:Number, scale:Number):void {
+            var tip:b2Vec2 = bazooka.GetWorldCenter();
+            tip.x = cannonBody.GetUserData().x = cannonBody.GetPosition().x * scale;
+            tip.y = cannonBody.GetUserData().y = cannonBody.GetPosition().y * scale;
+            // orient toward mouse
+            var dist_x:Number = tip.x - mouseX;
+            var dist_y:Number = tip.y - mouseY;
+            setAngle(Math.PI/2.0 + Math.atan2( -dist_y, -dist_x));
         }
         
         public function setAngle(angle:Number):void {
             bazooka_angle = angle;
-            bazooka.rotation = bazooka_angle * Util.RAD_TO_DEG; //57.2957795;
+            bazooka.SetAngle(bazooka_angle); // * Util.RAD_TO_DEG;
         }
         
         /** fire the cannon bullet */
-        public function fire(world:b2World, scale:Number):void {
-            // reset charging
-            charging = 0;
-            var bodyDef:b2BodyDef = new b2BodyDef();
-            var x:Number = (bazooka.x + (bazooka.width + 3) * Math.cos(bazooka_angle)) / scale;
-            var y:Number = (bazooka.y + (bazooka.width + 3) * Math.sin(bazooka_angle)) / scale;
-            bodyDef.position.Set(x, y);
+        public function fire(world:b2World, shapeBuilder:BasicShapeBuilder):void {
             
+            trace("bang!");
+            charging = 0;
+            
+            var x:Number = (bazooka.GetWorldCenter().x + (bazooka.GetUserData().width + 3) * Math.cos(bazooka_angle)) / shapeBuilder.scale;
+            var y:Number = (bazooka.GetWorldCenter().y + (bazooka.GetUserData().width + 3) * Math.sin(bazooka_angle)) / shapeBuilder.scale;
+            var bodyDef:b2BodyDef = new b2BodyDef();
+            bodyDef.position.Set(x, y);
+            bodyDef.type = b2Body.b2_dynamicBody;
+            
+            var body:b2Body = shapeBuilder.buildBullet(0.4, bodyDef, 1.0, 0.5, 0.2);
+            //body.GetUserData().name = Cannon.BULLET;
+            /*
             var boxDef:b2FixtureDef = new b2FixtureDef();
             
             var shape:b2PolygonShape = new b2PolygonShape();
@@ -90,11 +132,11 @@ package com.becker.animation.box2d.builders.items {
             bodyDef.userData = new Bullet(1.0);
             var body:b2Body = world.CreateBody(bodyDef);
             body.CreateFixture(boxDef);
-            body.ResetMassData() //SetMassFromShapes();
-            // apply the impulse according to the power
-            // that "/4" is just a setting to have decent gameplay
-            x = Math.cos(bazooka_angle) * power / 4;
-            y = Math.sin(bazooka_angle) * power / 4;
+            body.ResetMassData(); 
+            */
+            
+            x = Math.cos(bazooka_angle) * power * POWER_FACTOR;
+            y = Math.sin(bazooka_angle) * power * POWER_FACTOR;
             body.ApplyImpulse(new b2Vec2(x, y), body.GetWorldCenter());
             // resetting the power
             power = 1;
@@ -106,7 +148,7 @@ package com.becker.animation.box2d.builders.items {
             return _cannonBody;
         }   
         
-        public function get bazooka():Bazooka {
+        public function get bazooka():b2Body {
             return _bazooka;
         }   
         

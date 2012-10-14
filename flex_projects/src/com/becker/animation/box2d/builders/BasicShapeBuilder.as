@@ -10,6 +10,7 @@ package com.becker.animation.box2d.builders
     import Box2D.Dynamics.b2World;
     import Box2D.Dynamics.b2FixtureDef;
     import com.becker.animation.sprites.AbstractShape;
+    import com.becker.animation.sprites.Bullet;
     import com.becker.animation.sprites.ExplodableShape;
     import com.becker.animation.sprites.Line;
     import com.becker.common.PhysicalParameters;
@@ -50,6 +51,23 @@ package com.becker.animation.box2d.builders
             return addShape(boxDef, bodyDef); 
         }
         
+        public function buildBullet(radius:Number, bodyDef:b2BodyDef, 
+                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+                groupIndex:int = int.MAX_VALUE):b2Body { 
+            
+            var circleDef:b2FixtureDef = new b2FixtureDef();
+            circleDef.density = density;
+            circleDef.friction = friction;
+            circleDef.restitution = restitution;
+            if (groupIndex != int.MAX_VALUE) {
+                circleDef.filter.groupIndex = groupIndex;
+            }
+            circleDef.shape = new b2CircleShape(radius);
+            bodyDef.userData = new Bullet(radius * scale);
+            
+            return addShape(circleDef, bodyDef, true);
+        }
+
         /**
          * 
          * @return body with children for all the decorating blocks.

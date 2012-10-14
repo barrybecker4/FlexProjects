@@ -23,7 +23,7 @@ package com.becker.animation.sprites {
         public var remove_the_bullet:Boolean = false;
         
         /** Constructor */
-        public function Bullet(radius:Number) {
+        public function Bullet(radius:Number = 0.5) {
             super(radius);
             this.name = Cannon.BULLET;
             
