@@ -145,16 +145,25 @@ public class BoxWorld extends UIComponent implements Animatible {
         for (var joint:b2Joint = world.GetJointList(); joint; joint = joint.GetNext()) {
             
             if (joint.GetUserData()) {
-                var line:Line = Line(joint.GetUserData().GetUserData());
-             
-                line.x = joint.GetAnchorA().x * simulation.scale;
-                line.y = joint.GetAnchorA().y * simulation.scale;
-                
-                var numer:Number = joint.GetAnchorB().y - joint.GetAnchorA().y;
-                var denom:Number = joint.GetAnchorB().x - joint.GetAnchorA().x;
-                var angle:Number = Math.atan2(numer, denom);
-                
-                line.rotation = angle * Util.RAD_TO_DEG; 
+                if (joint.GetUserData().GetUserData() is Line) {
+                    var line:Line = Line(joint.GetUserData().GetUserData());
+                 
+                    line.x = joint.GetAnchorA().x * simulation.scale;
+                    line.y = joint.GetAnchorA().y * simulation.scale;
+                    
+                    var numer:Number = joint.GetAnchorB().y - joint.GetAnchorA().y;
+                    var denom:Number = joint.GetAnchorB().x - joint.GetAnchorA().x;
+                    var angle:Number = Math.atan2(numer, denom);
+                    
+                    line.rotation = angle * Util.RAD_TO_DEG; 
+                } 
+                else if (joint.GetUserData().GetUserData() is AbstractShape) {
+                    var shape:AbstractShape = AbstractShape(joint.GetUserData().GetUserData()); 
+                   
+                    shape.x = joint.GetAnchorA().x * simulation.scale;
+                    shape.y = joint.GetAnchorA().y * simulation.scale;
+                    shape.rotation = 0;
+                }
             }
         }
     }

@@ -22,6 +22,8 @@ package com.becker.animation.box2d.builders.items {
         private static const POWER_FACTOR:Number = 0.5;
         private static const JUMP_STRENGTH:Number = 100.0;
         
+        private static const NEG_90:Number = 3.0 * Math.PI / 2.0;
+        
         private var _cannonBody:b2Body;        
         private var _sensor:b2FixtureDef;
         
@@ -50,10 +52,11 @@ package com.becker.animation.box2d.builders.items {
         
         public function updateMovement():void {
             if (xspeed) {
-                cannonBody.SetAwake(true);  
+                //cannonBody.SetAwake(true);  
                 cannonBody.SetLinearVelocity(new b2Vec2(xspeed, cannonBody.GetLinearVelocity().y));
             }
             if (doJump) {
+                trace("Jumping!");
                 cannonBody.ApplyImpulse(new b2Vec2(0.0, -JUMP_STRENGTH), cannonBody.GetWorldCenter());
                 doJump = false;
             }
@@ -78,16 +81,17 @@ package com.becker.animation.box2d.builders.items {
         }
         
         public function pointTowardMouse(mouseX:Number, mouseY:Number, scale:Number):void {
-            var middle:b2Vec2 = bazooka.GetWorldCenter();
-            middle.x = cannonBody.GetWorldCenter().x + cannonBody.GetPosition().x * scale;
-               //cannonBody.GetUserData().x + cannonBody.GetPosition().x * scale;
-            middle.y = cannonBody.GetWorldCenter().y + cannonBody.GetPosition().y * scale;
-               //cannonBody.GetUserData().y + cannonBody.GetPosition().y * scale;
+            // cannonBody.GetWorldCenter() 
+            cannonBody.SetAwake(true);  
+            var middle:b2Vec2 = new b2Vec2(
+                cannonBody.GetPosition().x * scale, 
+                cannonBody.GetPosition().y * scale );
+           
             // orient toward mouse
             var dist_x:Number = middle.x - mouseX;
             var dist_y:Number = middle.y - mouseY;
             
-            bazooka.SetAngle(Math.PI/2.0 + Math.atan2( -dist_y, -dist_x));
+            bazooka.SetAngle(Math.PI / 2.0 + Math.atan2( -dist_y, -dist_x));
         }
         
         public function startCharging():void {
@@ -98,20 +102,21 @@ package com.becker.animation.box2d.builders.items {
         /** fire the cannon bullet */
         public function fire(world:b2World, shapeBuilder:BasicShapeBuilder):void {
             
-            var bazookaAngle:Number = bazooka.GetAngle();
-            var x:Number = bazooka.GetWorldCenter().x + (bazooka.GetUserData().height/shapeBuilder.scale) * Math.cos(3.0 * Math.PI/2.0  + bazookaAngle); 
-            var y:Number = bazooka.GetWorldCenter().y + (bazooka.GetUserData().height / shapeBuilder.scale) * Math.sin(3.0 * Math.PI / 2.0  + bazookaAngle); 
+            var bazookaAngle:Number = NEG_90 + bazooka.GetAngle();
+            
+            var x:Number = bazooka.GetWorldCenter().x + (0.6 * bazooka.GetUserData().height / shapeBuilder.scale) * Math.cos(bazookaAngle); 
+            var y:Number = bazooka.GetWorldCenter().y + (0.6 * bazooka.GetUserData().height / shapeBuilder.scale) * Math.sin(bazookaAngle); 
             
             var bodyDef:b2BodyDef = new b2BodyDef();
-            //trace("start pos = " + x + ", " + y);
+
             bodyDef.position.Set(x, y);
             bodyDef.type = b2Body.b2_dynamicBody;
             
             var body:b2Body = shapeBuilder.buildBullet(0.4, bodyDef, 1.0, 0.3, 0.2);
             
             var power:int = bazooka.GetUserData().power;
-            x = Math.cos(bazookaAngle + 3.0 * Math.PI/2.0 ) * power * POWER_FACTOR;
-            y = Math.sin(bazookaAngle + 3.0 * Math.PI/2.0 ) * power * POWER_FACTOR;
+            x = Math.cos(bazookaAngle) * power * POWER_FACTOR;
+            y = Math.sin(bazookaAngle) * power * POWER_FACTOR;
             body.ApplyImpulse(new b2Vec2(x, y), body.GetWorldCenter());
             
             // resetting the power
