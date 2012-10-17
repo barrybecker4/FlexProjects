@@ -8,7 +8,7 @@ package com.becker.animation.sprites {
      */
     public class Bazooka extends AbstractShape {
         
-        private static const MAX_CHARGE:Number = 50;
+        private static const MAX_CHARGE:Number = 40;
         private static const CHARGE_BAR_COLOR:int = 0xff1100;
         
         /** defining the power of the bazooka */
@@ -40,7 +40,7 @@ package com.becker.animation.sprites {
         }
         
         public function startCharging():void {
-            charging = 1.0;
+            charging = 2.0;
         }
         
         public function get power():int {
@@ -57,7 +57,7 @@ package com.becker.animation.sprites {
                 if (_power > MAX_CHARGE || _power <1) {
                     _power = MAX_CHARGE;
                 } 
-                this.invalidateDisplayList();
+                invalidateDisplayList();
             }
         }
    

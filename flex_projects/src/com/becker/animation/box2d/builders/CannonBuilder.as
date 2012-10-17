@@ -70,6 +70,7 @@ package com.becker.animation.box2d.builders {
             var revoluteJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
             revoluteJointDef.enableMotor = true;
      
+            revoluteJointDef.userData = shapeBuilder.buildBall(0.2, bodyDef, 0.0, 0.5, 0.1);
             revoluteJointDef.Initialize(cannonBody, bazooka, new b2Vec2(zookaPos.x, zookaPos.y + ZOOKA_HEIGHT));
             var joint:b2RevoluteJoint = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
             
