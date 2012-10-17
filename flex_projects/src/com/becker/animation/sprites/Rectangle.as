@@ -15,11 +15,11 @@ package  com.becker.animation.sprites {
         private var img:DisplayObject;
         
         
-        public function Rectangle(width:Number, height:Number, color:uint = 0xaa77ff) {
-            super(color)
+        public function Rectangle(width:Number, height:Number, texture:Class = null) {
+            super(0xaa77ff)
             this.width = width;
             this.height = height;
-            img = new Images.GOLD;
+            img = texture ? new texture : new Images.GOLD;
             this.addChild(img);
             
             /*

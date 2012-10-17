@@ -49,24 +49,37 @@ package com.becker.animation.box2d.builders {
                 shapeBuilder.buildBlock(PLAYER_WIDTH, PLAYER_HEIGHT, bodyDef, params.density, params.friction, params.restitution, 1);
             cannonBody.GetUserData().name = Cannon.PLAYER;
             
-            var zookaPos:b2Vec2 = new b2Vec2(startX, startY - PLAYER_HEIGHT);
-            bodyDef.position = zookaPos;  //Set(startX + 0.3, startY - 1.5);
+            var zookaPos:b2Vec2 = new b2Vec2(startX, startY - PLAYER_HEIGHT - ZOOKA_HEIGHT/2.0);
+            var bazooka:b2Body = createAttachedBazooka(zookaPos, bodyDef, cannonBody);
+            
+            var ground_sensor:b2FixtureDef = createGroundSensor(bodyDef);
+            
+            var contactListener:CannonContactListener = new CannonContactListener();
+            world.SetContactListener(contactListener);
+
+            return new Cannon(cannonBody, bazooka, ground_sensor, contactListener);
+        }
+        
+        private function createAttachedBazooka(zookaPos:b2Vec2, bodyDef:b2BodyDef, cannonBody:b2Body):b2Body {
+            
+            bodyDef.position = zookaPos;  
             //bodyDef.angle = Math.PI / 5.0;
-            var bazooka:b2Body = shapeBuilder.buildBlock(ZOOKA_WIDTH, ZOOKA_HEIGHT, bodyDef, 0.0, params.friction, params.restitution, 2);
-            //var bazooka:Bazooka = new Bazooka(50, 8);
-            //canvas.addChild(bazooka);
-            //bazooka.gotoAndStop(1);
+            var bazooka:b2Body = shapeBuilder.buildBazooka(ZOOKA_WIDTH, ZOOKA_HEIGHT, bodyDef, 0.0, 0.5, 0.1, 2);
             
             // add a joint for the bazooka and player rect
             var revoluteJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
-            revoluteJointDef.enableMotor = false; // true;
+            revoluteJointDef.enableMotor = true;
      
-            revoluteJointDef.Initialize(cannonBody, bazooka, new b2Vec2(zookaPos.x, zookaPos.y + 0.7 * ZOOKA_HEIGHT));
+            revoluteJointDef.Initialize(cannonBody, bazooka, new b2Vec2(zookaPos.x, zookaPos.y + ZOOKA_HEIGHT));
             var joint:b2RevoluteJoint = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
+            
+            return bazooka;
+        }
+        
+        private function createGroundSensor(bodyDef:b2BodyDef):b2FixtureDef {
             
             var ground_sensor:b2FixtureDef = new b2FixtureDef();
             ground_sensor.isSensor = true;
-            //ground_sensor.userData = "groundsensor";
             
             var sensorShape:b2PolygonShape = new b2PolygonShape();
             sensorShape.SetAsOrientedBox(10 / scale, 5 / scale, new b2Vec2(0, 27 / scale), 0);
@@ -74,15 +87,11 @@ package com.becker.animation.box2d.builders {
             
             var body:b2Body = world.CreateBody(bodyDef);
             var box:Rectangle = new Rectangle(1, 1);
-            box.name = "groundsensor";
+            box.name = Cannon.GROUND_SENSOR;
             body.SetUserData(box);
             body.CreateFixture(ground_sensor);
-            body.ResetMassData() //SetMassFromShapes();
-            
-            var contactListener:CannonContactListener = new CannonContactListener();
-            world.SetContactListener(contactListener);
-
-            return new Cannon(cannonBody, bazooka, ground_sensor, contactListener);
+            body.ResetMassData() 
+            return ground_sensor;
         }
     }
 }
