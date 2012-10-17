@@ -20,14 +20,14 @@ package com.becker.animation.sprites {
         public var time_count:Timer = new Timer(BULLET_DURATION);
         
         /**  flag to determine if I have to remove the bullet */
-        public var remove_the_bullet:Boolean = false;
+        public var remove:Boolean = false;
         
         /** Constructor */
         public function Bullet(radius:Number = 0.5) {
             super(radius);
             this.name = Cannon.BULLET;
             
-            time_count.addEventListener(TimerEvent.TIMER, bullet_is_old);
+            time_count.addEventListener(TimerEvent.TIMER, isOld);
             time_count.start();
         }
      
@@ -35,14 +35,14 @@ package com.becker.animation.sprites {
          * removing the time listener and setting the flag to true
          * @param event timer event
          */
-        public function bullet_is_old(event:TimerEvent):void {
-            time_count.removeEventListener(TimerEvent.TIMER, bullet_is_old);
-            remove_the_bullet = true;
+        public function isOld(event:TimerEvent):void {
+            time_count.removeEventListener(TimerEvent.TIMER, isOld);
+            remove = true;
         }
         
         /** returning the flag, this is the method I'll call from the main class */
-        public function has_to_be_removed():Boolean {
-            return (remove_the_bullet);
+        public function isToBeRemoved():Boolean {
+            return (remove);
         }
     }
 }
