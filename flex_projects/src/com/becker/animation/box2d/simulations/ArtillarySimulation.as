@@ -9,7 +9,6 @@ package com.becker.animation.box2d.simulations {
     import com.becker.animation.box2d.builders.items.Cannon;
     import com.becker.animation.box2d.interactors.KeyboardInteractor;
     import com.becker.animation.box2d.interactors.MouseButtonInteractor;
-    import com.becker.animation.box2d.interactors.MouseDragInteractor;
     import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
      
@@ -68,7 +67,7 @@ package com.becker.animation.box2d.simulations {
                             cannon.pointTowardMouse(canvas.mouseX, canvas.mouseY, scale);
                             break;
                         case Cannon.BULLET :
-                            if (bb.GetUserData().has_to_be_removed()) {
+                            if (bb.GetUserData().isToBeRemoved()) {
                                 canvas.removeChild(bb.GetUserData());
                                 bb.SetUserData(null);
                                 world.DestroyBody(bb);
@@ -87,7 +86,7 @@ package com.becker.animation.box2d.simulations {
             kbdInteractor.keyPressHandler = keyHandler;
             mouseInteractor.buttonPressHandler = mouseDownHandler;
             mouseInteractor.buttonReleaseHandler = mouseUpHandler;
-            interactors = [kbdInteractor, mouseInteractor, ];
+            interactors = [kbdInteractor, mouseInteractor];
         }
         
         /** handler for the KeyboardInteractor */
