@@ -18,8 +18,6 @@ package com.becker.animation.box2d.simulations {
      */
     public class ArtillarySimulation extends AbstractSimulation {
         
-        private static const JUMP_STRENGTH:Number = 100;
-        
         private var builder:BasicShapeBuilder;   
         private var cannonBuilder:CannonBuilder; 
         private var cannon:Cannon;
@@ -54,16 +52,7 @@ package com.becker.animation.box2d.simulations {
                 if (bb.GetUserData() != null) {
                     switch (bb.GetUserData().name) {
                         case Cannon.PLAYER :
-                            if (cannon.xspeed) {
-                                bb.SetAwake(true);  
-                                bb.SetLinearVelocity(new b2Vec2(cannon.xspeed, bb.GetLinearVelocity().y));
-                            }
-                            if (cannon.doJump) {
-                                bb.ApplyImpulse(new b2Vec2(0.0, -JUMP_STRENGTH), bb.GetWorldCenter());
-                                cannon.doJump = false;
-                            }
-                            bb.SetAngle(0);
-                            
+                            cannon.updateMovement();
                             cannon.pointTowardMouse(canvas.mouseX, canvas.mouseY, scale);
                             break;
                         case Cannon.BULLET :
@@ -98,7 +87,7 @@ package com.becker.animation.box2d.simulations {
         
         /** handler for the mouseInteractor. Start with positive charging. */
         private function mouseDownHandler():void {
-            cannon.charging = 1;
+            cannon.startCharging();
         }
         
         /** handler for the mouseInteractor. Shoot cannon when released. */

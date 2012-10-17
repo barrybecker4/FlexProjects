@@ -10,6 +10,7 @@ package com.becker.animation.box2d.builders
     import Box2D.Dynamics.b2World;
     import Box2D.Dynamics.b2FixtureDef;
     import com.becker.animation.sprites.AbstractShape;
+    import com.becker.animation.sprites.Bazooka;
     import com.becker.animation.sprites.Bullet;
     import com.becker.animation.sprites.ExplodableShape;
     import com.becker.animation.sprites.Line;
@@ -47,6 +48,26 @@ package com.becker.animation.box2d.builders
             shape.SetAsBox(width, height);
             boxDef.shape = shape;
             bodyDef.userData = new Rectangle(width * 2 * scale, height * 2 * scale);
+            
+            return addShape(boxDef, bodyDef); 
+        }
+        
+        /** remove this and allow passing in the class for the grahic shape */
+        public function buildBazooka(width:Number, height:Number, bodyDef:b2BodyDef, 
+                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+                groupIndex:int = int.MAX_VALUE):b2Body {
+            
+            var boxDef:b2FixtureDef = new b2FixtureDef();
+            boxDef.density = density;
+            boxDef.friction = friction;
+            boxDef.restitution = restitution;
+            if (groupIndex != int.MAX_VALUE) {
+                boxDef.filter.groupIndex = groupIndex;
+            }
+            var shape:b2PolygonShape = new b2PolygonShape();
+            shape.SetAsBox(width, height);
+            boxDef.shape = shape;
+            bodyDef.userData = new Bazooka(width * 2 * scale, height * 2 * scale);
             
             return addShape(boxDef, bodyDef); 
         }

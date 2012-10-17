@@ -14,7 +14,7 @@ package com.becker.animation.sprites {
     public class Bullet extends Circle {
         
         /** The bullet will be removed after this amount of time */
-        private static const BULLET_DURATION:uint = 4000;
+        private static const BULLET_DURATION:uint = 8000;
         
         /** setting the time to 10,000 milliseconds = 10 seconds */
         public var time_count:Timer = new Timer(BULLET_DURATION);
