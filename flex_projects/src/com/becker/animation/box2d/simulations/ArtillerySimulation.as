@@ -6,9 +6,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
     import com.becker.animation.box2d.builders.CannonBuilder;
-    import com.becker.animation.box2d.builders.CarBuilder;
     import com.becker.animation.box2d.builders.items.Cannon;
-    import com.becker.animation.box2d.builders.items.car.Car;
     import com.becker.animation.box2d.interactors.KeyboardInteractor;
     import com.becker.animation.box2d.interactors.MouseButtonInteractor;
     import com.becker.common.PhysicalParameters;
@@ -16,15 +14,13 @@ package com.becker.animation.box2d.simulations {
      
     
     /**
-     * Simulates an artillary cannon hopping around and shooting stuff.
+     * Simulates an artillery cannon hopping around and shooting stuff.
      */
-    public class ArtillaryOnCarSimulation extends AbstractSimulation {
+    public class ArtillerySimulation extends AbstractSimulation {
         
         private var builder:BasicShapeBuilder;   
         private var cannonBuilder:CannonBuilder; 
-        private var carBuilder:CarBuilder; 
         private var cannon:Cannon;
-        private var car:Car;
         
         
         override public function initialize(world:b2World, canvas:UIComponent,
@@ -32,7 +28,6 @@ package com.becker.animation.box2d.simulations {
             super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);
             cannonBuilder = new CannonBuilder(world, canvas, scale);  
-            carBuilder = new CarBuilder(world, canvas, scale);  
         }
         
         override public function addStaticElements():void { 
@@ -46,7 +41,6 @@ package com.becker.animation.box2d.simulations {
         override public function addDynamicElements():void {
              
             cannon = cannonBuilder.buildInstance(30, 35, params);
-            car = carBuilder.buildInstance(35, 35, params);
         }
         
         /**

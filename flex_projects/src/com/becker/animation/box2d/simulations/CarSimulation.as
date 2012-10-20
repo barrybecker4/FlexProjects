@@ -17,7 +17,7 @@ package com.becker.animation.box2d.simulations {
     /**
      * Simulates a car moving with a bunch of balls and crap.
      *  * ideas todo:
-     *  - add artillary demo. 
+     *  - add artillery demo. 
      *  - cleanup simple shape construction (inlude positions and params).
      *  - make scene scale with window resize (sort of done).
      *  - make car game. Mount gun on car. 
