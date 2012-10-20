@@ -3,6 +3,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.interactors.Interactor;
     import com.becker.animation.box2d.interactors.MouseDragInteractor;
+    import com.becker.animation.box2d.NoiseContactListener;
     import com.becker.common.PhysicalParameters;
     
     
@@ -33,6 +34,7 @@ package com.becker.animation.box2d.simulations {
             this.canvas = canvas;
             this.params = params;
             _scale = canvas.width / 80;
+            world.SetContactListener(new NoiseContactListener());
         }
         
         public function addStaticElements():void {

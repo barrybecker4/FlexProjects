@@ -70,7 +70,8 @@ public class BoxWorld extends UIComponent implements Animatible {
         addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
         addEventListener(ResizeEvent.RESIZE, resized, false, 0, true);
                
-        world.SetContactListener(new ContactListener());    
+        //world.SetContactListener(new NoiseContactListener());  
+        world.SetContinuousPhysics(true);
         
         simulation.addStaticElements(); 
         simulation.addDynamicElements();       

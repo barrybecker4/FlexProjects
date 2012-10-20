@@ -52,6 +52,19 @@ package com.becker.animation.box2d.builders
             return addShape(boxDef, bodyDef); 
         }
         
+        public function buildSensor(center:b2Vec2, width:Number, height:Number, 
+                                    body:b2Body, sensorName:String = "sensor"):void {
+         
+            var fixtureDef:b2FixtureDef = new b2FixtureDef();
+            fixtureDef.isSensor = true;
+
+            var shape:b2PolygonShape = new b2PolygonShape();
+            shape.SetAsOrientedBox(width, height, center);
+            fixtureDef.shape = shape;
+            fixtureDef.userData = sensorName;
+            body.CreateFixture(fixtureDef);
+        }
+        
         /** remove this and allow passing in the class for the grahic shape */
         public function buildBazooka(width:Number, height:Number, bodyDef:b2BodyDef, 
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
@@ -90,43 +103,43 @@ package com.becker.animation.box2d.builders
         }
 
         /**
-         * 
+         * A group of blocks that are glued togeth into one body
          * @return body with children for all the decorating blocks.
          */
         public function buildCompoundBlock(orientedBlocks:Array, bodyDef:b2BodyDef, 
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
                 groupIndex:int = int.MAX_VALUE):b2Body {
                 
-            var boxDef:b2FixtureDef = new b2FixtureDef();
-            boxDef.density = density;
-            boxDef.friction = friction;
-            boxDef.restitution = restitution;
+            var fixtureDef:b2FixtureDef = new b2FixtureDef();
+            fixtureDef.density = density;
+            fixtureDef.friction = friction;
+            fixtureDef.restitution = restitution;
             if (groupIndex != int.MAX_VALUE) {
-                boxDef.filter.groupIndex = groupIndex;
+                fixtureDef.filter.groupIndex = groupIndex;
             }
             
             var masterBlock:OrientedBox = orientedBlocks[0];
             
             var mainShape:b2PolygonShape = new b2PolygonShape();
             mainShape.SetAsOrientedBox(masterBlock.width, masterBlock.height, masterBlock.center, masterBlock.rotation);
-            boxDef.shape = mainShape;
+            fixtureDef.shape = mainShape;
                 
             bodyDef.userData = new Rectangle(masterBlock.width * 2 * scale, masterBlock.height * 2 * scale);
-            var body:b2Body = addShape(boxDef, bodyDef);
+            var body:b2Body = addShape(fixtureDef, bodyDef);
             
             for (var i:int = 1; i < orientedBlocks.length; i++) {
                 var orientedBlock:OrientedBox = orientedBlocks[i];
                 var blockShape:b2PolygonShape = new b2PolygonShape();
                 blockShape.SetAsOrientedBox(orientedBlock.width, orientedBlock.height, orientedBlock.center, orientedBlock.rotation);
                 
-                boxDef.shape = blockShape;
+                fixtureDef.shape = blockShape;
                 var rect:Rectangle = new Rectangle(orientedBlock.width * 2 * scale, orientedBlock.height * 2 * scale);
                 rect.x = orientedBlock.center.x * scale;
                 rect.y = orientedBlock.center.y * scale;
                 rect.rotation = Util.RAD_TO_DEG * orientedBlock.rotation;
                 bodyDef.userData.addChild(rect);
                 
-                addShape(boxDef, bodyDef);
+                addShape(fixtureDef, bodyDef);
             }
             body.ResetMassData();    
             return body;

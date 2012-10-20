@@ -19,29 +19,27 @@ package com.becker.animation.box2d.builders.items {
         public static const BULLET:String = "Bullet";
         public static const GROUND_SENSOR:String = "groundsensor";
         
+        public var touchingGround:Boolean;
+        
         private static const POWER_FACTOR:Number = 0.5;
-        private static const JUMP_STRENGTH:Number = 100.0;
+        private static const JUMP_STRENGTH:Number = 150.0;
         
         private static const NEG_90:Number = 3.0 * Math.PI / 2.0;
         
         private var _cannonBody:b2Body;        
-        private var _sensor:b2FixtureDef;
         
         private var _bazooka:b2Body;
         private var doJump:Boolean = false;
         private var contactListener:CannonContactListener;
         
-        
         /** speed at which to emit projectiles */
         public var xspeed:int = 0;
         
-     
                                   
-        public function Cannon(cannonBody:b2Body, bazooka:b2Body, sensor:b2FixtureDef, contactListener:CannonContactListener) {
+        public function Cannon(cannonBody:b2Body, bazooka:b2Body, contactListener:CannonContactListener) {
                     
              _cannonBody = cannonBody;
              _bazooka = bazooka; 
-             _sensor = sensor;
              this.contactListener = contactListener;
         }
         
@@ -59,8 +57,9 @@ package com.becker.animation.box2d.builders.items {
                 trace("Jumping!");
                 cannonBody.ApplyImpulse(new b2Vec2(0.0, -JUMP_STRENGTH), cannonBody.GetWorldCenter());
                 doJump = false;
+                touchingGround = false;
             }
-            cannonBody.SetAngle(0);
+            //cannonBody.SetAngle(0);  // preventit from falling over
         }
         
         public function updateXSpeed(keyCode:int):void {
@@ -74,14 +73,15 @@ package com.becker.animation.box2d.builders.items {
         
         public function updateJump(keyCode:int):void {
             if (keyCode == 38) { // up arrow
-                if (contactListener.canJump()) { // checking if the hero can jump
+                trace("up arrow pressed. touchingGround=" + touchingGround);
+                if (touchingGround) { // check if the hero can jump
                     doJump = true;
                 }
             }
         }
         
         public function pointTowardMouse(mouseX:Number, mouseY:Number, scale:Number):void {
-            // cannonBody.GetWorldCenter() 
+
             cannonBody.SetAwake(true);  
             var middle:b2Vec2 = new b2Vec2(
                 cannonBody.GetPosition().x * scale, 
@@ -119,6 +119,9 @@ package com.becker.animation.box2d.builders.items {
             y = Math.sin(bazookaAngle) * power * POWER_FACTOR;
             body.ApplyImpulse(new b2Vec2(x, y), body.GetWorldCenter());
             
+            // equal and opposite force to the bazzoka
+            bazooka.ApplyImpulse(new b2Vec2(-x, -y), bazooka.GetWorldCenter());
+            
             // resetting the power
             bazooka.GetUserData().reset();
         }
@@ -131,10 +134,5 @@ package com.becker.animation.box2d.builders.items {
         public function get bazooka():b2Body {
             return _bazooka;
         }   
-        
-        public function get sensor():b2FixtureDef {
-            return _sensor;
-        }   
-        
     }
 }
