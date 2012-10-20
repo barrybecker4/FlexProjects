@@ -9,7 +9,7 @@ package  com.becker.animation.box2d {
     
     import com.becker.common.Sounds;
     
-    public class ContactListener extends b2ContactListener {
+    public class NoiseContactListener extends b2ContactListener {
 
         /**
          * Called when a contact point is added. 
@@ -18,6 +18,7 @@ package  com.becker.animation.box2d {
             var volume:Number = 0.1 + Math.random() / 50.0; 
             if (volume > 0) {     
                 //Sounds.playScrape(volume);
+                Sounds.playHit(volume);
             }
         };*/
         
