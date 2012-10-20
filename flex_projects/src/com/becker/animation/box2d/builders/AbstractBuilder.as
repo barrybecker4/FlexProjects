@@ -28,11 +28,11 @@ package com.becker.animation.box2d.builders
           
             var body:b2Body = world.CreateBody(bodyDef);
             body.SetBullet(isBullet);
-            
             body.CreateFixture(fixtureDef);
             canvas.addChild(bodyDef.userData);
             return body;
         }
+   
         
         /** Will just be visible without physical presence. */
         protected function addShapeWithoutFixture(fixtureDef:b2FixtureDef, bodyDef:b2BodyDef):b2Body {           

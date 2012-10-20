@@ -13,6 +13,7 @@ package com.becker.animation.box2d.builders {
     import com.becker.animation.sprites.Bazooka;
     import com.becker.animation.sprites.Rectangle;
     import com.becker.common.PhysicalParameters;
+    import flash.events.Event;
     import mx.core.UIComponent;
     
     /**
@@ -21,15 +22,16 @@ package com.becker.animation.box2d.builders {
     public class CannonBuilder extends AbstractBuilder {
         
         private static const SIZE:Number = 2.5;
-        private static const PLAYER_WIDTH:Number = 1.0;
-        private static const PLAYER_HEIGHT:Number = 2.0;
+        private static const PLAYER_WIDTH:Number = 1.4;
+        private static const PLAYER_HEIGHT:Number = 1.0;
         
         private static const ZOOKA_WIDTH:Number = 0.3;
         private static const ZOOKA_HEIGHT:Number = 1.2;
 
         private var shapeBuilder:BasicShapeBuilder;
-        private var params:PhysicalParameters;    
-        
+        private var params:PhysicalParameters;   
+        private var cannon:Cannon;
+      
     
         /** Constructor */
         public function CannonBuilder(world:b2World, canvas:UIComponent, scale:Number) {
@@ -52,12 +54,17 @@ package com.becker.animation.box2d.builders {
             var zookaPos:b2Vec2 = new b2Vec2(startX, startY - PLAYER_HEIGHT - ZOOKA_HEIGHT/2.0);
             var bazooka:b2Body = createAttachedBazooka(zookaPos, bodyDef, cannonBody);
             
-            var ground_sensor:b2FixtureDef = createGroundSensor(bodyDef);
+            //var ground_sensor:b2FixtureDef = 
+            shapeBuilder.buildSensor(new b2Vec2(0, 1.0), 1.0, 0.5, cannonBody, Cannon.GROUND_SENSOR);
+            
+            cannon = new Cannon(cannonBody, bazooka, contactListener);
             
             var contactListener:CannonContactListener = new CannonContactListener();
+            contactListener.eventDispatcher.addEventListener(CannonContactListener.CANNON_START_CONTACT, onStartContact);
+            contactListener.eventDispatcher.addEventListener(CannonContactListener.CANNON_STOP_CONTACT, onStopContact);
             world.SetContactListener(contactListener);
 
-            return new Cannon(cannonBody, bazooka, ground_sensor, contactListener);
+            return cannon;
         }
         
         private function createAttachedBazooka(zookaPos:b2Vec2, bodyDef:b2BodyDef, cannonBody:b2Body):b2Body {
@@ -77,22 +84,12 @@ package com.becker.animation.box2d.builders {
             return bazooka;
         }
         
-        private function createGroundSensor(bodyDef:b2BodyDef):b2FixtureDef {
-            
-            var ground_sensor:b2FixtureDef = new b2FixtureDef();
-            ground_sensor.isSensor = true;
-            
-            var sensorShape:b2PolygonShape = new b2PolygonShape();
-            sensorShape.SetAsOrientedBox(10 / scale, 5 / scale, new b2Vec2(0, 27 / scale), 0);
-            ground_sensor.shape = sensorShape;
-            
-            var body:b2Body = world.CreateBody(bodyDef);
-            var box:Rectangle = new Rectangle(1, 1);
-            box.name = Cannon.GROUND_SENSOR;
-            body.SetUserData(box);
-            body.CreateFixture(ground_sensor);
-            body.ResetMassData() 
-            return ground_sensor;
+        private function onStartContact(e:Event):void {
+            cannon.touchingGround = true;
+        }
+ 
+        private function onStopContact(e:Event):void {
+            cannon.touchingGround = false;
         }
     }
 }

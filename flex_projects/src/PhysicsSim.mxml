@@ -60,16 +60,17 @@
         
         private function simulationSelected():void {
             
-            if (debugCheckbox.selected) {
-                debugCheckbox.selected = false;
-                debugStateChanged();
-            }
             var sim:Simulation = 
                 simulations.getSimulation(String(simulationCombo.selectedItem)); 
             var params:PhysicalParameters = 
             new PhysicalParameters(densityStepper.value, frictionStepper.value, restitutionStepper.value);
             
-            app.setSimulation(sim, params);  
+            app.setSimulation(sim, params); 
+
+            if (debugCheckbox.selected) {
+                debugCheckbox.selected = false;
+                debugStateChanged();
+            }
         }   
         
         private function toggleAnimation():void {      
