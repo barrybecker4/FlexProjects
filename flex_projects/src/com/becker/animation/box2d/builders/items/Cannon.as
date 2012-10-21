@@ -98,7 +98,6 @@ package com.becker.animation.box2d.builders.items {
             
             cannonBody.SetAwake(true);  
             var newAngle:Number = bazooka.GetAngle() + angleDelta;
-            trace("new b angle=" + newAngle);
             bazooka.SetAngle(newAngle);
         }
         
