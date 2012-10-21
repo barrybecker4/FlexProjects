@@ -33,7 +33,7 @@ package com.becker.animation.box2d.builders.items {
         private var contactListener:CannonContactListener;
         
         /** speed at which to emit projectiles */
-        public var xspeed:int = 0;
+        private var xspeed:int = 0;
         
                                   
         public function Cannon(cannonBody:b2Body, bazooka:b2Body, contactListener:CannonContactListener) {
@@ -62,21 +62,17 @@ package com.becker.animation.box2d.builders.items {
             //cannonBody.SetAngle(0);  // preventit from falling over
         }
         
-        public function updateXSpeed(keyCode:int):void {
-            
-            if (keyCode == 39) { // right arrow
-                xspeed = 3;
-            } else if (keyCode == 37) { // left arrow
-                xspeed = -3;
-            }
+        /** 
+         * @param speed the amount to set the x speed to
+         */
+        public function setXSpeed(speed:Number):void {
+            xspeed = speed;
         }
         
-        public function updateJump(keyCode:int):void {
-            if (keyCode == 38) { // up arrow
-                trace("up arrow pressed. touchingGround=" + touchingGround);
-                if (touchingGround) { // check if the hero can jump
-                    doJump = true;
-                }
+        public function updateJump():void {
+            
+            if (touchingGround) { // check if the hero can jump
+                doJump = true;
             }
         }
         
@@ -92,6 +88,18 @@ package com.becker.animation.box2d.builders.items {
             var dist_y:Number = middle.y - mouseY;
             
             bazooka.SetAngle(Math.PI / 2.0 + Math.atan2( -dist_y, -dist_x));
+        }
+        
+        /** 
+         * Change the direction that the cannon is pointing 
+         * @param angleDelta the amount to change in radians. 
+         */
+        public function rotateCannonAngle(angleDelta:Number):void {
+            
+            cannonBody.SetAwake(true);  
+            var newAngle:Number = bazooka.GetAngle() + angleDelta;
+            trace("new b angle=" + newAngle);
+            bazooka.SetAngle(newAngle);
         }
         
         public function startCharging():void {
