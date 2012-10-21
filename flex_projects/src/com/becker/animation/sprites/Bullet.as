@@ -13,22 +13,32 @@ package com.becker.animation.sprites {
      */
     public class Bullet extends Circle {
         
-        /** The bullet will be removed after this amount of time */
-        private static const BULLET_DURATION:uint = 8000;
+        /** The bullet will be removed after this amount of time by default */
+        private static const DEFAULT_BULLET_DURATION:uint = 8000;
         
         /** setting the time to 10,000 milliseconds = 10 seconds */
-        public var time_count:Timer = new Timer(BULLET_DURATION);
+        private var time_count:Timer;
         
         /**  flag to determine if I have to remove the bullet */
         public var remove:Boolean = false;
         
-        /** Constructor */
-        public function Bullet(radius:Number = 0.5) {
+        private var duration:uint;
+        
+        /** 
+         * Constructor 
+         * @param radius size of the bullet
+         * @param duration amount of time the bullet will persis for. if 0, then lasts forever.
+         */
+        public function Bullet(radius:Number = 0.5, 
+                               duration:uint = DEFAULT_BULLET_DURATION) {
             super(radius);
-            this.name = Cannon.BULLET;
-            
-            time_count.addEventListener(TimerEvent.TIMER, isOld);
-            time_count.start();
+            this.name =  Cannon.BULLET;
+            this.duration = duration;
+            if (duration > 0) {
+                time_count = new Timer(duration);
+                time_count.addEventListener(TimerEvent.TIMER, isOld);
+                time_count.start();
+            }
         }
      
         /**

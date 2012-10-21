@@ -86,7 +86,8 @@ package com.becker.animation.box2d.builders
         }
         
         public function buildBullet(radius:Number, bodyDef:b2BodyDef, 
-                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+                density:Number = 1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+                duration:uint = 5000,
                 groupIndex:int = int.MAX_VALUE):b2Body { 
             
             var circleDef:b2FixtureDef = new b2FixtureDef();
@@ -97,7 +98,7 @@ package com.becker.animation.box2d.builders
                 circleDef.filter.groupIndex = groupIndex;
             }
             circleDef.shape = new b2CircleShape(radius);
-            bodyDef.userData = new Bullet(radius * scale);
+            bodyDef.userData = new Bullet(radius * scale, duration);
             
             return addShape(circleDef, bodyDef, true);
         }
