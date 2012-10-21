@@ -81,8 +81,15 @@ package com.becker.animation.box2d.simulations {
         /** handler for the KeyboardInteractor */
         private function keyHandler(keyCode:uint):void {
            
-            cannon.updateXSpeed(keyCode);
-            cannon.updateJump(keyCode);
+            if (keyCode == 39) { // right arrow
+                cannon.setXSpeed(3); 
+            } else if (keyCode == 37) { // left arrow
+                cannon.setXSpeed(-3); 
+            }
+            
+            if (keyCode == 38) { // up arrow
+                cannon.updateJump();
+            }
         }
         
         /** handler for the mouseInteractor. Start with positive charging. */

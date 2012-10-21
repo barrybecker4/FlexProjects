@@ -139,7 +139,7 @@ package com.becker.animation.box2d.builders
                 rect.rotation = Util.RAD_TO_DEG * orientedBlock.rotation;
                 bodyDef.userData.addChild(rect);
                 
-                addShape(fixtureDef, bodyDef);
+                addShapeWithoutFixture(fixtureDef, bodyDef);
             }
             body.ResetMassData();    
             return body;

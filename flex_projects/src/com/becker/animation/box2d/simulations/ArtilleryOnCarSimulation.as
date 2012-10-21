@@ -16,9 +16,11 @@ package com.becker.animation.box2d.simulations {
      
     
     /**
-     * Simulates an artillery cannon hopping around and shooting stuff.
+     * Attaches a gun to a car so nothing can get in your way when you drive around.
      */
     public class ArtilleryOnCarSimulation extends AbstractSimulation {
+        
+        private static const ANGLE_DELTA:Number = Math.PI / 60;
         
         private var builder:BasicShapeBuilder;   
         private var cannonBuilder:CannonBuilder; 
@@ -59,7 +61,7 @@ package com.becker.animation.box2d.simulations {
                     switch (bb.GetUserData().name) {
                         case Cannon.PLAYER :
                             cannon.updateMovement();
-                            cannon.pointTowardMouse(canvas.mouseX, canvas.mouseY, scale);
+                            //cannon.pointTowardMouse(canvas.mouseX, canvas.mouseY, scale);
                             break;
                         case Cannon.BULLET :
                             if (bb.GetUserData().isToBeRemoved()) {
@@ -87,8 +89,20 @@ package com.becker.animation.box2d.simulations {
         /** handler for the KeyboardInteractor */
         private function keyHandler(keyCode:uint):void {
            
-            cannon.updateXSpeed(keyCode);
-            cannon.updateJump(keyCode);
+            if (keyCode == 39) { // right arrow
+                cannon.setXSpeed(3); 
+            } else if (keyCode == 37) { // left arrow
+                cannon.setXSpeed(-3); 
+            }
+            else if (keyCode == 38) { // up arrow
+                cannon.updateJump();
+            }
+            else if (keyCode == 65) {  // a
+                cannon.rotateCannonAngle(-ANGLE_DELTA);
+            }
+            else if (keyCode == 83) { // s
+                cannon.rotateCannonAngle(ANGLE_DELTA);
+            }
         }
         
         /** handler for the mouseInteractor. Start with positive charging. */

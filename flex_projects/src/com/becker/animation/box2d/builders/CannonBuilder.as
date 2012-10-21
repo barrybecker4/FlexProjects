@@ -54,7 +54,6 @@ package com.becker.animation.box2d.builders {
             var zookaPos:b2Vec2 = new b2Vec2(startX, startY - PLAYER_HEIGHT - ZOOKA_HEIGHT/2.0);
             var bazooka:b2Body = createAttachedBazooka(zookaPos, bodyDef, cannonBody);
             
-            //var ground_sensor:b2FixtureDef = 
             shapeBuilder.buildSensor(new b2Vec2(0, 1.0), 1.0, 0.5, cannonBody, Cannon.GROUND_SENSOR);
             
             cannon = new Cannon(cannonBody, bazooka, contactListener);
@@ -77,7 +76,7 @@ package com.becker.animation.box2d.builders {
             var revoluteJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
             revoluteJointDef.enableMotor = true;
      
-            revoluteJointDef.userData = shapeBuilder.buildBall(0.2, bodyDef, 0.0, 0.5, 0.1);
+            //revoluteJointDef.userData = shapeBuilder.buildBall(0.2, bodyDef, 0.0, 0.5, 0.1);
             revoluteJointDef.Initialize(cannonBody, bazooka, new b2Vec2(zookaPos.x, zookaPos.y + ZOOKA_HEIGHT));
             var joint:b2RevoluteJoint = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
             

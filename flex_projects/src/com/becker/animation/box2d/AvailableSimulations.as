@@ -32,7 +32,7 @@ public class AvailableSimulations {
            "Theo Jansen Spider",
            "Car",
            "Artillery",
-           "ArtilleryOnCar",
+           "Artillery on Car",
            "ExplodingBoxes"
      ]; 
     
