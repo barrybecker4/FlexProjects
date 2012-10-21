@@ -12,6 +12,7 @@
         import com.becker.animation.box2d.AvailableSimulations;
         import com.becker.animation.box2d.BoxWorld;
         import com.becker.animation.box2d.Simulation;
+        import com.becker.animation.box2d.simulations.ArtilleryOnCarSimulation;
         import com.becker.animation.box2d.simulations.RagDollSimulation;
         import com.becker.animation.walking.RealWalk;
         import com.becker.common.PhysicalParameters;
@@ -30,20 +31,15 @@
         private static const PAUSE_LABEL:String = "Pause";
         
         private static const INSTRUCTIONS:String = 
-            "Use this Flash application, based on <a href=\"http://box2dflash.sourceforge.net/\">Box2DAS3</a> " + 
-            "to simulate dynamic structures. You can click on things and drag them around, " + 
-            "and you can press 'd' over an object to delete it." 
+            "Drive around and shoot stuff!" 
                 
         private var app:BoxWorld;
-        private var simulations:AvailableSimulations = new AvailableSimulations();
+        private var simulation:ArtilleryOnCarSimulation = new ArtilleryOnCarSimulation();
         
-        [Bindable]
-        private var selectedFont:String;
         
         private function createComplete():void {
             app = BoxWorld(animComp.sprite);
                    
-            selectedFont = fontSelector.selectedFont;
             gravityStepper.stepSize = 0.1; 
             gravityStepper.maximum = 20;
             gravityStepper.value = DEFAULT_GRAVITY; 
@@ -56,12 +52,10 @@
         
         private function simulationSelected():void {
             
-            var sim:Simulation = 
-                simulations.getSimulation(String(simulationCombo.selectedItem)); 
             var params:PhysicalParameters = 
             new PhysicalParameters(densityStepper.value, frictionStepper.value, restitutionStepper.value);
             
-            app.setSimulation(sim, params); 
+            app.setSimulation(simulation, params); 
 
             if (debugCheckbox.selected) {
                 debugCheckbox.selected = false;
@@ -87,31 +81,16 @@
             }
         }   
         
-        private function fontSelected():void {
-            selectedFont = String(fontSelector.selectedFont);
-        }   
-        
     ]]></mx:Script>
 
     <mx:Binding source="gravityStepper.value" destination="app.gravity" />
     
-    <mx:Panel title="Physics Simulation" width="100%" height="100%" 
-              titleStyleName="actionShadedLargeFont"  styleName="{selectedFont}" >
+    <mx:Panel title="Shooting Car Game" width="100%" height="100%" 
+              titleStyleName="actionShadedLargeFont" >
       
         <mx:VBox  width="100%"> 
-             <mx:TextArea htmlText="{INSTRUCTIONS}"
-                    width="100%" height="50" />   
+             <mx:TextArea htmlText="{INSTRUCTIONS}" width="100%" height="50" />   
              
-             <mx:HBox width="100%">          
-                <mx:HBox>
-                     <mx:Label text="Simulation" />
-                     <mx:ComboBox id="simulationCombo" 
-                                  dataProvider="{AvailableSimulations.AVAILABLE_SIMULATIONS}"  
-                                  selectedIndex="6" change="simulationSelected()" />  
-                </mx:HBox>
-                <mx:Spacer width="100%" />
-                <control:FontSelector id="fontSelector" changeHandler="fontSelected" />
-             </mx:HBox>
              <mx:HBox>
                   <mx:HBox>
                      <mx:Label text="Gravity" />

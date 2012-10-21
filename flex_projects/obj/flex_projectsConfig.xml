@@ -29,7 +29,7 @@
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>E:\projects\flex_projects\flex_projects\src\PhysicsSim.mxml</path-element>
+    <path-element>E:\projects\flex_projects\flex_projects\src\CarGame.mxml</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>

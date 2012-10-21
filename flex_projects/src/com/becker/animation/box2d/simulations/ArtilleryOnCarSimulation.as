@@ -4,6 +4,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
+    import Box2D.Dynamics.Joints.b2WeldJointDef;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
     import com.becker.animation.box2d.builders.CannonBuilder;
     import com.becker.animation.box2d.builders.CarBuilder;
@@ -47,8 +48,13 @@ package com.becker.animation.box2d.simulations {
         
         override public function addDynamicElements():void {
              
-            cannon = cannonBuilder.buildInstance(30, 35, params);
-            car = carBuilder.buildInstance(35, 35, params);
+            cannon = cannonBuilder.buildInstance(30, 34, params);
+            car = carBuilder.buildInstance(30, 35, params);
+            
+            // now glue the cannon to the top of the car.
+            var weldJointDef:b2WeldJointDef = new b2WeldJointDef();
+            weldJointDef.Initialize(car.carBody, cannon.cannonBody, car.carBody.GetWorldCenter());
+            world.CreateJoint(weldJointDef);
         }
         
         /**
