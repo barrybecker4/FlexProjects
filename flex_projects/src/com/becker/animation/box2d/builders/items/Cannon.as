@@ -106,13 +106,18 @@ package com.becker.animation.box2d.builders.items {
         }
       
         
-        /** fire the cannon bullet */
+        /** 
+         * fire the cannon bullet if we have bullets to fire.
+         */
         public function fire(world:b2World, shapeBuilder:BasicShapeBuilder):void {
+            
+            if (!bazooka.GetUserData().hasBullets) return;
             
             var bazookaAngle:Number = NEG_90 + bazooka.GetAngle();
             
-            var x:Number = bazooka.GetWorldCenter().x + (0.6 * bazooka.GetUserData().height / shapeBuilder.scale) * Math.cos(bazookaAngle); 
-            var y:Number = bazooka.GetWorldCenter().y + (0.6 * bazooka.GetUserData().height / shapeBuilder.scale) * Math.sin(bazookaAngle); 
+            var radius:Number = 0.6 * bazooka.GetUserData().height / shapeBuilder.scale;
+            var x:Number = bazooka.GetWorldCenter().x + radius * Math.cos(bazookaAngle); 
+            var y:Number = bazooka.GetWorldCenter().y + radius * Math.sin(bazookaAngle); 
             
             var bodyDef:b2BodyDef = new b2BodyDef();
 
@@ -121,7 +126,7 @@ package com.becker.animation.box2d.builders.items {
             
             var body:b2Body = shapeBuilder.buildBullet(0.4, bodyDef, 1.0, 0.3, 0.2);
             
-            var power:int = bazooka.GetUserData().power;
+            var power:int = bazooka.GetUserData().charge;
             x = Math.cos(bazookaAngle) * power * POWER_FACTOR;
             y = Math.sin(bazookaAngle) * power * POWER_FACTOR;
             body.ApplyImpulse(new b2Vec2(x, y), body.GetWorldCenter());
@@ -130,7 +135,7 @@ package com.becker.animation.box2d.builders.items {
             bazooka.ApplyImpulse(new b2Vec2(-x, -y), bazooka.GetWorldCenter());
             
             // resetting the power
-            bazooka.GetUserData().reset();
+            bazooka.GetUserData().discharged();
         }
       
 

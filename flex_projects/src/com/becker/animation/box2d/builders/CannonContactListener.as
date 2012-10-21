@@ -39,9 +39,9 @@ package com.becker.animation.box2d.builders {
                     eventDispatcher.dispatchEvent(new Event(CANNON_START_CONTACT));
                 }
             }
-            else {
-                trace("error in BeginContact : " + contact.GetFixtureA() + " or " + contact.GetFixtureB() + " has no userData. b1="+ body1.GetUserData() + " b2="+ body2.GetUserData());
-            }
+            //else {
+            //    trace("error in BeginContact : " + contact.GetFixtureA() + " or " + contact.GetFixtureB() + " has no userData. b1="+ body1.GetUserData() + " b2="+ body2.GetUserData());
+            //}
         }
  
         /**
@@ -60,9 +60,9 @@ package com.becker.animation.box2d.builders {
                     eventDispatcher.dispatchEvent(new Event(CANNON_STOP_CONTACT));
                 }
             }
-            else {
-                trace("error in EndContact : " + contact.GetFixtureA() + " or " + contact.GetFixtureB() + " has no userData. b1="+ body1.GetUserData() + " b2="+ body2.GetUserData());
-            }
+            //else {
+            //    trace("error in EndContact : " + contact.GetFixtureA() + " or " + contact.GetFixtureB() + " has no userData. b1="+ body1.GetUserData() + " b2="+ body2.GetUserData());
+            //}
         }
         
         private function isCannon(contact:b2Contact):Boolean {
