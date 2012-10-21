@@ -16,12 +16,13 @@ package com.becker.animation.sprites {
         /** The bullet will be removed after this amount of time by default */
         private static const DEFAULT_BULLET_DURATION:uint = 8000;
         
-        /** setting the time to 10,000 milliseconds = 10 seconds */
+        /** timer fires at regular intervals corresponding to the generationRate  */
         private var time_count:Timer;
         
         /**  flag to determine if I have to remove the bullet */
         public var remove:Boolean = false;
         
+        /** lifetime of the bullt. Forever if 0.  */
         private var duration:uint;
         
         /** 
@@ -34,11 +35,12 @@ package com.becker.animation.sprites {
             super(radius);
             this.name =  Cannon.BULLET;
             this.duration = duration;
+            /*
             if (duration > 0) {
                 time_count = new Timer(duration);
                 time_count.addEventListener(TimerEvent.TIMER, isOld);
                 time_count.start();
-            }
+            }*/
         }
      
         /**
