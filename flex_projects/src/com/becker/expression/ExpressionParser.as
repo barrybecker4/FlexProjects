@@ -24,7 +24,7 @@ package com.becker.expression {
          * For example, given this expression 
          * 2x^3 +  5(x + 3x^2) / (x - 1)
          * the items in []'s represent the array of nodes returned.
-         * [2] [.] [x] [^] [3] [+] [5][.][x + 3x^2] [/] [x - 1]
+         * [2] [*] [x] [^] [3] [+] [5][*][x + 3x^2] [/] [x - 1]
          * The parts that were in {()'s become their own subtrees via recursive calls.
          * @param exp the expression to get the nodes at the current level for
          * @param array of nodes representing terms that the current level.
