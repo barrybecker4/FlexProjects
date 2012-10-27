@@ -36,14 +36,12 @@
                 error = "that is a bad expression";
             }
         }
-        
-    ]]></mx:Script>
-    
+    ]]></mx:Script>  
     
     <mx:HBox width="100%" borderThickness="1" >
         <mx:Label text="F(x) = "/>
         <mx:TextInput id="expressionArea" width="100%"
-            restrict="\- 0-9+-*/()x"
+            restrict="\-+\*/\^ 0-9\(\)x"
             text="" change="{expression=expressionArea.text}"  />
     </mx:HBox>
     <mx:Label id="errorField" text="{error}" visible="{error!=''}" includeInLayout="{error!=''}" color="red" />   

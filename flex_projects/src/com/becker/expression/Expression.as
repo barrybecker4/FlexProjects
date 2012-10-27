@@ -10,9 +10,9 @@ package com.becker.expression {
      */
     public class Expression {
         
+        /** root of the binary tree representing the expression */
         private var expRoot:TreeNode;
         private var _isValid:Boolean = false;
-        
         
         /** 
          * Constructor 
@@ -20,9 +20,8 @@ package com.becker.expression {
          */
         public function Expression(expressionText:String) {
             
-            var parser:ExpressionParser = new ExpressionParser();
             try {
-               expRoot = parser.parse(expressionText);
+               expRoot = new ExpressionParser().parse(expressionText);
                _isValid = true;
             }
             catch (e:Error) {
@@ -43,10 +42,8 @@ package com.becker.expression {
         public function evaluate(x:Number):Number {
             return x;
         }
-        
 
-        public function toString():String {
-            
+        public function toString():String {   
             return expRoot ? print(expRoot) : "Invalid";
         }
         
@@ -56,17 +53,14 @@ package com.becker.expression {
             var text:String = "";
             
             if (node.children.length == 2) {
-                text += print(node.children[0]);
+                text += (node.hasParens ? "(":"") + print(node.children[0]);
                 text += " " + node.data + " ";
-                text += print(node.children[1]);
+                text += print(node.children[1]) + (node.hasParens ? ")":"");
             }
             else {
                 text += node.data;
             }
-            trace("returning " + text);
             return text;
         }
-        
     }
-
 }

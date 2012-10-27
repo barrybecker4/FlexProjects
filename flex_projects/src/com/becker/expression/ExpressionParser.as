@@ -6,10 +6,6 @@ package com.becker.expression {
      */
     public class ExpressionParser {
         
-        /** Constructor */
-        public function ExpressionParser() {
-        }
-        
         /** 
          * Parses an expression.
          * Called recursively to parse sub-expressions nested within parenthesis.
@@ -36,7 +32,6 @@ package com.becker.expression {
          */
         private function getNodesAtLevel(exp:String):Array {
             
-            trace("now parsing exp=" + exp);
             var pos:int = 0;
             var nodes:Array = [];
             var token:String = "";
@@ -45,13 +40,22 @@ package com.becker.expression {
             while (pos <= exp.length && token != ")") {
                 trace("pos=" + pos +" ch=[" + ch + "]  token=" +token);
                 if (ch == ' ') {
-                    // spaces skipped
+                    // spaces are ignored
                 }
                 else if (ch == '(') {
                     var closingParen:int = findClosingParen(exp, pos);
-                    trace("found parenthesized exp=" + exp.substring(pos, closingParen));
                     // recursive call for sub expression
                     var subTree:TreeNode = parse(exp.substring(pos, closingParen));
+                    subTree.hasParens = true;
+                    
+                    if (token.length > 0 ) {
+                        pushNodesForToken(token, nodes);
+                        token = "";
+                        nodes.push(new TreeNode(Operators.TIMES));
+                    }
+                    else if (nodes.length > 0 && nodes[nodes.length - 1].hasParens) {
+                        nodes.push(new TreeNode(Operators.TIMES));
+                    }
                     nodes.push(subTree);
                     pos = closingParen + 1;
                 }
@@ -60,17 +64,14 @@ package com.becker.expression {
                 }
                 else if (ch >= '0' && ch <= '9') {
                     token += ch;
-                    trace("found a number " + ch + " token="+ token);
                     if (token.indexOf("x") >= 0) {
                         throw new Error("Cannot have numbers after x in a term "+ token +" within " + exp);
                     }
                 }
                 else if (ch == 'x') {
-                    trace("found " + ch + " token="+ token);
                     token += ch;
                 }
                 else if (Operators.isOperator(ch)) {
-                    trace("found an op " + ch + " token="+ token);
                     pushNodesForToken(token, nodes);
                     token = "";
                     nodes.push(new TreeNode(ch));
@@ -82,7 +83,6 @@ package com.becker.expression {
             }
             // add the final node
             pushNodesForToken(token, nodes);
-            trace("returning "+ nodes.length +" nodes");
             
             return nodes;
         }
@@ -96,12 +96,10 @@ package com.becker.expression {
             var parenCount:int = 0;
             var i:int = pos + 1;
             var ch:String = exp.charAt(i);
-            trace("starting paren search at i=" + i + " ch=" + ch);
             while (!(ch == ')' && parenCount == 0) && i<exp.length) {
                 if (ch == '(') parenCount++;
                 if (ch == ')') parenCount--;
                 ch = exp.charAt(i++);
-                trace(i + " ch=" + ch + " parenCount=" + parenCount);
             }
             
             if (ch != ')' && i == exp.length) {
@@ -170,7 +168,7 @@ package com.becker.expression {
             var index:int = 1;
             
             while (index < nodes.length) {
-                if (ops.indexOf(nodes[index].data) >= 0) {
+                if (ops.indexOf(nodes[index].data) >= 0 && !nodes[index].hasParens) {
                     nodes[index].children = [nodes[index-1], nodes[index+1]];
                     nodes.splice(index-1, 3, nodes[index]);
                 } else {
@@ -179,14 +177,5 @@ package com.becker.expression {
             }
             return nodes;
         }
-        
-        /*
-        private function printNodes(msg:String, nodes:Array):void {
-            trace(msg);
-            for each (var node:TreeNode in nodes) {
-                trace("   node=" + node.toString());
-            }
-        }*/
     }
-
 }
