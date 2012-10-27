@@ -57,6 +57,7 @@ package com.becker.animation.box2d.builders {
             shapeBuilder.buildSensor(new b2Vec2(0, 1.0), 1.0, 0.5, cannonBody, Cannon.GROUND_SENSOR);
             
             cannon = new Cannon(cannonBody, bazooka, contactListener);
+            bazooka.SetAngle(Math.PI / 3.0);
             
             var contactListener:CannonContactListener = new CannonContactListener();
             contactListener.eventDispatcher.addEventListener(CannonContactListener.CANNON_START_CONTACT, onStartContact);

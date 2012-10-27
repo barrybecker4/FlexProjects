@@ -35,12 +35,11 @@ package com.becker.animation.sprites {
             super(radius);
             this.name =  Cannon.BULLET;
             this.duration = duration;
-            /*
             if (duration > 0) {
                 time_count = new Timer(duration);
                 time_count.addEventListener(TimerEvent.TIMER, isOld);
                 time_count.start();
-            }*/
+            }
         }
      
         /**

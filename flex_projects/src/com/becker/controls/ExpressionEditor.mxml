@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+   width="100%">
+    
+    <mx:Metadata>
+        [Event(name="change", type="mx.events.FlexEvent")]
+    </mx:Metadata>
+
+    <mx:Script><![CDATA[
+
+        import com.becker.expression.Expression;
+        import flash.events.Event;
+        import flash.events.MouseEvent;
+        import mx.events.FlexEvent;
+        import mx.controls.Alert;
+     
+        [Bindable]
+        public var expression:String = "";
+        
+        [Bindable]
+        private var error:String = "";
+          
+        
+        /** validate the expression when the user clicks the validate button */
+        private function doValidation(evt:MouseEvent):void {
+            
+            var exp:Expression = new Expression(expression);
+            
+            Alert.show("Validated exp = " + exp.toString());
+            error = "";
+            
+            if (exp.isValid) {
+                dispatchEvent(new FlexEvent("change"));
+            }
+            else {
+                error = "that is a bad expression";
+            }
+        }
+        
+    ]]></mx:Script>
+    
+    
+    <mx:HBox width="100%" borderThickness="1" >
+        <mx:Label text="F(x) = "/>
+        <mx:TextInput id="expressionArea" width="100%"
+            restrict="\- 0-9+-*/()x"
+            text="" change="{expression=expressionArea.text}"  />
+    </mx:HBox>
+    <mx:Label id="errorField" text="{error}" visible="{error!=''}" includeInLayout="{error!=''}" color="red" />   
+    <mx:HBox width="100%">
+        <mx:Button id="validate" 
+           label="Validate" 
+           click="doValidation(event)" 
+           enabled="{expression!=''}"
+           toolTip="validate the expression entered " />                
+        <mx:HBox id="spacer"  width="100%"/>             
+    </mx:HBox>
+</mx:VBox>
