@@ -1,5 +1,5 @@
 package com.becker.expression {
-	/**
+    /**
      * A node in a binary tree. 
      * Contains either a operator (non-leaf) or operand (at leaf).
      * 
@@ -23,7 +23,6 @@ package com.becker.expression {
          */
         public function TreeNode(value:String) { 
             _data = value;
-
         }
         
         public function get data():String {
@@ -32,6 +31,11 @@ package com.becker.expression {
          
         public function toString():String {
             return _data; 
+        }
+        
+        /** @return true if the specified node is an operator */
+        public function isOperator():Boolean {
+            return !hasParens && Operators.isOperator(data);
         }
     }
 }

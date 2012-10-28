@@ -1,11 +1,14 @@
 package com.becker.expression {
+    
+    import com.becker.expression.TreeNode;
+    
     /**
      * Parses the text form of an expression (in x) into a tree representation.
      * 
      * @author Barry Becker
      */
     public class ExpressionParser {
-        
+       
         /** 
          * Parses an expression.
          * Called recursively to parse sub-expressions nested within parenthesis.
@@ -14,8 +17,6 @@ package com.becker.expression {
         public function parse(textExpression:String):TreeNode {
             
             var nodes:Array = getNodesAtLevel(textExpression);
-            
-            // reduce the nodes list to a single node and return it
             return makeTreeFromNodes(nodes);
         }
         
@@ -26,6 +27,7 @@ package com.becker.expression {
          * the items in []'s represent the array of nodes returned.
          * [2] [*] [x] [^] [3] [+] [5][*][x + 3x^2] [/] [x - 1]
          * The parts that were in {()'s become their own subtrees via recursive calls.
+         * 
          * @param exp the expression to get the nodes at the current level for
          * @param array of nodes representing terms that the current level.
          * @throws Error if there is a syntax error causing the expression to be invalid
@@ -38,7 +40,6 @@ package com.becker.expression {
             var ch:String = exp.charAt(pos++);
             
             while (pos <= exp.length && token != ")") {
-                trace("pos=" + pos +" ch=[" + ch + "]  token=" +token);
                 if (ch == ' ') {
                     // spaces are ignored
                 }
@@ -59,7 +60,9 @@ package com.becker.expression {
                     nodes.push(subTree);
                     pos = closingParen + 1;
                 }
-                else if (ch == Operators.MINUS && token.length == 0) {
+                else if (ch == Operators.MINUS && token.length == 0 && Operators.isLastNodeOperator(nodes)) {
+                    // a leading minus within sub expression
+                    trace("found leading -   nodes="+ nodes);
                     token += ch;
                 }
                 else if (ch >= '0' && ch <= '9') {
@@ -159,6 +162,7 @@ package com.becker.expression {
         
         /**
          * Simplify the list of terms by evaluating the terms joined by the specified operators.
+         * Reduce the nodes list to a single node and return it.
          * @param ops list of operators that all have the same precendence.
          * @param nodes the list of nodes to reduce
          * @return same list of nodes, but reduced.

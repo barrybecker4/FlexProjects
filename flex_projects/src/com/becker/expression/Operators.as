@@ -23,10 +23,16 @@ package com.becker.expression {
             [PLUS, MINUS]
         ];
         
+        
+        /** @return true if the last node is an operator or there were no previous nodes */
+        public static function isLastNodeOperator(nodes:Array):Boolean {
+            return nodes.length == 0 || nodes[nodes.length - 1].isOperator();
+        }
+        
+        /** @return true if the specified character is an operator */
         public static function isOperator(ch:String):Boolean {
             return ch == PLUS || ch == MINUS || ch == TIMES || ch == DIVIDE || ch == EXPONENT;
         }
-      
     }
 
 }

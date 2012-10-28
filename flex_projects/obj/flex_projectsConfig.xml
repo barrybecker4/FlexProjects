@@ -16,12 +16,13 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'10/27/2012'</value>
+      <value>'10/28/2012'</value>
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
       <path-element>E:\projects\flex_projects\flex_projects\src</path-element>
       <path-element>E:\projects\flex_projects\Box2DLib\Build\FlashDevelop\bin</path-element>
+      <path-element>E:\projects\flex_projects\flex_projects\test</path-element>
       <path-element>E:\apps\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
     <library-path append="true">
@@ -29,7 +30,7 @@
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>E:\projects\flex_projects\flex_projects\src\FunctionEditorApp.mxml</path-element>
+    <path-element>E:\projects\flex_projects\flex_projects\test\AllTests.mxml</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>
