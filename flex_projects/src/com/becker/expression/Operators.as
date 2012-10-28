@@ -7,12 +7,12 @@ package com.becker.expression {
      */
     public class Operators {
         
-        public static const EXPONENT:String = '^';
-        public static const TIMES:String = '*';
-        public static const DIVIDE:String = '/';
         public static const PLUS:String = '+';
         public static const MINUS:String = '-';
-        
+        public static const TIMES:String = '*';
+        public static const DIVIDE:String = '/';
+        public static const EXPONENT:String = '^';
+
         /** 
          * Defines the order of precedence for the operators
          * This at the same level are evaluated from left to right.
@@ -23,6 +23,18 @@ package com.becker.expression {
             [PLUS, MINUS]
         ];
         
+        public static function operate(op:String, operand1:Number, operand2:Number):Number {
+            var result:Number;
+            switch (op) {
+                case PLUS : result = operand1 + operand2; break;
+                case MINUS : result = operand1 - operand2; break;
+                case TIMES : result = operand1 * operand2; break;
+                case DIVIDE : result = operand1 / operand2; break;
+                case EXPONENT : result = Math.pow(operand1, operand2); break;
+                default : throw new Error("Unexpected operator :" + op);
+            }
+            return result;
+        }
         
         /** @return true if the last node is an operator or there were no previous nodes */
         public static function isLastNodeOperator(nodes:Array):Boolean {

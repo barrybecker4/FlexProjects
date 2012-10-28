@@ -12,9 +12,9 @@
         import flash.events.Event;
         import mx.events.FlexEvent;
         import mx.controls.Alert;
-     
+        
         [Bindable]
-        public var expression:String = "";
+        public var expression:Expression;
         
         [Bindable]
         private var error:String = "";
@@ -23,12 +23,12 @@
         /** validate the expression when the user clicks the validate button */
         private function doValidation(evt:Event):void {
             
-            var exp:Expression = new Expression(expression);
+            expression = new Expression(expressionArea.text);
             
-            Alert.show("Validated exp = " + exp.toString());
+            validatedExp.htmlText = "F(x) = " + expression.toString();
             error = "";
             
-            if (exp.isValid) {
+            if (expression.isValid) {
                 dispatchEvent(new FlexEvent("change"));
             }
             else {
@@ -42,7 +42,6 @@
         <mx:TextInput id="expressionArea" width="100%"
             restrict="\-+\*/\^ 0-9\(\)x"
             text="" 
-            change="{expression=expressionArea.text}" 
             enter="doValidation(event)" />
     </mx:HBox>
     <mx:Label id="errorField" text="{error}" visible="{error!=''}" includeInLayout="{error!=''}" color="red" />   
@@ -50,8 +49,11 @@
         <mx:Button id="validate" 
            label="Validate" 
            click="doValidation(event)" 
-           enabled="{expression!=''}"
+           enabled="{(expressionArea.text != '')}"
            toolTip="validate the expression entered " />                
-        <mx:HBox id="spacer"  width="100%"/>             
+        <mx:HBox id="spacer"  width="100%"/>    
+        <mx:Label id="validatedExp" />
+        <mx:HBox width="100%"  />
+        
     </mx:HBox>
 </mx:VBox>

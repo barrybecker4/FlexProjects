@@ -7,6 +7,8 @@
     <mx:Style source="assets/flexStyles.css" />
     
     <mx:Script><![CDATA[
+        import com.becker.expression.ExpressionEvaluator;
+        import com.becker.expression.ExpressionEvaluatorTest;
         import com.becker.expression.ExpressionParserTest;
         import mx.events.FlexEvent;
         import com.becker.controls.ExpressionEditor;
@@ -15,8 +17,13 @@
    
         private function createComplete():void { 
             
+            //var log:String = "";
+            
             var parserTest:ExpressionParserTest = new ExpressionParserTest();
-            testLog.htmlText = parserTest.run();
+            testLog.htmlText += parserTest.run();
+            
+            var evalTest:ExpressionEvaluatorTest = new ExpressionEvaluatorTest();
+            testLog.htmlText += evalTest.run();
         }
   
     ]]></mx:Script>

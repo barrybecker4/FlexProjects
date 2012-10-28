@@ -44,24 +44,12 @@ package com.becker.expression {
                     // spaces are ignored
                 }
                 else if (ch == '(') {
-                    var closingParen:int = findClosingParen(exp, pos);
-                    // recursive call for sub expression
-                    var subTree:TreeNode = parse(exp.substring(pos, closingParen));
-                    subTree.hasParens = true;
-                    
-                    if (token.length > 0 ) {
-                        pushNodesForToken(token, nodes);
-                        token = "";
-                        nodes.push(new TreeNode(Operators.TIMES));
-                    }
-                    else if (nodes.length > 0 && nodes[nodes.length - 1].hasParens) {
-                        nodes.push(new TreeNode(Operators.TIMES));
-                    }
-                    nodes.push(subTree);
-                    pos = closingParen + 1;
+                    var closingParenPos:int = findClosingParen(exp, pos);
+                    token = processSubExpression(exp, pos, token, closingParenPos, nodes);
+                    pos = closingParenPos + 1;
                 }
                 else if (ch == Operators.MINUS && token.length == 0 && Operators.isLastNodeOperator(nodes)) {
-                    // a leading minus within sub expression
+                    // a leading minus sign
                     token += ch;
                 }
                 else if (ch >= '0' && ch <= '9') {
@@ -85,7 +73,7 @@ package com.becker.expression {
             }
             // add the final node
             pushNodesForToken(token, nodes);
-            
+
             return nodes;
         }
         
@@ -111,6 +99,30 @@ package com.becker.expression {
         }
         
         /**
+         * Parse a parenthesized sub expression recursively.
+         * @return current token. May have been reset to "".
+         */
+        private function processSubExpression(
+            exp:String, pos:int, token:String, closingParenPos:int, nodes:Array):String {
+            
+            // recursive call for sub expression
+            var subTree:TreeNode = parse(exp.substring(pos, closingParenPos));
+            subTree.hasParens = true;
+            
+            if (token) {
+                // there was some leading token before the parenthesized expression.
+                pushNodesForToken(token, nodes);
+                token = "";
+                nodes.push(new TreeNode(Operators.TIMES));
+            }
+            else if (nodes.length > 0 && nodes[nodes.length - 1].hasParens) {
+                nodes.push(new TreeNode(Operators.TIMES));
+            }
+            nodes.push(subTree);
+            return token;
+        }
+        
+        /**
          * The token may represent several nodes because of implicit multiplication.
          * For example, 
          *   -4x should become  [-4] [times] [x] 
@@ -120,11 +132,17 @@ package com.becker.expression {
          */
         private function pushNodesForToken(token:String, nodes:Array):void {
             
-            if (!token ) return;
+            if (!token) return;
+            
             var len:int = token.length;
             if (token.charAt(len - 1) == 'x') {
                 if (len > 1) {
-                    nodes.push(getNodeForNumber(token.substring(0, len-1)));
+                    if (token.charAt(0) == Operators.MINUS) {
+                        nodes.push(new TreeNode("-1"));
+                    }
+                    else {
+                        nodes.push(getNodeForNumber(token.substring(0, len - 1)));
+                    }
                     nodes.push(new TreeNode(Operators.TIMES));
                 }
                 nodes.push(new TreeNode("x"));

@@ -15,36 +15,6 @@ package com.becker.expression {
         /** instance under test */
         private var parser:ExpressionParser = new ExpressionParser();
         
-        private static const CASES:Array = [
-            "x",
-            "x*x",
-            "x^2",
-            "x-2",
-            "2-x",
-            "5x",
-            "3x - 1",
-            "(2x + 1) - 3",
-            "3(6x - 2)",
-            "(3 + x) - (x - 2)",
-            "3x - 2x^-2",
-            "-3x^2 - 1",
-            "4 --4",
-            "2(x + 1)(x-1)",
-            "-3x + (4x^2 - 5) / (x^-3 + x^2 - (1/x + 4)) (x + 1)",
-            "(3 + 2(x + 3x^(5+x))/ 2x) - 4x(3+1/x)^(2x(8-x))"
-        ];
-        
-        private static const NEGATIVE_CASES:Array = [
-            "a",
-            "xx",
-            "^x",
-            "x-^2",
-            "4 ---4",
-        ];
-        
-        public function ExpressionParserTest() {
-        }
-        
         public function run():String {
             
             var log:String  = runPositiveTests();
@@ -57,7 +27,7 @@ package com.becker.expression {
             var log:String = "\nnow running positive tests...\n";
             var root:TreeNode;
             
-            for each (var testCase:String in CASES) {
+            for each (var testCase:String in ExpressionCases.CASES) {
                 try {
                     root = parser.parse(testCase);
                     log += new TreeSerializer().serialize(root);
@@ -74,7 +44,7 @@ package com.becker.expression {
             var log:String = "\nnow running negative tests...\n";
             var root:TreeNode;
             
-            for each (var testCase:String in NEGATIVE_CASES) {
+            for each (var testCase:String in ExpressionCases.NEGATIVE_CASES) {
                 try {
                     root = parser.parse(testCase);
                     log += "<b>Failed: Did no get any error for case " + testCase + " </b>";

@@ -29,10 +29,13 @@ package com.becker.expression {
                 Alert.show("Error: " + e.message);
             }
         }
-       
         
         public function get isValid():Boolean {
             return _isValid;
+        }
+        
+        public function get rootNode():TreeNode {
+            return expRoot;
         }
         
         /**
