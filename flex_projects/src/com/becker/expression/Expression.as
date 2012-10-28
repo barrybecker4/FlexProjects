@@ -29,6 +29,7 @@ package com.becker.expression {
                 Alert.show("Error: " + e.message);
             }
         }
+       
         
         public function get isValid():Boolean {
             return _isValid;
@@ -44,23 +45,7 @@ package com.becker.expression {
         }
 
         public function toString():String {   
-            return expRoot ? print(expRoot) : "Invalid";
-        }
-        
-        /** recursive in order traversal of the tree */
-        private function print(node:TreeNode):String {
-            
-            var text:String = "";
-            
-            if (node.children.length == 2) {
-                text += (node.hasParens ? "(":"") + print(node.children[0]);
-                text += " " + node.data + " ";
-                text += print(node.children[1]) + (node.hasParens ? ")":"");
-            }
-            else {
-                text += node.data;
-            }
-            return text;
+            return new TreeSerializer().serialize(expRoot);
         }
     }
 }

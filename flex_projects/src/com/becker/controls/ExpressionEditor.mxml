@@ -10,7 +10,6 @@
 
         import com.becker.expression.Expression;
         import flash.events.Event;
-        import flash.events.MouseEvent;
         import mx.events.FlexEvent;
         import mx.controls.Alert;
      
@@ -22,7 +21,7 @@
           
         
         /** validate the expression when the user clicks the validate button */
-        private function doValidation(evt:MouseEvent):void {
+        private function doValidation(evt:Event):void {
             
             var exp:Expression = new Expression(expression);
             
@@ -42,7 +41,9 @@
         <mx:Label text="F(x) = "/>
         <mx:TextInput id="expressionArea" width="100%"
             restrict="\-+\*/\^ 0-9\(\)x"
-            text="" change="{expression=expressionArea.text}"  />
+            text="" 
+            change="{expression=expressionArea.text}" 
+            enter="doValidation(event)" />
     </mx:HBox>
     <mx:Label id="errorField" text="{error}" visible="{error!=''}" includeInLayout="{error!=''}" color="red" />   
     <mx:HBox width="100%">

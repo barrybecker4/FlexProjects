@@ -7,34 +7,29 @@
     <mx:Style source="assets/flexStyles.css" />
     
     <mx:Script><![CDATA[
+        import com.becker.expression.ExpressionParserTest;
         import mx.events.FlexEvent;
         import com.becker.controls.ExpressionEditor;
         import mx.controls.Alert;
         
-        private static const INSTRUCTIONS:String = 
-            "Enter a function in terms of x." 
-                
+   
         private function createComplete():void { 
-        }
-        
-        private function onChange(evt:FlexEvent):void {
-            //Alert.show("new expression = " + expEditor.expression);
+            
+            var parserTest:ExpressionParserTest = new ExpressionParserTest();
+            testLog.htmlText = parserTest.run();
         }
   
     ]]></mx:Script>
 
     
-    <mx:Panel title="Function Editor" width="100%" height="100%" 
+    <mx:Panel title="Tests" width="100%" height="100%" 
               titleStyleName="actionShadedLargeFont" >
       
-        <mx:VBox width="100%" 
+       <mx:VBox width="100%" height="100%"
             paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"> 
-             <mx:TextArea htmlText="{INSTRUCTIONS}" width="100%" editable="false"
-                 paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10"/>   
-             <control:ExpressionEditor id="expEditor" change="onChange(event)" /> 
+             <mx:TextArea id="testLog" width="100%" height="100%" />   
        </mx:VBox>
        
-       <mx:VBox id="tree" width="200" height="100%" /> 
     </mx:Panel>
      
 </mx:Application>
