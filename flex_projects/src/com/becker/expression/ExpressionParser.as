@@ -62,7 +62,6 @@ package com.becker.expression {
                 }
                 else if (ch == Operators.MINUS && token.length == 0 && Operators.isLastNodeOperator(nodes)) {
                     // a leading minus within sub expression
-                    trace("found leading -   nodes="+ nodes);
                     token += ch;
                 }
                 else if (ch >= '0' && ch <= '9') {
