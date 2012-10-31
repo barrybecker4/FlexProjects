@@ -20,6 +20,10 @@ package com.becker.expression {
             _exp = exp;
         }
         
+        /** 
+         * Prevent the range from exceeding certain limits or the graph will not look good
+         * when y values go off to infinity.
+         */
         public function setRangeLimits(yMin:Number, yMax:Number):void {
             this.ymin = yMin;
             this.ymax = yMax;
@@ -38,14 +42,18 @@ package com.becker.expression {
             return result;
         }
         
-        /** processing for inner nodes */
+        /** 
+         * Recursive traversal of the ecpression tree nodes to evaluate 
+         */
         private function eval(x:Number, node:TreeNode):Number {
 
             if (node.children.length == 2) {
+                // parent nodes are always operators
                 var operand1:Number = eval(x, node.children[0]);
                 var operand2:Number = eval(x, node.children[1]);
                 return Operators.operate(node.data, operand1, operand2);
             }
+            // leaf nodes are always an operand
             return node.data == 'x' ? x : parseInt(node.data);
         }
     }

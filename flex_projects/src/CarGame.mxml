@@ -11,12 +11,10 @@
     <mx:Script><![CDATA[
         import com.becker.animation.box2d.AvailableSimulations;
         import com.becker.animation.box2d.BoxWorld;
+        import com.becker.animation.box2d.builders.items.car.Car;
         import com.becker.animation.box2d.Simulation;
         import com.becker.animation.box2d.simulations.ArtilleryOnCarSimulation;
-        import com.becker.animation.box2d.simulations.RagDollSimulation;
-        import com.becker.animation.walking.RealWalk;
         import com.becker.common.PhysicalParameters;
-        import com.becker.controls.FontSelector;
         import mx.controls.HSlider;
         import mx.events.FlexEvent;
         import mx.events.IndexChangedEvent;
@@ -50,6 +48,10 @@
             simulationSelected(); 
         }
         
+        private function get car():Car {
+            return simulation.car;
+        }
+        
         private function simulationSelected():void {
             
             var params:PhysicalParameters = 
@@ -80,6 +82,16 @@
                 toggleAnimation()
             }
         }   
+        private function changeSpeed(delta:int):void {
+            
+        }
+        private function applyBrakes():void {
+            
+        }
+        private function fireCannon():void {
+            
+        }
+        
         
     ]]></mx:Script>
 
@@ -88,10 +100,25 @@
     <mx:Panel title="Shooting Car Game" width="100%" height="100%" 
               titleStyleName="actionShadedLargeFont" >
       
-        <mx:VBox  width="100%"> 
-             <mx:TextArea htmlText="{INSTRUCTIONS}" width="100%" height="50" />   
-             
-             <mx:HBox>
+        <mx:HBox width="100%" styleName="container"> 
+              
+             <mx:VBox width="250" height="100%" styleName="borderContainer" >
+                  <mx:HBox>
+                      <mx:Label text="Accelerate" />
+                      <mx:Button id="fasterButton" label="Right"  click="changeSpeed(3)"  toolTip="( &lt;- ) Make the car go faster to the right" />     
+                      <mx:Button id="slowerButton" label="Left"  click="changeSpeed(-3)"  toolTip="( -&gt; ) Make the car go faster to the left" />    
+                  </mx:HBox>
+                  <mx:HSlider id="acceleration" width="100%"
+                      labels="['&lt;', '0', '&gt;']"
+                      tickInterval="50" 
+                      height="50" 
+                      values = "[0]"
+                      minimum="-100"
+                      maximum="100" />
+                  <mx:Button id="brakeButton" label="Apply Brakes"  click="applyBrakes()"  toolTip="Stop the car" />    
+                  <mx:Button id="shootButton" label="Shoot"  click="fireCannon()"  toolTip="Fire the cannot on top of the car" />     
+             </mx:VBox>      
+             <mx:VBox height="100%" width="180"  styleName="borderContainer">
                   <mx:HBox>
                      <mx:Label text="Gravity" />
                      <mx:NumericStepper id="gravityStepper" stepSize="0.1" width="60" />
@@ -109,17 +136,21 @@
                      <mx:NumericStepper id="restitutionStepper"  stepSize="0.05" width="60"/>
                   </mx:HBox>
                   <mx:Spacer width="40" />
+             </mx:VBox>
+             
+             <mx:VBox height="100%" width="180" styleName="borderContainer">
+                  <mx:Button id="animateButton" label="{PAUSE_LABEL}"  click="toggleAnimation()"  toolTip="toggle the animation"  />                
+                  <mx:Button id="restartButton" label="Restart"  click="restartAnimation()" />  
                   <mx:HBox>
                       <mx:CheckBox id="debugCheckbox" label="Show debug info" selected="false" click="debugStateChanged()" 
                           toolTip="Show vectors and other structure" />
                   </mx:HBox>
-             </mx:HBox>
+             </mx:VBox>
              
-             <mx:HBox >
-                  <mx:Button id="animateButton" label="{PAUSE_LABEL}"  click="toggleAnimation()"  toolTip="toggle the animation"  />                
-                  <mx:Button id="restart" label="Restart"  click="restartAnimation()" />             
-             </mx:HBox>
-       </mx:VBox>
+             <mx:VBox styleName="borderContainer" width="100%" height="100%">
+                 <mx:TextArea htmlText="{INSTRUCTIONS}" width="100%" height="100%" minWidth="150" />  
+             </mx:VBox>
+       </mx:HBox>
        
        <app:AnimationComponent id="animComp" animClass="com.becker.animation.box2d.BoxWorld" /> 
     </mx:Panel>

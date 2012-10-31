@@ -11,7 +11,7 @@ package com.becker.expression {
     public class Expression {
         
         /** root of the binary tree representing the expression */
-        private var expRoot:TreeNode;
+        private var _rootNode:TreeNode;
         private var _isValid:Boolean = false;
         
         /** 
@@ -21,7 +21,7 @@ package com.becker.expression {
         public function Expression(expressionText:String) {
             
             try {
-               expRoot = new ExpressionParser().parse(expressionText);
+               _rootNode = new ExpressionParser().parse(expressionText);
                _isValid = true;
             }
             catch (e:Error) {
@@ -35,20 +35,11 @@ package com.becker.expression {
         }
         
         public function get rootNode():TreeNode {
-            return expRoot;
-        }
-        
-        /**
-         * Evaluate the expression give a value for x.
-         * @param x the value to plug in for x.
-         * @return result of evaluation.
-         */
-        public function evaluate(x:Number):Number {
-            return x;
+            return _rootNode;
         }
 
         public function toString():String {   
-            return new TreeSerializer().serialize(expRoot);
+            return new TreeSerializer().serialize(_rootNode);
         }
     }
 }

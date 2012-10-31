@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+   width="100%" height="100%">
+  
+    <mx:Script><![CDATA[
+
+        import com.becker.expression.Expression;
+        import com.becker.expression.ExpressionEvaluator;
+        import flash.events.Event;
+        import mx.events.FlexEvent;
+        import mx.controls.Alert;
+        import mx.collections.ArrayCollection;
+        import mx.charts.chartClasses.NumericAxis;
+        import mx.graphics.SolidColor;
+     
+        private static const INITIAL_MIN_X:Number = -10.0;
+        private static const INITIAL_MAX_X:Number = 10.0;
+        private static const MIN_X:Number = -100.0;
+        private static const MAX_X:Number = 100.0;
+        private static const Y_LIMIT:Number = 1000;
+        private static const NUM_POINTS:int = 1000;
+        
+        private static const DOMAIN:Array = [INITIAL_MIN_X, INITIAL_MAX_X];
+        private static const SLIDER_LABELS:Array= [""+MIN_X, "0", ""+MAX_X];
+        
+        [Bindable]
+        private var _expression:Expression;
+        
+        
+        [Bindable]
+        private var _data:ArrayCollection = new ArrayCollection();
+
+         
+        [Bindable]
+        public function get expression():Expression {
+            return _expression;
+        }
+         
+         public function set expression(exp:Expression):void {
+             _expression = exp;
+             createData();
+         }
+         
+         private function updateDomain():void {
+             createData();
+         }
+         
+         private function createData():void {
+             if (!_expression) return;
+             _data.removeAll();
+             var minx:Number = xRange.values[0];
+             var maxx:Number = xRange.values[1];
+             var inc:Number = (maxx - minx) / NUM_POINTS;
+             var evaluator:ExpressionEvaluator = new ExpressionEvaluator(_expression);
+             evaluator.setRangeLimits(-Y_LIMIT, Y_LIMIT);
+             for (var x:Number = minx; x <= maxx; x += inc) {
+                 var item:Object = {};  
+                 item.x = x;
+                 item.y = evaluator.evaluate(x);
+                 _data.addItem( item );
+             }
+         } // 
+         
+    ]]></mx:Script>  
+    
+       <mx:PlotChart id="plot"  width="100%" height="100%"
+        dataProvider="{_data}" 
+        showDataTips="true">
+        <!--mx:verticalAxis>
+            <mx:NumericAxis autoAdjust="false" />
+        </mx:verticalAxis-->
+        <mx:series>
+           <mx:LineSeries 
+                xField="x"
+                yField="y"
+                fill="{new SolidColor(0x0000FF, 1.0)}"
+                stroke="{new Stroke(0x000000, .5, 1.0)}"
+                itemRenderer="mx.charts.renderers.CircleItemRenderer"
+                radius="2">
+              <mx:lineStroke>
+                   <mx:Stroke  color="0x0066FF"  weight="3"  alpha=".5"/>
+              </mx:lineStroke>
+         </mx:LineSeries>
+        </mx:series>
+     </mx:PlotChart>
+     
+     <mx:HSlider id="xRange"
+         change="updateDomain()"
+         enabled="{_expression != null}"
+         width="100%"
+         thumbCount="2"
+         labels="{SLIDER_LABELS}"
+         tickInterval="2" 
+         height="50" 
+         values = "{DOMAIN}"
+         minimum="{MIN_X}"
+         maximum="{MAX_X}" />
+</mx:VBox>

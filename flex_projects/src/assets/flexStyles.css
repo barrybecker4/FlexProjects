@@ -35,7 +35,7 @@
 @font-face {
         src:url("fonts/Action Man Italic.ttf");
         font-family: actionItalicFont;
-        fontStyle: italic;
+        font-style: italic;
 }
 @font-face {
         src:url("fonts/Action Man Shaded.ttf");
@@ -48,7 +48,7 @@
 @font-face {
         src:url("fonts/Air Millhouse Italic.ttf");
         font-family: millhouseFont;
-        fontStyle: italic;
+        font-style: italic;
 }
 
 
@@ -73,54 +73,71 @@ millhouseFont
 }
 .agentFont {
     font-family:agentFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 .abductionFont {
     font-family:abductionFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 .abscissaFont {
     font-family:abscissaFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 .crikeyFont {
     font-family:crikeyFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 .acklinFont {
     font-family:acklinFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 .acquaintanceFont {
     font-family:acquaintanceFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 .actionFont {
     font-family:actionFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 .actionItalicFont {
     font-family:actionItalicFont;
-    fontSize: 14pt;
-    fontType: italic;
+    font-size: 14pt;
+    font-style: italic;
 }
 .actionShadedFont {
     font-family:actionShadedFont;
-    fontSize: 14pt;
-    fontWeight: normal;
+    font-size: 14pt;
+    font-weight: normal;
 }
 .cutAboveFont {
     font-family:cutAboveFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 .millhouseFont {
     font-family:millhouseFont;
-    fontSize: 14pt;
+    font-size: 14pt;
 }
 
 .actionShadedLargeFont {
     font-family:actionShadedFont;
-    fontSize: 24pt;
+    font-size: 20pt;
+    height: 20;
+}
+.borderContainer {
+    padding-top: 5;
+    padding-left: 5;
+    padding-right: 5;
+    padding-bottom: 5;
+    border-style: solid;
+    border-color: #CCCCCC;
+    border-width: 2;
+}
+
+.container {
+    padding-top: 5;
+    padding-left: 5;
+    padding-right: 5;
+    padding-bottom: 5;
 }
 /*
 TextArea {
