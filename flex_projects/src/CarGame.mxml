@@ -37,6 +37,7 @@
         
         private function createComplete():void {
             app = BoxWorld(animComp.sprite);
+            trace("setup");
                    
             gravityStepper.stepSize = 0.1; 
             gravityStepper.maximum = 20;
@@ -82,8 +83,14 @@
                 toggleAnimation()
             }
         }   
-        private function changeSpeed(delta:int):void {
+        private function inc():void {
+            car.increaseAcceleration = true; 
+            trace('down');
+        }
+        
+        private function changed():void {
             
+            trace('fasterButton ' + fasterButton.selected);
         }
         private function applyBrakes():void {
             
@@ -105,8 +112,12 @@
              <mx:VBox width="250" height="100%" styleName="borderContainer" >
                   <mx:HBox>
                       <mx:Label text="Accelerate" />
-                      <mx:Button id="fasterButton" label="Right"  click="changeSpeed(3)"  toolTip="( &lt;- ) Make the car go faster to the right" />     
-                      <mx:Button id="slowerButton" label="Left"  click="changeSpeed(-3)"  toolTip="( -&gt; ) Make the car go faster to the left" />    
+                      <mx:Button id="fasterButton" label="Right"  
+                          mouseDown="car.increaseAcceleration=true;" mouseUp="trace('up')"
+                          toolTip="( &lt;- ) Make the car go faster to the right" />     
+                      <mx:Button id="slowerButton" label="Left"  
+                          buttonDown="{car.decreaseAcceleration=true}" change="{true}" 
+                          toolTip="( -&gt; ) Make the car go faster to the left" />    
                   </mx:HBox>
                   <mx:HSlider id="acceleration" width="100%"
                       labels="['&lt;', '0', '&gt;']"

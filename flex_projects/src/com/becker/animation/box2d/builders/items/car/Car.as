@@ -36,7 +36,6 @@ package com.becker.animation.box2d.builders.items.car {
             else {
                 motorSpeed *=0.99;  // damping due to friction
             }
-            
             if (increaseAcceleration) {
                 motorSpeed += SPEED_INC;
             }
@@ -44,6 +43,7 @@ package com.becker.animation.box2d.builders.items.car {
                 motorSpeed -= SPEED_INC;
             }
             
+            //trace("motorSpeed=" + motorSpeed);
             setMotorSpeed(motorSpeed);
             
             // helps to keep the car on the ground during strong acceleration.
@@ -82,8 +82,6 @@ package com.becker.animation.box2d.builders.items.car {
      
             motors[1].SetMotorSpeed(speed); 
             motors[1].SetMaxMotorTorque(maxMotorTorque); 
-            
-            // trace("motor speed : " + speed +" maxTorque=" + maxMotorTorque);
         }
        
     }

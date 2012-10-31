@@ -1,6 +1,6 @@
 package com.becker.animation.sprites {
     
-    import com.becker.animation.box2d.builders.items.Cannon;
+    import com.becker.animation.box2d.builders.items.*;
     import flash.utils.Timer;
     
     import flash.display.Sprite;
@@ -33,7 +33,7 @@ package com.becker.animation.sprites {
         public function Bullet(radius:Number = 0.5, 
                                duration:uint = DEFAULT_BULLET_DURATION) {
             super(radius);
-            this.name =  Cannon.BULLET;
+            this.name = Cannon.BULLET;
             this.duration = duration;
             if (duration > 0) {
                 time_count = new Timer(duration);

@@ -14,16 +14,15 @@ import flash.events.Event;
 import mx.core.UIComponent;
 import mx.events.ResizeEvent;
 
-
 /**
- * The simulated world of shapes.
+ * The artificial world that will host a simulation.
  * The simulation that is set on the word defines what will be shown in it.
  * 
+ * @author Barry Becker
  */
 public class BoxWorld extends UIComponent implements Animatible {
     
     private var world:b2World;
-    
     private var simulation:Simulation;
     
     private static const VELOCITY_ITERATIONS:int = 10;
@@ -35,7 +34,6 @@ public class BoxWorld extends UIComponent implements Animatible {
     public var gravity:Number = 9.8;
     
     private var _enableSimulation:Boolean = true;
-    
     private var showDebug:Boolean = false;
     private var debugSprite:Sprite;
     private var firstTime:Boolean;
@@ -51,12 +49,16 @@ public class BoxWorld extends UIComponent implements Animatible {
      */
     public function setSimulation(simulation:Simulation, 
                                   params:PhysicalParameters):void {
+                                      
+        removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+        removeEventListener(ResizeEvent.RESIZE, resized);
         firstTime = true;
         world = createWorld();
-        simulation.initialize(world, this, params);
+
         if (this.simulation != null) {
             this.simulation.cleanup();
         }
+        simulation.initialize(world, this, params);
         this.simulation = simulation;
         startAnimation(); 
     }
@@ -69,14 +71,12 @@ public class BoxWorld extends UIComponent implements Animatible {
         this.removeAllChildren();
         addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
         addEventListener(ResizeEvent.RESIZE, resized, false, 0, true);
-               
-        //world.SetContactListener(new NoiseContactListener());  
+                
         world.SetContinuousPhysics(true);
         
         simulation.addStaticElements(); 
         simulation.addDynamicElements();       
     }
-    
     
     /** 
      * Needed prior to flex 4 
@@ -109,6 +109,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     public function onEnterFrame(e:Event):void{
           
         if (firstTime && enableSimulation && this.stage != null) {
+            trace("adding interactors");
             simulation.createInteractors(); 
             firstTime = false;
         }
@@ -127,6 +128,7 @@ public class BoxWorld extends UIComponent implements Animatible {
     
     /** Go through body list and update sprite positions/rotations */
     private function drawAllBodies():void {
+        
         for (var bb:b2Body = world.GetBodyList(); bb; bb = bb.GetNext()) {
            
             //for (var fixture:b2Fixture = bb.GetFixtureList(); fixture; fixture = fixture.GetNext()) {

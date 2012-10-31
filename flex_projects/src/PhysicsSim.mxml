@@ -67,6 +67,8 @@
                 debugCheckbox.selected = false;
                 debugStateChanged();
             }
+            // without this keyboard events will go to the sim dropdown instead of the sim itself.
+            animComp.setFocus();
         }   
         
         private function toggleAnimation():void {      
@@ -83,7 +85,7 @@
              
             simulationSelected();
             if (!app.enableSimulation) {
-                toggleAnimation()
+                toggleAnimation();
             }
         }   
         
@@ -107,7 +109,7 @@
                      <mx:Label text="Simulation" />
                      <mx:ComboBox id="simulationCombo" 
                                   dataProvider="{AvailableSimulations.AVAILABLE_SIMULATIONS}"  
-                                  selectedIndex="6" change="simulationSelected()" />  
+                                  selectedIndex="4" change="simulationSelected()" />  
                 </mx:HBox>
                 <mx:Spacer width="100%" />
                 <control:FontSelector id="fontSelector" changeHandler="fontSelected" />
