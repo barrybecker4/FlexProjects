@@ -7,7 +7,7 @@ package com.becker.animation.box2d.builders.items.car {
     public class Car {
        
         private static const MAX_SPEED:Number = 40;
-        private static const SPEED_INC:Number = 0.6;
+        private static const SPEED_INC:Number = 0.3;
         private static const MOTOR_TORQUE:Number = 500.0;
         
         public var carBody: b2Body;
@@ -48,10 +48,6 @@ package com.becker.animation.box2d.builders.items.car {
             
             // helps to keep the car on the ground during strong acceleration.
             carBody.ApplyTorque(motorSpeed);
-            
-            braking = false;
-            increaseAcceleration = false;
-            decreaseAcceleration = false;
         }
         
         public function updateShockAbsorbers():void {

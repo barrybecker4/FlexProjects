@@ -12,6 +12,7 @@
         import com.becker.animation.box2d.AvailableSimulations;
         import com.becker.animation.box2d.BoxWorld;
         import com.becker.animation.box2d.builders.items.car.Car;
+        import com.becker.animation.box2d.builders.items.*;
         import com.becker.animation.box2d.Simulation;
         import com.becker.animation.box2d.simulations.ArtilleryOnCarSimulation;
         import com.becker.common.PhysicalParameters;
@@ -53,6 +54,10 @@
             return simulation.car;
         }
         
+        private function get cannon():Cannon {
+            return simulation.cannon;
+        }
+        
         private function simulationSelected():void {
             
             var params:PhysicalParameters = 
@@ -92,12 +97,6 @@
             
             trace('fasterButton ' + fasterButton.selected);
         }
-        private function applyBrakes():void {
-            
-        }
-        private function fireCannon():void {
-            
-        }
         
         
     ]]></mx:Script>
@@ -112,22 +111,26 @@
              <mx:VBox width="250" height="100%" styleName="borderContainer" >
                   <mx:HBox>
                       <mx:Label text="Accelerate" />
-                      <mx:Button id="fasterButton" label="Right"  
-                          mouseDown="car.increaseAcceleration=true;" mouseUp="trace('up')"
-                          toolTip="( &lt;- ) Make the car go faster to the right" />     
                       <mx:Button id="slowerButton" label="Left"  
-                          buttonDown="{car.decreaseAcceleration=true}" change="{true}" 
+                          mouseDown="car.decreaseAcceleration=true" mouseUp="car.decreaseAcceleration=false" 
                           toolTip="( -&gt; ) Make the car go faster to the left" />    
+                      <mx:Button id="fasterButton" label="Right"  
+                          mouseDown="car.increaseAcceleration=true" mouseUp="car.increaseAcceleration=false"
+                          toolTip="( &lt;- ) Make the car go faster to the right" />     
                   </mx:HBox>
-                  <mx:HSlider id="acceleration" width="100%"
+                  <mx:HSlider id="accelerationSlider" width="100%"
                       labels="['&lt;', '0', '&gt;']"
                       tickInterval="50" 
-                      height="50" 
+                      height = "50" 
                       values = "[0]"
                       minimum="-100"
                       maximum="100" />
-                  <mx:Button id="brakeButton" label="Apply Brakes"  click="applyBrakes()"  toolTip="Stop the car" />    
-                  <mx:Button id="shootButton" label="Shoot"  click="fireCannon()"  toolTip="Fire the cannot on top of the car" />     
+                  <mx:Button id="brakeButton" label="Apply Brakes"  
+                      mouseDown="car.braking=true" mouseUp="car.braking=false" 
+                      toolTip="Stop the car" />    
+                  <mx:Button id="shootButton" label="Shoot"  
+                      click="simulation.fireCannon()"  
+                      toolTip="Fire the cannot on top of the car" />     
              </mx:VBox>      
              <mx:VBox height="100%" width="180"  styleName="borderContainer">
                   <mx:HBox>

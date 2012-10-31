@@ -30,7 +30,7 @@ package com.becker.animation.box2d.simulations {
         private var builder:BasicShapeBuilder;   
         private var cannonBuilder:FixedCannonBuilder; 
         private var carBuilder:CarBuilder; 
-        private var cannon:FixedCannon;
+        private var _cannon:FixedCannon;
         private var _car:Car;
         
         
@@ -52,18 +52,23 @@ package com.becker.animation.box2d.simulations {
         
         override public function addDynamicElements():void {
              
-            cannon = cannonBuilder.buildInstance(30, 34, params);
+            _cannon = cannonBuilder.buildInstance(30, 34, params);
             _car = carBuilder.buildInstance(30, 35, params);
             
             // now glue the cannon to the top of the car.
             var weldJointDef:b2WeldJointDef = new b2WeldJointDef();
-            weldJointDef.Initialize(_car.carBody, cannon.cannonBody, _car.carBody.GetWorldCenter());
+            weldJointDef.Initialize(_car.carBody, _cannon.cannonBody, _car.carBody.GetWorldCenter());
             world.CreateJoint(weldJointDef);
         }
         
         /** get the car instance once it has been built */
         public function get car():Car {
             return _car;
+        }
+        
+        /** get the cannon instance once it has been built */
+        public function get cannon():Cannon {
+            return _cannon;
         }
         
         /**
@@ -80,7 +85,7 @@ package com.becker.animation.box2d.simulations {
                     }
                 }
             }
-            cannon.update();
+            _cannon.update();
             car.updateMotor();
             scrollToCarCenter();
             car.updateShockAbsorbers();
@@ -103,17 +108,21 @@ package com.becker.animation.box2d.simulations {
             interactors = [kbdInteractor, dragInteractor];
         }
         
+        public function fireCannon():void {
+            _cannon.fire(world, builder);
+        }
+        
         /** press handler for the KeyboardInteractor */
         private function keyPressHandler(keyCode:uint):void {
            
             if (keyCode == 65) {          // a
-                cannon.rotateCannonAngle(-ANGLE_DELTA);
+                _cannon.rotateCannonAngle(-ANGLE_DELTA);
             }
             else if (keyCode == 83) {     // s
-                cannon.rotateCannonAngle(ANGLE_DELTA);
+                _cannon.rotateCannonAngle(ANGLE_DELTA);
             }
             else if (keyCode == 32) {    // space
-                cannon.startCharging();
+                _cannon.startCharging();
             }
             
             else if (keyCode == 66) {   // B: braking
@@ -131,7 +140,7 @@ package com.becker.animation.box2d.simulations {
         private function keyReleaseHandler(keyCode:uint):void {
           
             if (keyCode == 32) {    // space
-                cannon.fire(world, builder);
+                fireCannon();
             }
         }
 
