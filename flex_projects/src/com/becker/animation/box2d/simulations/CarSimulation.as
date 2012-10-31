@@ -75,7 +75,7 @@ package com.becker.animation.box2d.simulations {
          * Also scrolls the whole scene so it is centered on the car.
          */
         override public function onFrameUpdate():void {
-            
+            super.onFrameUpdate();
             car.updateMotor();
             scrollToCarCenter();
             car.updateShockAbsorbers();
@@ -102,6 +102,7 @@ package com.becker.animation.box2d.simulations {
         } 
         
         override public function createInteractors():void {
+            trace("adding car interacotrs for world=" + world + " canvas=" + canvas);
             var dragInteractor:MouseDragInteractor = new MouseDragInteractor(canvas, world, scale);
             var kbdInteractor:KeyboardInteractor = new KeyboardInteractor(canvas);
             kbdInteractor.keyPressHandler = keyHandler;

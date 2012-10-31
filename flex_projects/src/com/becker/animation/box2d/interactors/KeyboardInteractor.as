@@ -16,6 +16,7 @@ public class KeyboardInteractor implements Interactor {
      
     private var owner:Sprite;
     private var _keyPressHandler:Function;
+    private var _keyReleaseHandler:Function;
 
  
     /**
@@ -38,18 +39,26 @@ public class KeyboardInteractor implements Interactor {
     public function set keyPressHandler(handler:Function):void {
         _keyPressHandler = handler;
     }
+    
+    /** must have the form of handler(keyCode:uint)  */
+    public function set keyReleaseHandler(handler:Function):void {
+        _keyReleaseHandler = handler;
+    }
       
     /**
      * Respond key presses.
      */
     private function keyPress(event:KeyboardEvent):void {
-                 
+              
         if (_keyPressHandler != null) {
             _keyPressHandler(event.keyCode);
         }
     }
     
     private function keyRelease(event:KeyboardEvent):void {
+        if (_keyReleaseHandler != null) {
+            _keyReleaseHandler(event.keyCode);
+        }
     }
     
 }

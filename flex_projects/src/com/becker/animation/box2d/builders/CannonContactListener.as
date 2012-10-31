@@ -4,7 +4,7 @@ package com.becker.animation.box2d.builders {
     import Box2D.Dynamics.b2Body;
     import Box2D.Dynamics.b2ContactListener;
     import Box2D.Dynamics.Contacts.b2Contact;
-    import com.becker.animation.box2d.builders.items.Cannon;
+    import com.becker.animation.box2d.builders.items.PlayerCannon;
     import flash.events.Event;
     import flash.events.EventDispatcher;
     
@@ -66,8 +66,8 @@ package com.becker.animation.box2d.builders {
         }
         
         private function isCannon(contact:b2Contact):Boolean {
-            return contact.GetFixtureA().GetUserData() == Cannon.GROUND_SENSOR 
-                     || contact.GetFixtureB().GetUserData()== Cannon.GROUND_SENSOR;
+            return contact.GetFixtureA().GetUserData() == PlayerCannon.GROUND_SENSOR 
+                     || contact.GetFixtureB().GetUserData()== PlayerCannon.GROUND_SENSOR;
         }
     }
 }

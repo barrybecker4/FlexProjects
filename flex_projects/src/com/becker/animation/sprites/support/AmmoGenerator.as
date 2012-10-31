@@ -1,11 +1,16 @@
 package com.becker.animation.sprites.support {
+    import flash.events.Event;
     import flash.events.TimerEvent;
     import flash.utils.Timer;
-	/**
-     * ...
+    import flash.events.EventDispatcher;
+    
+    /**
+     * Maintains the ammo count and the periodic spawning of new ammo.
      * @author Barry Becker
      */
     public class AmmoGenerator {
+        
+        public static const AMMO_CREATED:String = "newAmmoCreated";
         
         /** default max bullets. Don't grow more than this. */
         private static const DEFAULT_MAX:uint = 20;
@@ -24,6 +29,8 @@ package com.becker.animation.sprites.support {
         /** timer fires at regular intervals corresponding to the generationRate */
         private var time_count:Timer;
         
+        public var eventDispatcher:EventDispatcher;
+        
         /**
          * 
          * @param initialAmount
@@ -33,6 +40,8 @@ package com.becker.animation.sprites.support {
                                       generationRate:Number = DEFAULT_GENERATION_RATE) {
             
             _currentCount = initialAmount;
+            eventDispatcher = new EventDispatcher();
+            
             if (generationRate > 0) {
                 time_count = new Timer(generationRate);
                 time_count.addEventListener(TimerEvent.TIMER, createNewBullets);
@@ -69,6 +78,7 @@ package com.becker.animation.sprites.support {
             if (_currentCount > _max) {
                 _currentCount = _max;
             }
+            eventDispatcher.dispatchEvent(new Event(AMMO_CREATED));
         }
     }
 }

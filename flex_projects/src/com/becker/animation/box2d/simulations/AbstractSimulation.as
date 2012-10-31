@@ -16,7 +16,6 @@ package com.becker.animation.box2d.simulations {
      */
     public class AbstractSimulation implements Simulation {
         
-        //private static const DEFAULT_SCALE:Number = 20;
         protected var world:b2World;
         protected var canvas:UIComponent;
         protected var params:PhysicalParameters;

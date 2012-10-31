@@ -5,8 +5,8 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.BasicShapeBuilder;
-    import com.becker.animation.box2d.builders.CannonBuilder;
-    import com.becker.animation.box2d.builders.items.Cannon;
+    import com.becker.animation.box2d.builders.PlayerCannonBuilder;
+    import com.becker.animation.box2d.builders.items.*;
     import com.becker.animation.box2d.interactors.KeyboardInteractor;
     import com.becker.animation.box2d.interactors.MouseButtonInteractor;
     import com.becker.common.PhysicalParameters;
@@ -19,15 +19,15 @@ package com.becker.animation.box2d.simulations {
     public class ArtillerySimulation extends AbstractSimulation {
         
         private var builder:BasicShapeBuilder;   
-        private var cannonBuilder:CannonBuilder; 
-        private var cannon:Cannon;
+        private var cannonBuilder:PlayerCannonBuilder; 
+        private var cannon:PlayerCannon;
         
         
         override public function initialize(world:b2World, canvas:UIComponent,
                                             params:PhysicalParameters):void {
             super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);
-            cannonBuilder = new CannonBuilder(world, canvas, scale);  
+            cannonBuilder = new PlayerCannonBuilder(world, canvas, scale);  
         }
         
         override public function addStaticElements():void { 
@@ -51,7 +51,7 @@ package com.becker.animation.box2d.simulations {
             for (var bb:b2Body = world.GetBodyList(); bb; bb = bb.GetNext()) {
                 if (bb.GetUserData() != null) {
                     switch (bb.GetUserData().name) {
-                        case Cannon.PLAYER :
+                        case PlayerCannon.PLAYER :
                             cannon.updateMovement();
                             cannon.pointTowardMouse(canvas.mouseX, canvas.mouseY, scale);
                             break;

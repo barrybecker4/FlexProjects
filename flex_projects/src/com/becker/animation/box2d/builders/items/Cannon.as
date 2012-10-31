@@ -13,99 +13,32 @@ package com.becker.animation.box2d.builders.items {
     import com.becker.animation.sprites.Bullet;
     import com.becker.common.Util;
     
+    /** an abstract cannon */
     public class Cannon {
         
-        public static const PLAYER:String = "Player";
         public static const BULLET:String = "Bullet";
-        public static const GROUND_SENSOR:String = "groundsensor";
         
-        public var touchingGround:Boolean;
-        
-        private static const POWER_FACTOR:Number = 0.5;
-        private static const JUMP_STRENGTH:Number = 150.0;
-        
-        private static const NEG_90:Number = 3.0 * Math.PI / 2.0;
+        protected static const POWER_FACTOR:Number = 0.5;
+        protected static const NEG_90:Number = 3.0 * Math.PI / 2.0;
         
         private var _cannonBody:b2Body;        
-        
         private var _bazooka:b2Body;
-        private var doJump:Boolean = false;
-        private var contactListener:CannonContactListener;
-        
-        /** speed at which to emit projectiles */
-        private var xspeed:int = 0;
         
                                   
-        public function Cannon(cannonBody:b2Body, bazooka:b2Body, contactListener:CannonContactListener) {
+        public function Cannon(cannonBody:b2Body, bazooka:b2Body) {
                     
              _cannonBody = cannonBody;
              _bazooka = bazooka; 
-             this.contactListener = contactListener;
         }
         
         public function update():void {
             bazooka.GetUserData().update();
-            xspeed = 0;
-        }
-        
-        public function updateMovement():void {
-            if (xspeed) {
-                //cannonBody.SetAwake(true);  
-                cannonBody.SetLinearVelocity(new b2Vec2(xspeed, cannonBody.GetLinearVelocity().y));
-            }
-            if (doJump) {
-                trace("Jumping!");
-                cannonBody.ApplyImpulse(new b2Vec2(0.0, -JUMP_STRENGTH), cannonBody.GetWorldCenter());
-                doJump = false;
-                touchingGround = false;
-            }
-            //cannonBody.SetAngle(0);  // preventit from falling over
-        }
-        
-        /** 
-         * @param speed the amount to set the x speed to
-         */
-        public function setXSpeed(speed:Number):void {
-            xspeed = speed;
-        }
-        
-        public function updateJump():void {
-            
-            if (touchingGround) { // check if the hero can jump
-                doJump = true;
-            }
-        }
-        
-        public function pointTowardMouse(mouseX:Number, mouseY:Number, scale:Number):void {
-
-            cannonBody.SetAwake(true);  
-            var middle:b2Vec2 = new b2Vec2(
-                cannonBody.GetPosition().x * scale, 
-                cannonBody.GetPosition().y * scale );
-           
-            // orient toward mouse
-            var dist_x:Number = middle.x - mouseX;
-            var dist_y:Number = middle.y - mouseY;
-            
-            bazooka.SetAngle(Math.PI / 2.0 + Math.atan2( -dist_y, -dist_x));
-        }
-        
-        /** 
-         * Change the direction that the cannon is pointing 
-         * @param angleDelta the amount to change in radians. 
-         */
-        public function rotateCannonAngle(angleDelta:Number):void {
-            
-            cannonBody.SetAwake(true);  
-            var newAngle:Number = bazooka.GetAngle() + angleDelta;
-            bazooka.SetAngle(newAngle);
         }
         
         public function startCharging():void {
             bazooka.GetUserData().startCharging();
         }
-      
-        
+       
         /** 
          * fire the cannon bullet if we have bullets to fire.
          */
@@ -137,8 +70,7 @@ package com.becker.animation.box2d.builders.items {
             // resetting the power
             bazooka.GetUserData().discharged();
         }
-      
-
+     
         public function get cannonBody():b2Body {
             return _cannonBody;
         }   

@@ -9,7 +9,7 @@ package com.becker.animation.box2d.builders {
     import Box2D.Dynamics.b2World;
     import Box2D.Dynamics.Joints.b2RevoluteJoint;
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
-    import com.becker.animation.box2d.builders.items.Cannon;
+    import com.becker.animation.box2d.builders.items.PlayerCannon;
     import com.becker.animation.sprites.Bazooka;
     import com.becker.animation.sprites.Rectangle;
     import com.becker.common.PhysicalParameters;
@@ -19,7 +19,7 @@ package com.becker.animation.box2d.builders {
     /**
      * Build a cannon with manipulable parameters
      */
-    public class CannonBuilder extends AbstractBuilder {
+    public class PlayerCannonBuilder extends AbstractBuilder {
         
         private static const SIZE:Number = 2.5;
         private static const PLAYER_WIDTH:Number = 1.4;
@@ -30,17 +30,17 @@ package com.becker.animation.box2d.builders {
 
         private var shapeBuilder:BasicShapeBuilder;
         private var params:PhysicalParameters;   
-        private var cannon:Cannon;
+        private var cannon:PlayerCannon;
       
     
         /** Constructor */
-        public function CannonBuilder(world:b2World, canvas:UIComponent, scale:Number) {
+        public function PlayerCannonBuilder(world:b2World, canvas:UIComponent, scale:Number) {
             super(world, canvas, scale);
             shapeBuilder = new BasicShapeBuilder(world, canvas, scale);
         }
         
         public function buildInstance(startX:Number, startY:Number, 
-                                      params:PhysicalParameters):Cannon {
+                                      params:PhysicalParameters):PlayerCannon {
  
             var bodyDef:b2BodyDef = new b2BodyDef();
             bodyDef.type = b2Body.b2_dynamicBody;
@@ -49,14 +49,14 @@ package com.becker.animation.box2d.builders {
             
             var cannonBody:b2Body = 
                 shapeBuilder.buildBlock(PLAYER_WIDTH, PLAYER_HEIGHT, bodyDef, params.density, params.friction, params.restitution, 1);
-            cannonBody.GetUserData().name = Cannon.PLAYER;
+            cannonBody.GetUserData().name = PlayerCannon.PLAYER;
             
             var zookaPos:b2Vec2 = new b2Vec2(startX, startY - PLAYER_HEIGHT - ZOOKA_HEIGHT/2.0);
             var bazooka:b2Body = createAttachedBazooka(zookaPos, bodyDef, cannonBody);
             
-            shapeBuilder.buildSensor(new b2Vec2(0, 1.0), 1.0, 0.5, cannonBody, Cannon.GROUND_SENSOR);
+            shapeBuilder.buildSensor(new b2Vec2(0, 1.0), 1.0, 0.5, cannonBody, PlayerCannon.GROUND_SENSOR);
             
-            cannon = new Cannon(cannonBody, bazooka, contactListener);
+            cannon = new PlayerCannon(cannonBody, bazooka, contactListener);
             bazooka.SetAngle(Math.PI / 3.0);
             
             var contactListener:CannonContactListener = new CannonContactListener();
