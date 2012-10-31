@@ -100,7 +100,7 @@ package com.becker.animation.box2d.builders
             circleDef.shape = new b2CircleShape(radius);
             bodyDef.userData = new Bullet(radius * scale, duration);
             
-            return addShape(circleDef, bodyDef, true);
+            return addShape(circleDef, bodyDef, false); // true (causes slow)
         }
 
         /**

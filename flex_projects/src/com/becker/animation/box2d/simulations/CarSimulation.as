@@ -105,12 +105,13 @@ package com.becker.animation.box2d.simulations {
             trace("adding car interacotrs for world=" + world + " canvas=" + canvas);
             var dragInteractor:MouseDragInteractor = new MouseDragInteractor(canvas, world, scale);
             var kbdInteractor:KeyboardInteractor = new KeyboardInteractor(canvas);
-            kbdInteractor.keyPressHandler = keyHandler;
+            kbdInteractor.keyPressHandler = keyPressHandler;
+            kbdInteractor.keyReleaseHandler = keyReleaseHandler;
             interactors = [dragInteractor, kbdInteractor];
         }
         
         /** handler for the KeyboardInteractor */
-        private function keyHandler(keyCode:uint):void {
+        private function keyPressHandler(keyCode:uint):void {
            
             if (keyCode == 66) {   // B: braking
                 car.braking = true;
@@ -120,6 +121,20 @@ package com.becker.animation.box2d.simulations {
             } 
             else if (keyCode == 37) {  // left arrow
                 car.decreaseAcceleration = true;
+            }
+        }
+        
+        /** handler for the KeyboardInteractor */
+        private function keyReleaseHandler(keyCode:uint):void {
+           
+            if (keyCode == 66) {   // B: braking
+                car.braking = false;
+            }
+            else if (keyCode == 39) {  // right arrow
+                car.increaseAcceleration = false;
+            } 
+            else if (keyCode == 37) {  // left arrow
+                car.decreaseAcceleration = false;
             }
         }
      
