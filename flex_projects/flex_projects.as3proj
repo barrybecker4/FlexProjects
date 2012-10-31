@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin-debug\PhysicsSim.swf" />
+    <movie path="bin-debug\app.swf" />
     <movie fps="30" />
     <movie width="1400" />
     <movie height="1000" />

@@ -31,7 +31,7 @@ package com.becker.animation.box2d.builders {
         
         private var shapeBuilder:BasicShapeBuilder;
         private var params:PhysicalParameters;    
-        private var car:Car;
+        private var _car:Car;
     
         /** Constructor */
         public function CarBuilder(world:b2World, canvas:UIComponent, scale:Number) {
@@ -41,7 +41,7 @@ package com.becker.animation.box2d.builders {
         
         public function buildInstance(startX:Number, startY:Number, 
                                       params:PhysicalParameters):Car {           
-            car = new Car();
+            _car = new Car();
                   
             var bodyDef:b2BodyDef = new b2BodyDef();
             bodyDef.type = b2Body.b2_dynamicBody;
@@ -53,9 +53,9 @@ package com.becker.animation.box2d.builders {
             createWheels(bodyDef);
             createJoints(bodyDef);
 
-            return car;
+            return _car;
         }
-
+      
         /** Create a compound body for all the fixed car parts. */
         private function createCarBody(bodyDef:b2BodyDef):void {
             var blocks:Array = [
@@ -66,30 +66,30 @@ package com.becker.animation.box2d.builders {
                     new b2Vec2( SHOCK_DISTANCE * SIZE, SHOCK_DEPTH * SIZE),  -AXLE_ANGLE),
             ];
             
-            car.carBody = shapeBuilder.buildCompoundBlock(blocks, bodyDef, 2, 0.5, 0.2, -1); 
+            _car.carBody = shapeBuilder.buildCompoundBlock(blocks, bodyDef, 2, 0.5, 0.2, -1); 
         }
         
         private function createAxles(bodyDef:b2BodyDef):void {
             
-            car.axles[0] =  createAxle(1, bodyDef);
-            car.axles[1] =  createAxle(-1, bodyDef);
+            _car.axles[0] =  createAxle(1, bodyDef);
+            _car.axles[1] =  createAxle(-1, bodyDef);
                                
             var boxDef:b2FixtureDef = new b2FixtureDef();
             boxDef.density = 1.0;
             var prismaticJointDef:b2PrismaticJointDef = createPrismaticJoint();
-            prismaticJointDef.Initialize(car.carBody, car.axles[0], car.axles[0].GetWorldCenter(), 
+            prismaticJointDef.Initialize(_car.carBody, _car.axles[0], _car.axles[0].GetWorldCenter(), 
                                          new b2Vec2(Math.cos(-AXLE_ANGLE), Math.sin(-AXLE_ANGLE)));
      
-            car.springs[0] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint; 
-            prismaticJointDef.Initialize(car.carBody, car.axles[1], car.axles[1].GetWorldCenter(), 
+            _car.springs[0] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint; 
+            prismaticJointDef.Initialize(_car.carBody, _car.axles[1], _car.axles[1].GetWorldCenter(), 
                                          new b2Vec2(-Math.cos(-AXLE_ANGLE), Math.sin(-AXLE_ANGLE)));
      
-            car.springs[1] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint;
+            _car.springs[1] = world.CreateJoint(prismaticJointDef) as b2PrismaticJoint;
         }
         
         private function createAxle(sign:Number, bodyDef:b2BodyDef):b2Body {
         
-            var center:b2Vec2 = car.carBody.GetWorldCenter();
+            var center:b2Vec2 = _car.carBody.GetWorldCenter();
             var ang:Number = sign * AXLE_ANGLE;
             bodyDef.position.Set(
                 center.x + SIZE * -sign * ( SHOCK_DISTANCE + SHOCK_HEIGHT * Math.cos(ang)), 
@@ -116,12 +116,12 @@ package com.becker.animation.box2d.builders {
             for (var i:int = 0; i < 2; i++) {
      
                 var sign:Number = (i == 0) ? 1: -1;
-                var center:b2Vec2 = car.axles[i].GetWorldCenter();
+                var center:b2Vec2 = _car.axles[i].GetWorldCenter();
                 
                 bodyDef.position.Set(center.x - sign * SIZE * 0.3 * Math.cos(sign * AXLE_ANGLE), 
                                      center.y + sign * SIZE * 0.3 * Math.sin(sign * AXLE_ANGLE));
 
-                car.wheels[i] = shapeBuilder.buildBall(SIZE * WHEEL_RADIUS, bodyDef, 0.2, 1.1, 0.2, -1);
+                _car.wheels[i] = shapeBuilder.buildBall(SIZE * WHEEL_RADIUS, bodyDef, 0.2, 1.1, 0.2, -1);
             }
         }
         
@@ -130,18 +130,18 @@ package com.becker.animation.box2d.builders {
             var revoluteJointDef:b2RevoluteJointDef = new b2RevoluteJointDef();
             revoluteJointDef.enableMotor = true;
      
-            revoluteJointDef.Initialize(car.axles[0], car.wheels[0], car.wheels[0].GetWorldCenter());
-            car.motors[0] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
+            revoluteJointDef.Initialize(_car.axles[0], _car.wheels[0], _car.wheels[0].GetWorldCenter());
+            _car.motors[0] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
      
-            revoluteJointDef.Initialize(car.axles[1], car.wheels[1], car.wheels[1].GetWorldCenter());
-            car.motors[1] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
+            revoluteJointDef.Initialize(_car.axles[1], _car.wheels[1], _car.wheels[1].GetWorldCenter());
+            _car.motors[1] = world.CreateJoint(revoluteJointDef) as b2RevoluteJoint;
              
             // Set initial motor speeds.
-            car.motors[0].SetMotorSpeed(1); 
-            car.motors[0].SetMaxMotorTorque(10); 
+            _car.motors[0].SetMotorSpeed(1); 
+            _car.motors[0].SetMaxMotorTorque(10); 
      
-            car.motors[1].SetMotorSpeed(1);  
-            car.motors[1].SetMaxMotorTorque(10);  
+            _car.motors[1].SetMotorSpeed(1);  
+            _car.motors[1].SetMaxMotorTorque(10);  
         }
     }
 }

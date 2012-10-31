@@ -27,7 +27,7 @@ package com.becker.animation.box2d.simulations {
         private var cannonBuilder:CannonBuilder; 
         private var carBuilder:CarBuilder; 
         private var cannon:Cannon;
-        private var car:Car;
+        private var _car:Car;
         
         
         override public function initialize(world:b2World, canvas:UIComponent,
@@ -49,12 +49,18 @@ package com.becker.animation.box2d.simulations {
         override public function addDynamicElements():void {
              
             cannon = cannonBuilder.buildInstance(30, 34, params);
-            car = carBuilder.buildInstance(30, 35, params);
+            _car = carBuilder.buildInstance(30, 35, params);
             
             // now glue the cannon to the top of the car.
             var weldJointDef:b2WeldJointDef = new b2WeldJointDef();
-            weldJointDef.Initialize(car.carBody, cannon.cannonBody, car.carBody.GetWorldCenter());
+            weldJointDef.Initialize(_car.carBody, cannon.cannonBody, _car.carBody.GetWorldCenter());
             world.CreateJoint(weldJointDef);
+        }
+        
+          
+        /** get the car instance once it has been built */
+        public function get car():Car {
+            return _car;
         }
         
         /**
