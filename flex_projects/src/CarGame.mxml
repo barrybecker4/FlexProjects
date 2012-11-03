@@ -31,6 +31,8 @@
         
         private static const INSTRUCTIONS:String = 
             "Drive around and shoot stuff!" 
+            
+        private static const INITIAL_GUN_ANGLE:Number = Math.PI/6;
                 
         private var app:BoxWorld;
         private var simulation:ArtilleryOnCarSimulation = new ArtilleryOnCarSimulation();
@@ -88,16 +90,6 @@
                 toggleAnimation()
             }
         }   
-        private function inc():void {
-            car.increaseAcceleration = true; 
-            trace('down');
-        }
-        
-        private function changed():void {
-            
-            trace('fasterButton ' + fasterButton.selected);
-        }
-        
         
     ]]></mx:Script>
 
@@ -111,26 +103,38 @@
              <mx:VBox width="250" height="100%" styleName="borderContainer" >
                   <mx:HBox>
                       <mx:Label text="Accelerate" />
-                      <mx:Button id="slowerButton" label="Left"  
+                      <mx:Button id="getLeftButton" label="Left"  
                           mouseDown="car.decreaseAcceleration=true" mouseUp="car.decreaseAcceleration=false" 
-                          toolTip="( -&gt; ) Make the car go faster to the left" />    
-                      <mx:Button id="fasterButton" label="Right"  
+                          toolTip="( -&gt; ) Make the car go faster to the left" focusEnabled="false" />    
+                      <mx:Button id="goRightButton" label="Right"  
                           mouseDown="car.increaseAcceleration=true" mouseUp="car.increaseAcceleration=false"
-                          toolTip="( &lt;- ) Make the car go faster to the right" />     
+                          toolTip="( &lt;- ) Make the car go faster to the right" focusEnabled="false" />     
                   </mx:HBox>
                   <mx:HSlider id="accelerationSlider" width="100%"
                       labels="['&lt;', '0', '&gt;']"
-                      tickInterval="50" 
+                      tickInterval="20" 
                       height = "50" 
                       values = "[0]"
                       minimum="-100"
                       maximum="100" />
-                  <mx:Button id="brakeButton" label="Apply Brakes"  
-                      mouseDown="car.braking=true" mouseUp="car.braking=false" 
-                      toolTip="Stop the car" />    
-                  <mx:Button id="shootButton" label="Shoot"  
-                      click="simulation.fireCannon()"  
-                      toolTip="Fire the cannot on top of the car" />     
+                  <mx:HBox>
+                      <mx:Button id="brakeButton" label="Apply Brakes"  
+                          mouseDown="car.braking=true" mouseUp="car.braking=false" 
+                          toolTip="(b) Stop the car" focusEnabled="false" />    
+                      <mx:Button id="shootButton" label="Shoot"  
+                          mouseDown="cannon.startCharging()" mouseUp="simulation.fireCannon()"
+                          toolTip="(space) Fire the cannot on top of the car" focusEnabled="false" />  
+                  </mx:HBox>
+                  <mx:HBox>
+                      <mx:Label text="Gun Angle"/>
+                      <mx:HSlider id="gunAngleSlider" width="100%"
+                          labels="['', '0', '', '40', '', '80', '', '120', '', '','180', '']"
+                          tickInterval="10" 
+                          height = "50" 
+                          values = "[cannon.gunAngle]"
+                          minimum="-20"
+                          maximum="200" />
+                  </mx:HBox>
              </mx:VBox>      
              <mx:VBox height="100%" width="180"  styleName="borderContainer">
                   <mx:HBox>

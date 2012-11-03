@@ -21,9 +21,8 @@
         private static const NUM_POINTS:int = 1000;
         
         private static const DOMAIN:Array = [INITIAL_MIN_X, INITIAL_MAX_X];
-        private static const SLIDER_LABELS:Array= [""+MIN_X, "0", ""+MAX_X];
+        private static const SLIDER_LABELS:Array= ["" + MIN_X, "0", "" + MAX_X];
         
-        [Bindable]
         private var _expression:Expression;
         
         
@@ -59,7 +58,7 @@
                  item.y = evaluator.evaluate(x);
                  _data.addItem( item );
              }
-         } // 
+         } 
          
     ]]></mx:Script>  
     
@@ -86,7 +85,7 @@
      
      <mx:HSlider id="xRange"
          change="updateDomain()"
-         enabled="{_expression != null}"
+         enabled="{expression != null}"
          width="100%"
          thumbCount="2"
          labels="{SLIDER_LABELS}"
