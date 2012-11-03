@@ -10,7 +10,8 @@ import flash.geom.Point;
         /** convert from degrees to radians */
         public static const DEG_TO_RAD:Number = Math.PI / 180.0;      
         
-        public function Util() {}
+        /** private constructor for static util class */
+        //private function Util() {}
         
         
         /**
