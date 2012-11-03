@@ -116,10 +116,10 @@ package com.becker.animation.box2d.simulations {
         private function keyPressHandler(keyCode:uint):void {
            
             if (keyCode == 65) {          // a
-                _cannon.rotateCannonAngle(-ANGLE_DELTA);
+                _cannon.gunAngle -= ANGLE_DELTA;
             }
             else if (keyCode == 83) {     // s
-                _cannon.rotateCannonAngle(ANGLE_DELTA);
+                _cannon.gunAngle += ANGLE_DELTA;
             }
             else if (keyCode == 32) {    // space
                 _cannon.startCharging();
@@ -141,6 +141,15 @@ package com.becker.animation.box2d.simulations {
           
             if (keyCode == 32) {    // space
                 fireCannon();
+            }
+            else if (keyCode == 66) {   // B: braking
+                car.braking = false;
+            }
+            else if (keyCode == 39) {  // right arrow
+                car.increaseAcceleration = false;
+            } 
+            else if (keyCode == 37) {  // left arrow
+                car.decreaseAcceleration = false;
             }
         }
 

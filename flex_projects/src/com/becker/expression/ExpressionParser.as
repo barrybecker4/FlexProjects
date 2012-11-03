@@ -21,7 +21,7 @@ package com.becker.expression {
         }
         
         /** 
-         * Find all the tree nodes for the terms a the current level 
+         * Recursive method to find all the tree nodes for the terms a the current level.
          * For example, given this expression 
          * 2x^3 +  5(x + 3x^2) / (x - 1)
          * the items in []'s represent the array of nodes returned.
@@ -29,7 +29,7 @@ package com.becker.expression {
          * The parts that were in {()'s become their own subtrees via recursive calls.
          * 
          * @param exp the expression to get the nodes at the current level for
-         * @param array of nodes representing terms that the current level.
+         * @return array of nodes representing terms that the current level.
          * @throws Error if there is a syntax error causing the expression to be invalid
          */
         private function getNodesAtLevel(exp:String):Array {
@@ -45,6 +45,7 @@ package com.becker.expression {
                 }
                 else if (ch == '(') {
                     var closingParenPos:int = findClosingParen(exp, pos);
+                    // this method will make the recursive call
                     token = processSubExpression(exp, pos, token, closingParenPos, nodes);
                     pos = closingParenPos + 1;
                 }

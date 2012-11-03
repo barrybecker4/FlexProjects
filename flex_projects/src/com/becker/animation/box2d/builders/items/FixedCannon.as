@@ -25,15 +25,18 @@ package com.becker.animation.box2d.builders.items {
             bazooka.SetAngle(angle);
         }
         
+         
         /** 
-         * Change the direction that the cannon is pointing 
-         * @param angleDelta the amount to change in radians. 
+         * The direction that the cannon is pointing in radians.
          */
-        public function rotateCannonAngle(angleDelta:Number):void {
-            
-            //cannonBody.SetAwake(true);  
-            var newAngle:Number = bazooka.GetAngle() + angleDelta;
-            bazooka.SetAngle(newAngle);
+        [Bindable]
+        public function get gunAngle():Number {
+            return bazooka.GetAngle();
         }
+        
+        public function set gunAngle(angle:Number):void {
+            bazooka.SetAngle(angle);
+        }
+       
     }
 }
