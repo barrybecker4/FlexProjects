@@ -53,7 +53,7 @@ package com.becker.expression {
                     // a leading minus sign
                     token += ch;
                 }
-                else if (ch >= '0' && ch <= '9') {
+                else if (isNumericChar(ch)) {
                     token += ch;
                     if (token.indexOf("x") >= 0) {
                         throw new Error("Cannot have numbers after x in a term "+ token +" within " + exp);
@@ -75,7 +75,7 @@ package com.becker.expression {
             // add the final node
             pushNodesForToken(token, nodes);
 
-            return nodes;
+            return nodes; 
         }
         
         /**
@@ -84,14 +84,17 @@ package com.becker.expression {
          * @return location of matching right parenthesis
          */
         private function findClosingParen(exp:String, pos:int):int {
-            var parenCount:int = 0;
-            var i:int = pos + 1;
-            var ch:String = exp.charAt(i);
-            while (!(ch == ')' && parenCount == 0) && i<exp.length) {
+            var parenCount:int = 1;
+            var i:int = pos;
+            var ch:String;
+            
+            trace("pos=" + pos + " ch=" + ch + " exp=" + exp);
+            do {
+                ch = exp.charAt(i++);
                 if (ch == '(') parenCount++;
                 if (ch == ')') parenCount--;
-                ch = exp.charAt(i++);
-            }
+                trace(i + " parenCt=" + parenCount + " ch=" + ch);
+            } while (!(ch == ')' && parenCount == 0) && i<=exp.length);
             
             if (ch != ')' && i == exp.length) {
                 throw new Error("Mismatched parenthesis in " + exp);
@@ -153,12 +156,17 @@ package com.becker.expression {
             }
         }
         
+        private function isNumericChar(ch:String):Boolean {
+           
+            return (ch >= '0' && ch <= '9') || ch == '.';
+        }
+        
         private function getNodeForNumber(token:String):TreeNode {
-            var num:Number = parseInt(token);
+            var num:Number = parseFloat(token);
             if (isNaN(num)) {
                 throw new Error("Invalid number in expression: " + token);
             }
-            return new TreeNode("" + int(num));
+            return new TreeNode("" + num);
         }
         
         /** 
@@ -175,6 +183,10 @@ package com.becker.expression {
                 throw new Error("Expected to have only one node after reducing, but have "
                     + nodes.length +" : " + nodes);
             }
+            if (nodes[0].isOperator() && nodes[0].children.length == 0) {
+                throw new Error("Missing operands");
+            }
+            
             return nodes[0];
         }
         
@@ -188,16 +200,26 @@ package com.becker.expression {
         private function reduceNodes(ops:Array, nodes:Array):Array {
             
             var index:int = 1;
+            if (nodes.length == 2) {
+                throw new Error("Missing operand : " + nodes);
+            }
             
             while (index < nodes.length) {
-                if (ops.indexOf(nodes[index].data) >= 0 && !nodes[index].hasParens) {
-                    nodes[index].children = [nodes[index-1], nodes[index+1]];
+                if (isOperator(nodes[index], ops)) {
+                    nodes[index].children = [nodes[index - 1], nodes[index + 1]];
+                    if (nodes.length < index + 1) {
+                        throw new Error("Not enough operands for operator in nodes=" + nodes);
+                    }
                     nodes.splice(index-1, 3, nodes[index]);
                 } else {
                     index += 2;
                 }
             }
             return nodes;
+        }
+        
+        private function isOperator(node:TreeNode, ops:Array):Boolean {
+            return ops.indexOf(node.data) >= 0 && !node.hasParens;
         }
     }
 }

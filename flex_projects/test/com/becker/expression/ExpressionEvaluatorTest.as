@@ -45,6 +45,5 @@ package com.becker.expression {
             log += "Evaluation tests finished in " + elapsed + " seconds.";
             return log;
         }
-        
     }
 }

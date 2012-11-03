@@ -54,7 +54,7 @@ package com.becker.expression {
                 return Operators.operate(node.data, operand1, operand2);
             }
             // leaf nodes are always an operand
-            return node.data == 'x' ? x : parseInt(node.data);
+            return node.data == 'x' ? x : parseFloat(node.data);
         }
     }
 }

@@ -1,25 +1,20 @@
 package com.becker.controls {
     
-    import com.becker.animation.Animatible;
-    import com.becker.common.Ball;   
     import com.becker.expression.Expression;
     import com.becker.expression.TreeNode;
+    import com.becker.common.GraphicsUtil;
     import flash.display.BitmapData;
     import flash.display.Graphics;
-    import flash.events.Event;   
     import flash.geom.Matrix;
     import flash.geom.Point;
     import flash.text.TextFormat;
-    import mx.core.UIComponent;
     import mx.containers.VBox;
-    import mx.controls.Label;
-    import mx.core.UITextField;
-    import mx.graphics.ImageSnapshot;
-    import flash.geom.Rectangle;
+    
     
     /**
      * Shows an expression tree visually.
      * Test with something like 2 + (x^2 - (x + (x  + (x + (x - (3x -(x + (x + 1))))))))/ 2
+     * 
      * @author Barry Becker
      */
     public class ExpressionTreeViewer extends VBox {
@@ -29,6 +24,7 @@ package com.becker.controls {
         
         private static const NODE_SIZE:int = 16;
         private static const TEXT_FORMAT:TextFormat = new TextFormat("Arial", 14, 0x330000, true);
+        private static const LINE_COLOR:uint = 0x000099;
         private static const PARENTHESIZED_COLORS:Array = 
             [0xffffaa, 0xccffcc, 0xddddff, 0xffddaa, 0xbbeeff, 0xffddf0, 0xd0ffee, 0xffccd0, 0xddffbb];
         
@@ -65,19 +61,19 @@ package com.becker.controls {
         }
         
         private function drawTree(w:Number, h:Number):void {
-            if (expression) {
+            if (expression && expression.isValid) {
                 levelXpos = [];
                 levelXpos[0] = 0;
                 currentMaxDepth = 0;
                 
                 preprocessTree();
-                //trace("depth=" + treeDepth + " widths=" + levelWidths + " levelXpos="+ levelXpos);
-    
                 drawSubtree(expression.rootNode, null, 0, 0, w, h);
             }
         }
         
-        private function drawSubtree(node:TreeNode, parentLocation:Point, level:int, parenNest:int, w:Number, h:Number):void {
+        /** recursive method to draw the subtree */
+        private function drawSubtree(node:TreeNode, parentLocation:Point, 
+                                     level:int, parenNest:int, w:Number, h:Number):void {
             
             if (level > currentMaxDepth) {
                 currentMaxDepth = level;
@@ -105,14 +101,15 @@ package com.becker.controls {
         private function drawNode(node:TreeNode, parentLocation:Point, level:int, 
                                   parenNest:int, w:Number, h:Number):void {
             var pt:Point = getPoint(level, w, h);
-            graphics.lineStyle(1, 0x0022bb);            
+            graphics.lineStyle(1, LINE_COLOR);            
             graphics.beginFill(getParenColor(parenNest));
             graphics.drawCircle(pt.x, pt.y, NODE_SIZE);
             if (parentLocation) {
                 graphics.moveTo(pt.x, pt.y - NODE_SIZE);
                 graphics.lineTo(parentLocation.x, parentLocation.y + NODE_SIZE);
             }
-            drawText(pt.x - NODE_SIZE / 3, pt.y - NODE_SIZE / 2, node.data);
+            GraphicsUtil.drawText(pt.x - NODE_SIZE / 3, pt.y - NODE_SIZE / 2 - 2, 
+                                  node.data, graphics, TEXT_FORMAT);
         }
         
         private function getPoint(level:int, w:Number, h:Number):Point {
@@ -147,26 +144,5 @@ package com.becker.controls {
         private function getParenColor(parenNest:int):uint {
             return PARENTHESIZED_COLORS[parenNest % PARENTHESIZED_COLORS.length];
         }
-        
-        /** 
-         * draws text at rectangle location
-         * @see http://stackoverflow.com/questions/1666127/can-i-set-text-on-a-flex-graphics-object
-         */
-        private function drawText(x:int, y:int, text:String):void {
-            var uit:UITextField = new UITextField();
-            uit.text = text;
-            uit.setTextFormat(TEXT_FORMAT);
-            uit.width = 4 + 16 * text.length;
-            var textBitmapData:BitmapData = ImageSnapshot.captureBitmapData(uit);
-            var matrix:Matrix = new Matrix();
-          
-            matrix.tx = x;
-            matrix.ty = y;
-            graphics.lineStyle(0, 0xdddd00, 0);            
-            graphics.beginBitmapFill(textBitmapData, matrix, false);
-            graphics.drawRect(x, y, uit.measuredWidth, uit.measuredHeight);
-            graphics.endFill();
-        }
-        
     }
 }
