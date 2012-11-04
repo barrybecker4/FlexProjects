@@ -15,14 +15,10 @@ package com.becker.animation.box2d.builders.items {
     
     public class FixedCannon extends Cannon {
         
-                                  
+        /** Constructor */                        
         public function FixedCannon(cannonBody:b2Body, bazooka:b2Body) {
                     
             super(cannonBody, bazooka);
-        }
-        
-        public function setGunAngle(angle:Number):void {
-            bazooka.SetAngle(angle);
         }
         
          

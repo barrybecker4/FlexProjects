@@ -35,12 +35,12 @@
         private static const INITIAL_GUN_ANGLE:Number = Math.PI/6;
                 
         private var app:BoxWorld;
+        [Bindable]
         private var simulation:ArtilleryOnCarSimulation = new ArtilleryOnCarSimulation();
         
         
         private function createComplete():void {
             app = BoxWorld(animComp.sprite);
-            trace("setup");
                    
             gravityStepper.stepSize = 0.1; 
             gravityStepper.maximum = 20;
@@ -56,7 +56,7 @@
             return simulation.car;
         }
         
-        private function get cannon():Cannon {
+        private function get cannon():FixedCannon {
             return simulation.cannon;
         }
         
@@ -89,7 +89,7 @@
             if (!app.enableSimulation) {
                 toggleAnimation()
             }
-        }   
+        }  
         
     ]]></mx:Script>
 
@@ -100,7 +100,7 @@
       
         <mx:HBox width="100%" styleName="container"> 
               
-             <mx:VBox width="250" height="100%" styleName="borderContainer" >
+             <mx:VBox width="280" height="100%" styleName="borderContainer" >
                   <mx:HBox>
                       <mx:Label text="Accelerate" />
                       <mx:Button id="getLeftButton" label="Left"  
@@ -112,11 +112,11 @@
                   </mx:HBox>
                   <mx:HSlider id="accelerationSlider" width="100%"
                       labels="['&lt;', '0', '&gt;']"
-                      tickInterval="20" 
-                      height = "50" 
-                      values = "[0]"
-                      minimum="-100"
-                      maximum="100" />
+                      tickInterval="2" 
+                      height = "40" 
+                      value = "{simulation.motorSpeed}"
+                      minimum="-20"
+                      maximum="20" />
                   <mx:HBox>
                       <mx:Button id="brakeButton" label="Apply Brakes"  
                           mouseDown="car.braking=true" mouseUp="car.braking=false" 
@@ -125,13 +125,26 @@
                           mouseDown="cannon.startCharging()" mouseUp="simulation.fireCannon()"
                           toolTip="(space) Fire the cannot on top of the car" focusEnabled="false" />  
                   </mx:HBox>
-                  <mx:HBox>
-                      <mx:Label text="Gun Angle"/>
-                      <mx:HSlider id="gunAngleSlider" width="100%"
+                  <mx:HBox width="100%">
+                      <mx:VBox width="100%">
+                          <mx:Label text="Gun Angle" height="18"/>
+                          <mx:HBox>
+                              <mx:Button id="decreasAngleButton" label="-"  
+                                  click="simulation.gunAngle--"  width="32" height="20"
+                                  toolTip="decrease gun angle" 
+                                  focusEnabled="false" autoRepeat="true" />    
+                              <mx:Button id="increasAngleButton" label="+" 
+                                  click="simulation.gunAngle++" width="32" height="20"
+                                  toolTip="increase gun angle" 
+                                  focusEnabled="false" autoRepeat="true"/>   
+                          </mx:HBox>
+                      </mx:VBox>
+                      
+                      <mx:HSlider id="gunAngleSlider" 
                           labels="['', '0', '', '40', '', '80', '', '120', '', '','180', '']"
                           tickInterval="10" 
-                          height = "50" 
-                          values = "[cannon.gunAngle]"
+                          height = "60" width="100%" 
+                          value = "{simulation.gunAngle}"
                           minimum="-20"
                           maximum="200" />
                   </mx:HBox>
@@ -157,11 +170,18 @@
              </mx:VBox>
              
              <mx:VBox height="100%" width="180" styleName="borderContainer">
-                  <mx:Button id="animateButton" label="{PAUSE_LABEL}"  click="toggleAnimation()"  toolTip="toggle the animation"  />                
-                  <mx:Button id="restartButton" label="Restart"  click="restartAnimation()" />  
+                  <mx:Button id="animateButton" label="{PAUSE_LABEL}"  
+                      click="toggleAnimation()"  
+                      toolTip="toggle the animation" 
+                      focusEnabled="false"  />                
+                  <mx:Button id="restartButton" label="Restart"  
+                      click="restartAnimation()" 
+                      focusEnabled="false" />  
                   <mx:HBox>
-                      <mx:CheckBox id="debugCheckbox" label="Show debug info" selected="false" click="debugStateChanged()" 
-                          toolTip="Show vectors and other structure" />
+                      <mx:CheckBox id="debugCheckbox" label="Show debug info" selected="false" 
+                      click="debugStateChanged()" 
+                      focusEnabled="false"
+                      toolTip="Show vectors and other structure" />
                   </mx:HBox>
              </mx:VBox>
              

@@ -65,7 +65,7 @@ package com.becker.animation.box2d.builders
             body.CreateFixture(fixtureDef);
         }
         
-        /** remove this and allow passing in the class for the grahic shape */
+        /** remove this and allow passing in the class for the graphic shape */
         public function buildBazooka(width:Number, height:Number, bodyDef:b2BodyDef, 
                 density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
                 groupIndex:int = int.MAX_VALUE):b2Body {

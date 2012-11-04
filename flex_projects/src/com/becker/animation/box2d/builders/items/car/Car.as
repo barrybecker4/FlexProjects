@@ -22,7 +22,7 @@ package com.becker.animation.box2d.builders.items.car {
         public var increaseAcceleration:Boolean = false;
         public var decreaseAcceleration:Boolean = false;
         
-        private var motorSpeed:Number = 0.0;
+        private var _motorSpeed:Number = 0.0;
         
         /** Constructor */
         public function Car() { };
@@ -31,23 +31,23 @@ package com.becker.animation.box2d.builders.items.car {
         /** should be called on every frame up update the motor speed and torque */
         public function updateMotor():void {
             if (braking) {
-                motorSpeed *= 0.8;
+                _motorSpeed *= 0.8;
             }
             else {
-                motorSpeed *=0.99;  // damping due to friction
+                _motorSpeed *=0.99;  // damping due to friction
             }
             if (increaseAcceleration) {
-                motorSpeed += SPEED_INC;
+                _motorSpeed += SPEED_INC;
             }
             else if (decreaseAcceleration) {
-                motorSpeed -= SPEED_INC;
+                _motorSpeed -= SPEED_INC;
             }
             
             //trace("motorSpeed=" + motorSpeed);
-            setMotorSpeed(motorSpeed);
+            setMotorSpeed(_motorSpeed);
             
             // helps to keep the car on the ground during strong acceleration.
-            carBody.ApplyTorque(motorSpeed);
+            carBody.ApplyTorque(_motorSpeed);
         }
         
         public function updateShockAbsorbers():void {
@@ -60,7 +60,10 @@ package com.becker.animation.box2d.builders.items.car {
             spring = springs[1];
             spring.SetMaxMotorForce(0 + Math.abs(MOTOR_TORQUE * Math.pow(spring.GetJointTranslation(), 2)));
             spring.SetMotorSpeed( -4.0 * Math.pow(spring.GetJointTranslation(), 1));
-             
+        }
+        
+        public function get motorSpeed():Number {
+            return _motorSpeed;
         }
         
         /** as speed increases, torque is reduced - like in an automatic trasmission. */

@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'11/3/2012'</value>
+      <value>'11/4/2012'</value>
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
@@ -30,7 +30,7 @@
     </library-path>
   </compiler>
   <file-specs>
-    <path-element>E:\projects\flex_projects\flex_projects\src\FunctionEditorApp.mxml</path-element>
+    <path-element>E:\projects\flex_projects\flex_projects\src\CarGame.mxml</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>30</default-frame-rate>
