@@ -33,11 +33,9 @@ package com.becker.animation.sprites {
         
         private var ammoGenerator:AmmoGenerator;
         
-        private var ct:uint;
-        
         
         /**
-         * 
+         * Constructor
          * @param	width
          * @param	height
          * @param	color
@@ -50,6 +48,7 @@ package com.becker.animation.sprites {
             ammoGenerator = new AmmoGenerator(INITIAL_NUM_BULLETS, 2000);
             ammoGenerator.spawnIncrement = BULLET_SPAWN_INC;
             ammoGenerator.eventDispatcher.addEventListener(AmmoGenerator.AMMO_CREATED, ammoCreated, false, 0, true);
+            trace("in bazook a constructor");
         }
         
         public function set charge(c:Number):void {
@@ -89,25 +88,23 @@ package com.becker.animation.sprites {
             if (charging != 0 && ammoGenerator.currentBulletCount > 0) {
                 // update the power
                 _charge += charging;
-                // this makes it slow for some reason
-                invalidateDisplayList();
+                //updateDisplayList(width, height);
                
                 if (_charge > _maxCharge) {
                     _charge = _maxCharge;
                 }
             }
         }
+     
         
-        
-   
         override protected function updateDisplayList(w:Number, h:Number):void {
-            super.updateDisplayList(w, h);
+            
             var halfHeight:Number = height / 2.0;
             graphics.lineStyle(0.5);
             graphics.beginFill(baseColor, 1.0);
             graphics.drawRect(-width/2.0, -halfHeight, width, height);
             graphics.endFill();  
-            
+
             // draw indicator for remaining ammo
             var bulletRatio:Number = 
                 Number(ammoGenerator.currentBulletCount) / Number(ammoGenerator.maxBulletCount);
@@ -119,7 +116,10 @@ package com.becker.animation.sprites {
             var ratio:Number = _charge / _maxCharge;
             graphics.beginFill(CHARGE_BAR_COLOR, 1.0);
             graphics.drawRect(-width/4.0, -halfHeight, width/2.0, ratio * height);
-            graphics.endFill();  
+            graphics.endFill(); 
+            
+            //trace("numQueuedUpdates=" + numQueuedUpdates);
+            super.updateDisplayList(w, h);
         }
     }
 

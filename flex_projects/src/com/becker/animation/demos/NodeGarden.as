@@ -7,22 +7,18 @@ package com.becker.animation.demos
     
     import mx.core.UIComponent;
 
-    public class NodeGarden extends UIComponent implements Animatible
-    {
+    public class NodeGarden extends UIComponent implements Animatible {
         private var particles:Array;
         private var numParticles:uint = 30;
         private var minDist:Number = 100;
         private var springAmount:Number = .003;
         
-        public function NodeGarden()
-        {
+        public function NodeGarden() {
         }
         
-        public function startAnimating():void
-        {        
+        public function startAnimating():void {        
             particles = new Array();
-            for(var i:uint = 0; i < numParticles; i++)
-            {
+            for(var i:uint = 0; i < numParticles; i++)  {
                 var particle:Ball = new Ball(5, 0xffffff);
                 particle.x = Math.random() * this.width;
                 particle.y = Math.random() * this.height;
@@ -35,51 +31,41 @@ package com.becker.animation.demos
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
         }
 
-        private function onEnterFrame(event:Event):void
-        {        
-            for(var i:uint = 0; i < numParticles; i++)
-            {
+        private function onEnterFrame(event:Event):void {        
+            for(var i:uint = 0; i < numParticles; i++) {
                 var particle:Ball = particles[i];
                 particle.x += particle.xVelocity;
                 particle.y += particle.yVelocity;
-                if(particle.x > this.width)
-                {
+                if(particle.x > this.width) {
                     particle.x = 0;
                 }
-                else if(particle.x < 0)
-                {
+                else if(particle.x < 0) {
                     particle.x = this.width;
                 }
-                if(particle.y > this.height)
-                {
+                if(particle.y > this.height) {
                     particle.y = 0;
                 }
-                else if(particle.y < 0)
-                {
-                    particle.y = stage.stageHeight;
+                else if(particle.y < 0) {
+                    particle.y = stage? stage.stageHeight: 0;
                 }
             }
               
             graphics.lineStyle(1, 0x0044cc);            
-            for(i=0; i < numParticles - 1; i++)
-            {
+            for(i=0; i < numParticles - 1; i++) {
                 var partA:Ball = particles[i];
-                for (var j:uint = i + 1; j < numParticles; j++)
-                {
+                for (var j:uint = i + 1; j < numParticles; j++) {
                     var partB:Ball = particles[j];
                     spring(partA, partB);
                 }
             }
         }
         
-        private function spring(partA:Ball, partB:Ball):void
-        {
+        private function spring(partA:Ball, partB:Ball):void {
             var dx:Number = partB.x - partA.x;
             var dy:Number = partB.y - partA.y;
             var dist:Number = Math.sqrt(dx * dx + dy * dy);
             
-            if(dist < minDist)
-            {                
+            if(dist < minDist) {                
                 graphics.moveTo(partA.x, partA.y);
                 graphics.lineTo(partB.x, partB.y);
                 var ax:Number = dx * springAmount;

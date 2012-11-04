@@ -13,20 +13,21 @@ package  com.becker.animation.box2d {
 
         /**
          * Called when a contact point is added. 
-         *
+         */
         override public function BeginContact(point:b2Contact):void {
             var volume:Number = 0.1 + Math.random() / 50.0; 
             if (volume > 0) {     
                 //Sounds.playScrape(volume);
                 Sounds.playHit(volume);
             }
-        };*/
+        };
         
         /**
          * Called after the contact has been solved. This includes the geometry
          * and the forces.
-         */
+         *
         override public function PostSolve(point:b2Contact, impulse:b2ContactImpulse):void {
+
             var sum:Number = 0;
             for each (var imp:Number in impulse.normalImpulses) {
                 sum += imp;
@@ -36,7 +37,7 @@ package  com.becker.animation.box2d {
             if (volume > 0.01) {
                 Sounds.playHit(volume);
             }
-        };  
+        };  */
     }
 
 }

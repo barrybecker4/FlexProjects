@@ -19,7 +19,7 @@ package com.becker.expression {
  
         /**
          * Constructor
-         * @param	value data value - either an operator or an operand.
+         * @param  value data value - either an operator or an operand.
          */
         public function TreeNode(value:String) { 
             _data = value;

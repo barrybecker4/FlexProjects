@@ -15,11 +15,16 @@ package com.becker.animation.box2d.simulations {
     import com.becker.animation.box2d.interactors.MouseDragInteractor;
     import com.becker.common.PhysicalParameters;
     import mx.core.UIComponent;
+    import com.becker.common.Util;
      
     /**
      * Attaches a gun to a car so nothing can get in your way when you drive around.
      */
     public class ArtilleryOnCarSimulation extends AbstractSimulation {
+        
+        [Bindable]
+        public var motorSpeed:Number = 0;
+        
         
         /** Amount to change the angle of the cannon incrementally */
         private static const ANGLE_DELTA:Number = Math.PI / 60;
@@ -67,8 +72,20 @@ package com.becker.animation.box2d.simulations {
         }
         
         /** get the cannon instance once it has been built */
-        public function get cannon():Cannon {
+        public function get cannon():FixedCannon {
             return _cannon;
+        }
+        
+        [Bindable]
+        public function get gunAngle():Number {
+            var ang:Number = 90.0 - _cannon.gunAngle * Util.RAD_TO_DEG
+            //trace("get a=" + ang);
+            return  ang;
+        }
+        public function set gunAngle(a:Number):void {
+            var ang:Number = (90 - a) * Util.DEG_TO_RAD;;
+            //trace("set a=" + ang);
+            _cannon.gunAngle = ang;
         }
         
         /**
@@ -89,8 +106,9 @@ package com.becker.animation.box2d.simulations {
             car.updateMotor();
             scrollToCarCenter();
             car.updateShockAbsorbers();
+            motorSpeed = car.motorSpeed;
         }
-        
+      
         private function scrollToCarCenter():void {
             var center:b2Vec2 = car.carBody.GetWorldCenter();
             var velocity:b2Vec2 = car.carBody.GetLinearVelocity();
@@ -124,7 +142,6 @@ package com.becker.animation.box2d.simulations {
             else if (keyCode == 32) {    // space
                 _cannon.startCharging();
             }
-            
             else if (keyCode == 66) {   // B: braking
                 car.braking = true;
             }

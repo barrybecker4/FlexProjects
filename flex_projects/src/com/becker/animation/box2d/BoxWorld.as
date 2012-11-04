@@ -6,6 +6,7 @@ import Box2D.Dynamics.*;
 import Box2D.Dynamics.Joints.b2Joint;
 import com.becker.animation.Animatible;
 import com.becker.animation.sprites.AbstractShape;
+import com.becker.animation.sprites.Bazooka;
 import com.becker.animation.sprites.Line;
 import com.becker.common.PhysicalParameters;
 import com.becker.common.Util;
