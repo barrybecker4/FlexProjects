@@ -131,15 +131,14 @@
                           <mx:HBox>
                               <mx:Button id="decreasAngleButton" label="-"  
                                   click="simulation.gunAngle--"  width="32" height="20"
-                                  toolTip="decrease gun angle" 
+                                  toolTip="(s) decrease gun angle" 
                                   focusEnabled="false" autoRepeat="true" />    
                               <mx:Button id="increasAngleButton" label="+" 
                                   click="simulation.gunAngle++" width="32" height="20"
-                                  toolTip="increase gun angle" 
+                                  toolTip="(a) increase gun angle" 
                                   focusEnabled="false" autoRepeat="true"/>   
                           </mx:HBox>
                       </mx:VBox>
-                      
                       <mx:HSlider id="gunAngleSlider" 
                           labels="['', '0', '', '40', '', '80', '', '120', '', '','180', '']"
                           tickInterval="10" 
