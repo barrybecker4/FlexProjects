@@ -139,6 +139,13 @@ millhouseFont
     padding-right: 5;
     padding-bottom: 5;
 }
+
+.inputWithLineOver {
+    border-style:solid;
+    border-sides:top;
+    border-thickness:2;
+    border-color:#000000;
+}
 /*
 TextArea {
     font-family:arial;
