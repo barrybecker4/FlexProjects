@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    xmlns:app="com.becker.animation.*"  
+    xmlns:control="com.becker.controls.*"  >
+    <mx:Style source="assets/flexStyles.css" />
+    
+    <mx:Script><![CDATA[
+        import mx.events.FlexEvent;
+        import com.becker.controls.ExpressionEditor;
+        import mx.controls.Alert;
+        import mx.containers.*;
+        
+        private static const INSTRUCTIONS:String = 
+            "Enter either a decimal or a fraction and having it instantly convert to the other form." 
+    ]]></mx:Script>
+   
+    <mx:Panel title="Decimal to Fraction Converter" width="100%" height="100%" 
+              titleStyleName="actionShadedLargeFont" >
+      
+       <mx:VBox width="100%" styleName="borderContainer"> 
+             <mx:TextArea htmlText="{INSTRUCTIONS}" width="100%" height="80" editable="false"
+                 styleName="container" />   
+       </mx:VBox>
+       
+       <mx:HBox width="100%" height="100%" styleName="container">
+           
+           <mx:VBox id="decimalBox" width="50%" height="100" styleName="borderContainer" > 
+              <mx:Label text="Decimal" />
+              <mx:HBox>
+                  <mx:TextInput id="fixedPart" text="1." 
+                      toolTip="This is the fixed part of the decimal. It must contain a '.'."/>
+                  <mx:HBox styleName="inputWithLineOver">
+                      <mx:TextInput id="repeatingPart" text="0" 
+                          toolTip="This is the repeating part of the decimal."/>
+                  </mx:HBox>
+              </mx:HBox>
+           </mx:VBox>
+               
+           <mx:VBox id="fractionBox" width="50%" height="100" styleName="borderContainer"> 
+              <mx:Label text="Fraction" />
+              <mx:VBox>
+                  <mx:HBox toolTip="Integer numerator">
+                      <mx:Label text="Numerator" width="100" />
+                      <mx:TextInput id="nemerator" text="1" />
+                  </mx:HBox>
+                  <mx:HBox>
+                      <mx:HBox width="100"/>
+                      <mx:HBox width="180" styleName="inputWithLineOver"/>
+                  </mx:HBox>   
+                  <mx:HBox toolTip="Integer denominator. Must not be 0.">
+                      <mx:Label text="Denominator" width="100" />
+                      <mx:TextInput id="denominator" text="1"   />
+                  </mx:HBox>  
+              </mx:VBox>
+           </mx:VBox>
+          
+    
+       </mx:HBox>
+       
+    </mx:Panel>
+     
+</mx:Application>

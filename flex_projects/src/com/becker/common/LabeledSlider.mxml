@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">  
     <mx:Script><![CDATA[
-        import com.becker.animation.walking.RealWalk;
         import mx.events.SliderEvent;
         import mx.events.FlexEvent;
     
