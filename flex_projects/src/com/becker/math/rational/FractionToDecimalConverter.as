@@ -22,7 +22,6 @@ public class FractionToDecimalConverter {
         
         return new Decimal(wholePart, "" + decimalPart, 0);
     }
-   
         
     private function findRepeatingPattern(deciString:String):String {
         return "foo";
