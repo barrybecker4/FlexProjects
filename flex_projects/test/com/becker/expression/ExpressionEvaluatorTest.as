@@ -42,7 +42,7 @@ package com.becker.expression {
                 log += "\n";
             }
             var elapsed:Number = 0.001 * (getTimer() - startTime);
-            log += "Evaluation tests finished in " + elapsed + " seconds.";
+            log += "Evaluation tests finished in " + elapsed + " seconds.\n";
             return log;
         }
     }
