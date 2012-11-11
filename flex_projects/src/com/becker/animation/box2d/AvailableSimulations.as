@@ -6,6 +6,7 @@ import Box2D.Common.Math.*;
 import Box2D.Dynamics.*;
 import com.becker.animation.box2d.simulations.ArtilleryOnCarSimulation;
 import com.becker.animation.box2d.simulations.ArtillerySimulation;
+import com.becker.animation.box2d.simulations.HolonomicRobotSimulation;
 
 import com.becker.animation.box2d.simulations.BridgeSimulation;
 import com.becker.animation.box2d.simulations.HelloWorldSimulation;
@@ -33,7 +34,8 @@ public class AvailableSimulations {
            "Car",
            "Artillery",
            "Artillery on Car",
-           "ExplodingBoxes"
+           "ExplodingBoxes",
+           "Holonomic Robot"
      ]; 
     
     /**
@@ -61,6 +63,8 @@ public class AvailableSimulations {
                 simulation = new ArtilleryOnCarSimulation(); break;
             case AVAILABLE_SIMULATIONS[7]: 
                 simulation = new ExplodingBoxesSimulation(); break;
+            case AVAILABLE_SIMULATIONS[8]: 
+                simulation = new HolonomicRobotSimulation(); break;
             default: throw new Error("Unexpected sim :" + simulationName);
         }
         

@@ -34,23 +34,46 @@ package com.becker.animation.box2d.builders
         }
        
         public function buildBlock(width:Number, height:Number, bodyDef:b2BodyDef, 
-                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+                density:Number = 1.0, friction:Number = 0.5, restitution:Number = 0.2, 
                 groupIndex:int = int.MAX_VALUE):b2Body {
             
-            var boxDef:b2FixtureDef = new b2FixtureDef();
-            boxDef.density = density;
-            boxDef.friction = friction;
-            boxDef.restitution = restitution;
+            var fixtureDef:b2FixtureDef = new b2FixtureDef();
+            fixtureDef.density = density;
+            fixtureDef.friction = friction;
+            fixtureDef.restitution = restitution;
             if (groupIndex != int.MAX_VALUE) {
-                boxDef.filter.groupIndex = groupIndex;
+                fixtureDef.filter.groupIndex = groupIndex;
             }
             var shape:b2PolygonShape = new b2PolygonShape();
             shape.SetAsBox(width, height);
-            boxDef.shape = shape;
+            fixtureDef.shape = shape;
             bodyDef.userData = new Rectangle(width * 2 * scale, height * 2 * scale);
             
-            return addShape(boxDef, bodyDef); 
+            return addShape(fixtureDef, bodyDef); 
+        } 
+        
+        public function buildOrientedBlock(orientedBlock:OrientedBox, bodyDef:b2BodyDef, 
+                density:Number=1.0, friction:Number = 0.5, restitution:Number = 0.2, 
+                groupIndex:int = int.MAX_VALUE):b2Body {
+                
+            var fixtureDef:b2FixtureDef = new b2FixtureDef();
+            fixtureDef.density = density;
+            fixtureDef.friction = friction;
+            fixtureDef.restitution = restitution;
+            if (groupIndex != int.MAX_VALUE) {
+                fixtureDef.filter.groupIndex = groupIndex;
+            }
+            
+            var mainShape:b2PolygonShape = new b2PolygonShape();
+            trace("oriented center = " + orientedBlock.center + " ang=" + orientedBlock.rotation);
+            mainShape.SetAsOrientedBox(
+                orientedBlock.width, orientedBlock.height, orientedBlock.center, orientedBlock.rotation);
+            fixtureDef.shape = mainShape;  
+            bodyDef.userData = new Rectangle(orientedBlock.width * 2 * scale, orientedBlock.height * 2 * scale);
+            
+            return addShape(fixtureDef, bodyDef);
         }
+   
         
         public function buildSensor(center:b2Vec2, width:Number, height:Number, 
                                     body:b2Body, sensorName:String = "sensor"):void {
@@ -102,9 +125,9 @@ package com.becker.animation.box2d.builders
             
             return addShape(circleDef, bodyDef, false); // true (causes slow)
         }
-
+       
         /**
-         * A group of blocks that are glued togeth into one body
+         * A group of blocks that are glued together into one body
          * @return body with children for all the decorating blocks.
          */
         public function buildCompoundBlock(orientedBlocks:Array, bodyDef:b2BodyDef, 

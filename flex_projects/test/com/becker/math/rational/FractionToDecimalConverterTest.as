@@ -34,7 +34,6 @@ package com.becker.math.rational {
                     } else {
                         log += " <b>Fail</b> Expected " + testCase[1] + " but got " + decimalResult;
                     }
-
                 } catch (e:Error) {
                     log += "Failed for case="+ testCase[0] + " (expected "+testCase[1] +")  \n  " + e.message;
                 }

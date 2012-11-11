@@ -1,7 +1,9 @@
 package com.becker.animation.box2d.builders {
     import Box2D.Common.Math.b2Vec2;
-	/**
+    /**
      * Specification for an oriented block. Usually part of a compound block shape.
+     * Immitable.
+     * 
      * @author Barry Becker
      */
     public class OrientedBox {

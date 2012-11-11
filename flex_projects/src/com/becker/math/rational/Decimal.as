@@ -19,10 +19,10 @@ public class Decimal {
      *    Has to be a string to differentiate between "", "0", and "00", "00023", etc.
      * @param	repeatingDecimalPart part to the right of the fixed decimal 
      *          part that does repeat. 0 if none since an inifinite number of trailing 0's
-     *          do not change the value.
+     *          do not change the value. Cannot be bigger than an unigned int can allow (about 4 billion).
      */
     public function Decimal(
-        fixedWholePart:int = 1, fixedDecimalPart:String = "", repeatingDecimalPart:int = 0) {
+        fixedWholePart:int = 1, fixedDecimalPart:String = "", repeatingDecimalPart:uint = 0) {
             
         this.fixedWholePart = fixedWholePart;
         this.fixedDecimalPart = fixedDecimalPart;

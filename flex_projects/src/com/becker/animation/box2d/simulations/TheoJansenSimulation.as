@@ -28,9 +28,9 @@ package com.becker.animation.box2d.simulations {
             crapBuilder = new CrapBuilder(world, canvas, scale);
         }
         
+        /** add ground bodies */
         override public function addStaticElements():void {
             
-            // Add ground body
             var bodyDef:b2BodyDef = new b2BodyDef();
             bodyDef.type = b2Body.b2_staticBody;
             
