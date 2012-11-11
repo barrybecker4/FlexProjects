@@ -48,7 +48,6 @@ package com.becker.animation.sprites {
             ammoGenerator = new AmmoGenerator(INITIAL_NUM_BULLETS, 2000);
             ammoGenerator.spawnIncrement = BULLET_SPAWN_INC;
             ammoGenerator.eventDispatcher.addEventListener(AmmoGenerator.AMMO_CREATED, ammoCreated, false, 0, true);
-            trace("in bazook a constructor");
         }
         
         public function set charge(c:Number):void {
