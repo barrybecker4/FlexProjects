@@ -34,7 +34,7 @@ public class Fraction {
         var wholePart:int = numerator / denominator;
         var decimalPart:int = 
             100 * (Number(numerator)/ Number(denominator) - wholePart);
-        return new Decimal(wholePart, decimalPart, 0);
+        return new Decimal(wholePart, "" + decimalPart, 0);
     }
     
     public function toString():String {

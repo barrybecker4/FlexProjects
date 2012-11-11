@@ -20,13 +20,12 @@ public class FractionToDecimalConverter {
         // march thru until find repeating pattern
         var repeatingPattern:String = findRepeatingPattern(deciString);
         
-        return new Decimal(wholePart, decimalPart, 0);
+        return new Decimal(wholePart, "" + decimalPart, 0);
     }
    
         
     private function findRepeatingPattern(deciString:String):String {
         return "foo";
     }
-    
 }
 }
