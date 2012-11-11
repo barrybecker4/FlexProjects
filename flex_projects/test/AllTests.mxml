@@ -10,6 +10,7 @@
         import com.becker.expression.ExpressionEvaluator;
         import com.becker.expression.ExpressionEvaluatorTest;
         import com.becker.expression.ExpressionParserTest;
+        import com.becker.math.rational.FractionToDecimalConverterTest;
         import mx.events.FlexEvent;
         import com.becker.controls.ExpressionEditor;
         import mx.controls.Alert;
@@ -17,13 +18,14 @@
    
         private function createComplete():void { 
             
-            //var log:String = "";
-            
             var parserTest:ExpressionParserTest = new ExpressionParserTest();
             testLog.htmlText += parserTest.run();
             
             var evalTest:ExpressionEvaluatorTest = new ExpressionEvaluatorTest();
             testLog.htmlText += evalTest.run();
+            
+            var ftodConversionTest:FractionToDecimalConverterTest = new FractionToDecimalConverterTest();
+            testLog.htmlText += ftodConversionTest.run();
         }
   
     ]]></mx:Script>

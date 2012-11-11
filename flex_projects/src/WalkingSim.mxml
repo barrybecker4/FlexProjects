@@ -3,7 +3,7 @@
     xmlns:mx="http://www.adobe.com/2006/mxml" 
     xmlns:app="com.becker.animation.walking.*"    
     xmlns:anim="com.becker.animation.*"    
-    xmlns:comp="com.becker.common.*"    
+    xmlns:comp="com.becker.controls.*"    
     layout="absolute" >
     
     <mx:Script><![CDATA[

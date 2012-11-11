@@ -8,7 +8,9 @@ import flash.geom.Point;
         public static const RAD_TO_DEG:Number = 180.0 / Math.PI;  
            
         /** convert from degrees to radians */
-        public static const DEG_TO_RAD:Number = Math.PI / 180.0;      
+        public static const DEG_TO_RAD:Number = Math.PI / 180.0; 
+        
+        private static const LN10:Number = Math.log(10.0);
         
         /** private constructor for static util class */
         //private function Util() {}
@@ -46,7 +48,38 @@ import flash.geom.Point;
                 result.y = y * cos + x * sin;
             }
             return result;
-        }      
+        }   
+        
+        /**
+         * @param v
+         * @return Log base 10 of v.
+         */
+        public static function log10(v:Number):Number {
+            return Math.log(v) / LN10;
+        }
+        
+        /**
+         * @return th greatest common factor of a and b
+         */
+        public static function greatestCommonFactor(a:int, b:int):int {
+            if (a == 0 && b == 0) return 1;
+            if (a < 0) return greatestCommonFactor(-a, b);
+            if (b < 0) return greatestCommonFactor(a, -b);
+            if (a == 0) return b;
+            if (b == 0) return a;
+            if (a == b) return a;
+            if (b < a) return greatestCommonFactor(b, a);
+
+            return greatestCommonFactor(a, b % a);
+        }
+
+        /**
+         * @return the least common multiple of a and b
+         */
+        public static function leastCommonMultiple(a:int, b:int):int {
+            return Math.abs(a * b) / greatestCommonFactor(a, b);
+        }
+
         
         /**
          * Round to specificied place.
@@ -65,7 +98,7 @@ import flash.geom.Point;
             return Math.sqrt(dx * dx + dy * dy);
         }
         
-                /**
+         /**
          * First, arrange all given points in ascending order, according to their x-coordinate.
          * Second, take the leftmost and rightmost points (lets call them C and D), and creates tempVec, 
          * where the points arranged in clockwise order will be stored.
