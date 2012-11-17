@@ -30,8 +30,8 @@
             var dtofConversionTest:DecimalToFractionConverterTest = new DecimalToFractionConverterTest();
             testLog.htmlText += dtofConversionTest.run();
             
-            //var ftodConversionTest:FractionToDecimalConverterTest = new FractionToDecimalConverterTest();
-            //testLog.htmlText += ftodConversionTest.run();
+            var ftodConversionTest:FractionToDecimalConverterTest = new FractionToDecimalConverterTest();
+            testLog.htmlText += ftodConversionTest.run();
             
             var matrixTest:Matrix3Test = new Matrix3Test();
             testLog.htmlText += matrixTest.run();

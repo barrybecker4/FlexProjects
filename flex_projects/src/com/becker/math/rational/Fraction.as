@@ -31,10 +31,7 @@ public class Fraction {
     }
     
     public function getAsDecimal():Decimal {
-        var wholePart:int = numerator / denominator;
-        var decimalPart:int = 
-            100 * (Number(numerator)/ Number(denominator) - wholePart);
-        return new Decimal(wholePart, "" + decimalPart, 0);
+        return new FractionToDecimalConverter().convert(this);
     }
     
     public function toString():String {

@@ -35,31 +35,11 @@ package com.becker.animation.box2d.builders {
             bodyDef.type = b2Body.b2_dynamicBody;
             bodyDef.position.Set(startX, startY);
             
-            /*
-            var body:b2Body = shapeBuilder.buildBall(RADIUS/2, bodyDef, 1.0, 0.4, 0.3);
-            body.ApplyImpulse(new b2Vec2( -100,  60), body.GetWorldCenter());
-            */
             
             var wheels:Array = [];
-            /*
-            var angInc:Number = 2.0 * Math.PI / NUM_WHEELS;
-            
-            for (var i:int = 0; i < NUM_WHEELS; i++) {
-                var angle:Number = i * angInc;
-                var xOffset:Number = RADIUS * Math.cos(angle);
-                var yOffset:Number = RADIUS * Math.sin(angle);
-                trace("xOffset=" + xOffset + " yOffset=" + yOffset + " angle=" + angle);
-                var orientedBlock:OrientedBox = 
-                    new OrientedBox(0.2, 1, new b2Vec2(xOffset, yOffset), angle);
-                
-                wheels.push(shapeBuilder.buildOrientedBlock(orientedBlock, bodyDef, 1.0, 0.4, 0.3));
-            }*/
             
             var body:b2Body = createBody(bodyDef);
-            
-
-            //body.ApplyImpulse(new b2Vec2(100, -100), body.GetWorldCenter());
-            //body.ApplyTorque(300);
+           
             
             robot = new HolonomicRobot(body, NUM_WHEELS);
               

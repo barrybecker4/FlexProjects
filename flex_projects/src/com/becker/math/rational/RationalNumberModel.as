@@ -34,7 +34,7 @@ public class RationalNumberModel {
         _numeratorPart = "1";
         _denominatorPart = "1";
         
-        decimal = new Decimal(1, 0, 0);
+        decimal = new Decimal(1, "", 0);
         fraction = new Fraction(1, 1);
     }
     
@@ -50,6 +50,7 @@ public class RationalNumberModel {
     public function get fixedDecimalPart():String {
         return _fixedDecimalPart;
     }
+    
     public function set fixedDecimalPart(v:String):void {
         _fixedDecimalPart = v;
         // split into whole and decimal part
