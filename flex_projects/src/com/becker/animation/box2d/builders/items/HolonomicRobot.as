@@ -1,6 +1,8 @@
 package com.becker.animation.box2d.builders.items {
     import Box2D.Common.Math.b2Vec2;
+    import Box2D.Common.Math.b2Vec3;
     import Box2D.Dynamics.b2Body;
+    import com.becker.common.Matrix3;
     import flash.geom.Matrix;
     
     /**
@@ -9,7 +11,7 @@ package com.becker.animation.box2d.builders.items {
      */
     public class HolonomicRobot {
         
-        private static const MAX_POWER:Number = 200;
+        private static const MAX_POWER:Number = 20;
         private var _body:b2Body;
         
         /** uniformly spaced wheels starting at angle 0. */
@@ -58,14 +60,16 @@ package com.becker.animation.box2d.builders.items {
         public function updateForces():void {
             
             var currentAngle:Number = body.GetAngle();
-            trace("ang = " + currentAngle + "Power A="+ getPowerForWheel(0) + " B="+ getPowerForWheel(1) + " C=" + getPowerForWheel(2));
+            //trace("ang = " + currentAngle + "Power A="+ getPowerForWheel(0) + " B="+ getPowerForWheel(1) + " C=" + getPowerForWheel(2));
             
+            var C:Matrix3 = new HolonomicMatrix(currentAngle);
+            var wheelForces:b2Vec3 = new b2Vec3(getPowerForWheel(0), getPowerForWheel(1), getPowerForWheel(2));
             
-            //var C:Matrix = new Matrix()
-            var forces:Array = [ -1, 2, -32];
+            var forces:b2Vec3 = C.MultVec(wheelForces);
+            //trace("forces = " + forces.x + ", "+ forces.y + ", "+ forces.z);
             
-            body.ApplyImpulse(new b2Vec2(forces[0], forces[1]), body.GetWorldCenter());
-            body.ApplyTorque(forces[2]); 
+            body.ApplyImpulse(new b2Vec2(forces.x, forces.y), body.GetWorldCenter());
+            body.ApplyTorque(forces.z); 
         }
         
     }

@@ -18,7 +18,7 @@ package com.becker.animation.box2d.simulations {
     
     public class HolonomicRobotSimulation extends AbstractSimulation {
         
-        private static const POWER_DELTA:Number = 2.0;
+        private static const POWER_DELTA:Number = 1.0;
         private var builder:BasicShapeBuilder;
         private var robotBuilder:HolonomicRobotBuilder;
         private var robot:HolonomicRobot;

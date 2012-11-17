@@ -31,6 +31,20 @@
             fixedPart.text = model.fixedDecimalPart;
             repeatingPart.text = model.repeatingPart;
         }
+        
+        private function updateDecimalFixedPartWidth():void {
+            fixedPart.width = fixedPart.textWidth + 22;
+        }
+        
+        private function numeratorChanged():void {
+            model.numeratorPart = numerator.text;
+            updateDecimalFixedPartWidth();
+        }
+        
+        private function denominatorChanged():void {
+            model.denominatorPart = denominator.text;
+            updateDecimalFixedPartWidth();
+        }
 
     ]]></mx:Script>
     
@@ -53,7 +67,7 @@
                   <mx:TextInput id="fixedPart" 
                       text="{model.fixedDecimalPart}" 
                       enter="{model.fixedDecimalPart = fixedPart.text}"
-                      change="{fixedPart.width = fixedPart.textWidth + 22}"
+                      change="updateDecimalFixedPartWidth()"
                       restrict="0-9."
                       toolTip="This is the fixed part of the decimal. It must contain a '.'."
                       width="24"
@@ -75,7 +89,7 @@
                       <mx:Label text="Numerator" width="100" />
                       <mx:TextInput id="numerator" width="150"
                           text="{model.numeratorPart}"
-                          enter="{model.numeratorPart = numerator.text}" 
+                          enter="numeratorChanged()" 
                           restrict="0-9"/>
                   </mx:HBox>
                   <mx:HBox>
@@ -86,7 +100,7 @@
                       <mx:Label text="Denominator" width="100" />
                       <mx:TextInput id="denominator" width="150"
                           text="{model.denominatorPart}" 
-                          enter="{model.denominatorPart = denominator.text}" 
+                          enter="denominatorChanged()" 
                           restrict="0-9"/>
                   </mx:HBox>  
               </mx:VBox>
