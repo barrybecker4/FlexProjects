@@ -8,23 +8,27 @@
   <compiler>
     <define append="true">
       <name>CONFIG::debug</name>
-      <value>true</value>
+      <value>false</value>
     </define>
     <define append="true">
       <name>CONFIG::release</name>
-      <value>false</value>
+      <value>true</value>
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
       <value>'3/28/2015'</value>
     </define>
-    <verbose-stacktraces>true</verbose-stacktraces>
+    <optimize>true</optimize>
+    <verbose-stacktraces>false</verbose-stacktraces>
     <source-path append="true">
       <path-element>E:\projects\FlexProjects\flex_projects\src</path-element>
+      <path-element>E:\projects\FlexProjects\Box2DLib\Build\FlashDevelop\bin</path-element>
       <path-element>E:\projects\FlexProjects\flex_projects\test</path-element>
       <path-element>E:\apps\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
-    <library-path append="true" />
+    <library-path append="true">
+      <path-element>E:\projects\FlexProjects\Box2DLib\Build\FlashDevelop\bin\Box2DFlashAS3.swc</path-element>
+    </library-path>
   </compiler>
   <file-specs>
     <path-element>E:\projects\FlexProjects\flex_projects\src\PhysicsSim.mxml</path-element>
