@@ -38,6 +38,10 @@ package com.becker.animation.box2d.simulations {
         private var _cannon:FixedCannon;
         private var _car:Car;
         
+        override public function get instructions():String {
+            return "Gun on car simulation based on <a href=\"http://box2dflash.sourceforge.net/\">Box2DAS3</a>." + 
+            "Use spacebar to shoot and arrow keys to move.";
+        }
         
         override public function initialize(world:b2World, canvas:UIComponent,
                                             params:PhysicalParameters):void {

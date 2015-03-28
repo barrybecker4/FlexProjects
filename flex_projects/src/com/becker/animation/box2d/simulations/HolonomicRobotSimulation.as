@@ -6,7 +6,7 @@ package com.becker.animation.box2d.simulations {
     import Box2D.Dynamics.b2BodyDef;
     import Box2D.Dynamics.b2World;
     import com.becker.animation.box2d.builders.HolonomicRobotBuilder;
-    import com.becker.animation.box2d.builders.items.HolonomicRobot;
+    import com.becker.animation.box2d.builders.items.holonomic.*;
     import com.becker.animation.box2d.interactors.KeyboardInteractor;
     import com.becker.animation.box2d.interactors.MouseDragInteractor;
     import com.becker.common.PhysicalParameters;
@@ -18,7 +18,7 @@ package com.becker.animation.box2d.simulations {
     
     public class HolonomicRobotSimulation extends AbstractSimulation {
         
-        private static const POWER_DELTA:Number = 1.0;
+        private static const POWER_DELTA:Number = 0.5;
         private var builder:BasicShapeBuilder;
         private var robotBuilder:HolonomicRobotBuilder;
         private var robot:HolonomicRobot;
@@ -32,6 +32,13 @@ package com.becker.animation.box2d.simulations {
             robotBuilder = new HolonomicRobotBuilder(world, canvas, scale);
         }
         
+        override public function get instructions():String {
+            return "Simulates control of a holonomic robot. Use the following keys to control it.<br>"
+                + "<b>a/z</b> - increase/decrease power on wheel A.<br>"
+                + "<b>s/x</b> - increase/decrease power on wheel B.<br>"
+                + "<b>d/c</b> - increase/decrease power on wheel C.<br>";            
+        }
+  
         override public function addStaticElements():void {
             
             var bodyDef:b2BodyDef = new b2BodyDef();
@@ -95,13 +102,13 @@ package com.becker.animation.box2d.simulations {
          */
         private function keyPressHandler(keyCode:uint):void {
            
-            if (keyCode == 65) {          // a - increase on first wheel
+            if (keyCode == 65) {        // a - increase on first wheel
                 robot.changePowerForWheel(0, POWER_DELTA);
             }
-            else if (keyCode == 83) {     // s
+            else if (keyCode == 83) {   // s
                 robot.changePowerForWheel(1, POWER_DELTA);
             }
-            else if (keyCode == 68) {    // d
+            else if (keyCode == 68) {   // d
                 robot.changePowerForWheel(2, POWER_DELTA);
             }
             else if (keyCode == 90) {   // z decrease power on first wheel

@@ -68,6 +68,12 @@ package com.becker.animation.box2d.simulations {
             cannon.update();
         }
         
+        override public function get instructions():String {
+            return "Artillary simulation based on <a href=\"http://box2dflash.sourceforge.net/\">Box2DAS3</a> "
+            +" and Emanuele Feronato's <a href=\"http://www.emanueleferonato.com/2009/09/04/creation-of-a-flash-artillery-game-using-box2d/\">artillary demo.</a>" 
+            + "Use spacebar to shoot and arrow keys to move.";
+        }
+        
         override public function createInteractors():void {
             var kbdInteractor:KeyboardInteractor = new KeyboardInteractor(canvas);
             var mouseInteractor:MouseButtonInteractor = new MouseButtonInteractor(canvas);

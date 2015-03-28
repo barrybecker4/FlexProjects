@@ -11,6 +11,9 @@ package com.becker.animation.box2d {
      */
     public interface Simulation {
         
+        /** get instructions appropriate for the simulation */
+        function get instructions():String
+         
         /** Do whatever is needed to intialize the simulation */
         function initialize(world:b2World, canvas:UIComponent,
                             params:PhysicalParameters):void;

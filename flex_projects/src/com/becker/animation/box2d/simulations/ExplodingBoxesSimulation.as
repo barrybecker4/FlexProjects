@@ -33,6 +33,12 @@ package com.becker.animation.box2d.simulations {
             super.initialize(world, canvas, params);
             builder = new BasicShapeBuilder(world, canvas, scale);  
         }
+        
+        override public function get instructions():String {
+            return "Exploding boxes simulation based on a "
+            +"<a href=\"http://www.emanueleferonato.com/2011/12/08/create-real-explosions-with-box2d/\">Box2DFlash demo</a> by Emanuele Feronato. " 
+            + "Use arrow keys to accelerate forward or back and b to brake.";
+        }
       
         override public function addStaticElements():void {
             addWalls();

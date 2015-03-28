@@ -2,7 +2,7 @@ package com.becker.animation.box2d.builders {
     
     import Box2D.Collision.Shapes.b2PolygonShape;
     import Box2D.Dynamics.b2Fixture;
-    import com.becker.animation.box2d.builders.items.HolonomicRobot;
+    import com.becker.animation.box2d.builders.items.holonomic.HolonomicRobot;
     import Box2D.Common.Math.b2Vec2;
     import Box2D.Dynamics.Joints.b2RevoluteJointDef;
     import Box2D.Dynamics.b2Body;
@@ -57,7 +57,7 @@ package com.becker.animation.box2d.builders {
                 var angle:Number = i * angInc;
                 var xOffset:Number = RADIUS * Math.cos(angle);
                 var yOffset:Number = RADIUS * Math.sin(angle);
-                trace("xOffset=" + xOffset + " yOffset=" + yOffset + " angle=" + angle);
+                //trace("xOffset=" + xOffset + " yOffset=" + yOffset + " angle=" + angle);
                 var orientedBlock:OrientedBox = 
                     new OrientedBox(0.2, 1, new b2Vec2(xOffset, yOffset), angle);
                 

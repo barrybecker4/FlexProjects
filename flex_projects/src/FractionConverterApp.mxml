@@ -15,7 +15,9 @@
         import mx.containers.*;
         
         private static const INSTRUCTIONS:String = 
-            "Enter either a decimal or a fraction and having it instantly convert to the other form." 
+            "Enter either the decimal or fractional representation of a rational number and have it instantly convert to the other form. " 
+            + "Note that the number of digits in the repeating decimal can be up to denominator-1 digits long, "
+            + "so prime denominators greater than 12 may not give accurate results (but often will)."
             
         private function created():void {
             model.addListener(RationalNumberModel.FRACTION_UPDATED, onFractionUpdated);

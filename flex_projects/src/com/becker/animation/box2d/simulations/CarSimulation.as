@@ -35,6 +35,10 @@ package com.becker.animation.box2d.simulations {
         private var crapBuilder:CrapBuilder;
         private var car:Car;
                   
+        override public function get instructions():String {
+            return "Car simulation based on <a href=\"http://box2dflash.sourceforge.net/\">Box2DAS3</a>. " 
+            + "Use arrow keys to accelerate forward or back and b to brake.";
+        }
         
         override public function initialize(world:b2World, canvas:UIComponent,
                                             params:PhysicalParameters):void {

@@ -62,6 +62,7 @@
             new PhysicalParameters(densityStepper.value, frictionStepper.value, restitutionStepper.value);
             
             app.setSimulation(sim, params); 
+            instructions.htmlText = sim.instructions;
 
             if (debugCheckbox.selected) {
                 debugCheckbox.selected = false;
@@ -97,19 +98,19 @@
 
     <mx:Binding source="gravityStepper.value" destination="app.gravity" />
     
-    <mx:Panel title="Physics Simulation" width="100%" height="100%" 
+    <mx:Panel title="Physics Simulations" width="100%" height="100%" 
               titleStyleName="actionShadedLargeFont"  styleName="{selectedFont}" >
       
         <mx:VBox  width="100%"> 
-             <mx:TextArea htmlText="{INSTRUCTIONS}"
-                    width="100%" height="50" />   
+             <mx:TextArea id="instructions" htmlText="{INSTRUCTIONS}" selectable="true"
+                    width="100%" height="60" />   
              
              <mx:HBox width="100%">          
                 <mx:HBox>
                      <mx:Label text="Simulation" />
                      <mx:ComboBox id="simulationCombo" 
                                   dataProvider="{AvailableSimulations.AVAILABLE_SIMULATIONS}"  
-                                  selectedIndex="8" change="simulationSelected()" />  
+                                  selectedIndex="4" change="simulationSelected()" />  
                 </mx:HBox>
                 <mx:Spacer width="100%" />
                 <control:FontSelector id="fontSelector" changeHandler="fontSelected" />

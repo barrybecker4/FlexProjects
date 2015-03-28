@@ -27,6 +27,12 @@ package com.becker.animation.box2d.simulations {
         
         public function AbstractSimulation() {}
         
+        public function get instructions():String {
+            return "Use this Flash application, based on <a href=\"http://box2dflash.sourceforge.net/\">Box2DAS3</a> " + 
+            "to simulate dynamic structures. You can click on things and drag them around, " + 
+            "and you can press 'd' over an object to delete it.";
+        }
+        
         public function initialize(world:b2World, canvas:UIComponent,
                                    params:PhysicalParameters):void {
             this.world = world;    
@@ -41,6 +47,7 @@ package com.becker.animation.box2d.simulations {
         
         public function addDynamicElements():void {
         }
+        
         
         /**
          * Called every time a new frame is drawn.
